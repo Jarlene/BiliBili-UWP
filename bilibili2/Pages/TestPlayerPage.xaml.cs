@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using FFmpegInterop;
+using Newtonsoft.Json;
 using SQLitePCL;
 using System;
 using System.Collections.Generic;
@@ -11,6 +12,7 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Graphics.Display;
+using Windows.Media.Core;
 using Windows.System.Display;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -40,10 +42,11 @@ namespace bilibili2.Pages
         }
 
         private DisplayRequest dispRequest = null;
-
+        //private FFmpegInteropMSS FFmpegMSS;
         string url ;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             url = e.Parameter as string;
             if (dispRequest == null)
             {
@@ -56,6 +59,12 @@ namespace bilibili2.Pages
             if (urls!=string.Empty)
             {
                 mediaElment.Source = new Uri(urls);
+               // PropertySet options = new PropertySet();
+               // mediaElment.Stop();
+                //FFmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromUri(urls, false, true, options);
+               // MediaStreamSource mss = FFmpegMSS.GetMediaStreamSource();
+                //Pass MediaStreamSource to Media Element
+                //mediaElment.SetMediaStreamSource(mss);
             }
             else
             {
@@ -111,13 +120,15 @@ namespace bilibili2.Pages
             Match mc = Regex.Match(results, @"<iframe src=""(.*?)""", RegexOptions.Multiline);
             HttpResponseMessage hr1 = await hc.GetAsync(new Uri(mc.Groups[1].Value));
             hr1.EnsureSuccessStatusCode();
-            string a = await hr1.Content.ReadAsStringAsync();
-            Match mc2 = Regex.Match(a, @"var vid=""(.*?)"";
+            var encodeResults2 = await hr1.Content.ReadAsBufferAsync();
+            string a = Encoding.UTF8.GetString(encodeResults2.ToArray(), 0, encodeResults2.ToArray().Length);
+                Match mc2 = Regex.Match(a, @"var vid=""(.*?)"";.*?var hd2=""(.*?)"";.*?var typ=""(.*?)"";.*?var sign=""(.*?)"";.*?var ulk=""(.*?)"";", RegexOptions.Singleline);
+                /**var vid=""(.*?)"";
 var hd2=""(.*?)"";
 var typ=""(.*?)"";
 var sign=""(.*?)"";
-var ulk=""(.*?)"";");
-            Match mc3 = Regex.Match(a, @"&tmsign=(.*?)&ajax");
+var ulk=""(.*?)"";**/
+                Match mc3 = Regex.Match(a, @"&tmsign=(.*?)&ajax");
             string vid, hd2, typ, sign, ulk;
             vid = mc2.Groups[1].Value;
             hd2 = mc2.Groups[2].Value;

@@ -21,6 +21,8 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="sc.Width" Value="350"/>
+                        <Setter Target="heh.VerticalAlignment" Value="Center"></Setter>
+                        <Setter Target="heh.Margin" Value="0 0 0 50"></Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="narrow">
@@ -29,6 +31,8 @@
                     </VisualState.StateTriggers>
                     <VisualState.Setters>
                         <Setter Target="sc.Width" Value="auto"/>
+                        <Setter Target="heh.VerticalAlignment" Value="Top"></Setter>
+                        <Setter Target="heh.Margin" Value="0"></Setter>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -47,7 +51,7 @@
             <TextBlock  Text="登录" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
         <ScrollViewer x:Name="sc"  Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <StackPanel>
+            <StackPanel x:Name="heh" VerticalAlignment="Top">
                 <Grid x:Name="grid_666" VerticalAlignment="Top" Margin="0 0 0 10">
                     <Grid x:Name="KanZheNi" VerticalAlignment="Top">
                         <Image Source="ms-appx:///Assets/ic_22.png" Width="56" HorizontalAlignment="Left"></Image>
@@ -60,12 +64,20 @@
                         <Image Source="ms-appx:///Assets/ic_33_hide.png" Width="56" HorizontalAlignment="Right"></Image>
                     </Grid>
                 </Grid>
-                <TextBox x:Name="txt_User" PlaceholderText="输入用户名、邮箱或手机号" Margin="10 5"></TextBox>
-                <PasswordBox x:Name="txt_Pass" PlaceholderText="输入密码" Margin="10 5" GotFocus="Login_Pass_GotFocus" LostFocus="Login_Pass_LostFocus"></PasswordBox>
-                <CheckBox x:Name="cb_SavaPass" IsChecked="True" Margin="10 5">自动登陆</CheckBox>
-                <Button x:Name="btn_Login" Margin="10 5" HorizontalAlignment="Stretch" Click="btn_Login_Click">登录</Button>
-                <Button x:Name="btn_SignIn" Margin="10 5" HorizontalAlignment="Stretch" >注册</Button>
+                <TextBox x:Name="txt_User" BorderThickness="1" PlaceholderText="输入用户名、邮箱或手机号" Margin="10 5"></TextBox>
+                <PasswordBox KeyDown="txt_Pass_KeyDown" BorderThickness="1"  x:Name="txt_Pass"  PlaceholderText="输入密码" Margin="10 5" GotFocus="Login_Pass_GotFocus" LostFocus="Login_Pass_LostFocus"></PasswordBox>
+                <CheckBox x:Name="cb_SavaPass" IsChecked="True" Margin="10 5">自动登录</CheckBox>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button x:Name="btn_Login" Grid.Column="1" Background="{StaticResource BG}" Margin="10 5" HorizontalAlignment="Stretch" Click="btn_Login_Click" Foreground="White">登录</Button>
+                    <Button x:Name="btn_SignIn"  Margin="10 5" Background="{StaticResource BG}" HorizontalAlignment="Stretch" Click="btn_SignIn_Click" Foreground="White">注册</Button>
+                </Grid>
+               
                 <TextBlock Visibility="Collapsed" x:Name="txt_Status" IsTextSelectionEnabled="True" TextWrapping="Wrap" Margin="10 0">正在加密</TextBlock>
+                <WebView x:Name="web" Visibility="Collapsed" Height="300" NavigationStarting="web_NavigationStarting"></WebView>
             </StackPanel>
         </ScrollViewer>
         <ProgressRing x:Name="pr_Load" Visibility="Collapsed" Grid.RowSpan="2" Height="50" Width="50" IsActive="True"></ProgressRing>

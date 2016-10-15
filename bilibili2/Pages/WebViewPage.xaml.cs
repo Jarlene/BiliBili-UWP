@@ -33,6 +33,7 @@ namespace bilibili2.Pages
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+            
             // if (e.NavigationMode == NavigationMode.New)
             // {
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
@@ -64,14 +65,14 @@ namespace bilibili2.Pages
             if (ban.Length != 0)
             {
                 //args.Handled = true;
-                this.Frame.Navigate(typeof(BanInfoPage), ban);
+                this.Frame.Navigate(typeof(BanInfoPage), ban.Replace("/", ""));
                 return;
             }
             string ban2 = Regex.Match(args.Uri.AbsoluteUri, @"^http://www.bilibili.com/bangumi/i/(.*?)$").Groups[1].Value;
             if (ban2.Length != 0)
             {
                 //args.Handled = true;
-                this.Frame.Navigate(typeof(BanInfoPage), ban2);
+                this.Frame.Navigate(typeof(BanInfoPage), ban2.Replace("/", ""));
                 return;
             }
             //bilibili://?av=4284663
@@ -79,7 +80,7 @@ namespace bilibili2.Pages
             if (ban3.Length != 0)
             {
                 //args.Handled = true;
-                this.Frame.Navigate(typeof(VideoInfoPage), ban3);
+                this.Frame.Navigate(typeof(VideoInfoPage), ban3.Replace("/", ""));
                 return;
             }
             //text .Text= args.Uri.AbsoluteUri;
@@ -111,21 +112,21 @@ namespace bilibili2.Pages
             if (ban.Length != 0)
             {
                 args.Handled = true;
-                this.Frame.Navigate(typeof(BanInfoPage), ban);
+                this.Frame.Navigate(typeof(BanInfoPage), ban.Replace("/",""));
                 return;
             }
             string ban2 = Regex.Match(args.Uri.AbsoluteUri, @"^http://www.bilibili.com/bangumi/i/(.*?)$").Groups[1].Value;
             if (ban2.Length != 0)
             {
                 args.Handled = true;
-                this.Frame.Navigate(typeof(BanInfoPage), ban2);
+                this.Frame.Navigate(typeof(BanInfoPage), ban2.Replace("/", ""));
                 return;
             }
             string ban3 = Regex.Match(args.Uri.AbsoluteUri, @"^bilibili://?av=(.*?)$").Groups[1].Value;
             if (ban3.Length != 0)
             {
                 //args.Handled = true;
-                this.Frame.Navigate(typeof(VideoInfoPage), ban3);
+                this.Frame.Navigate(typeof(VideoInfoPage), ban3.Replace("/", ""));
                 return;
             }
             //乱写一通的正则

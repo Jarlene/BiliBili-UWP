@@ -32,7 +32,7 @@ namespace bilibili2.Controls
         {
             if (this.ActualWidth <= 500)
             {
-                ViewBox2_num.Width = ActualWidth / 2 - 15;
+                ViewBox2_num.Width = ActualWidth / 2 - 14;
                 double d = ((ViewBox2_num.Width + 12) / 1.15) * 2;
                 gridview_Hot.Height = d;
                 gridview_DJ.Height = d;
@@ -40,16 +40,18 @@ namespace bilibili2.Controls
                 gridview_HH.Height = d;
                 gridview_JJ.Height = d;
                 gridview_MZ.Height = d;
-                gridview_SH.Height = d;
+                //gridview_SH.Height = d;
                 gridview_WL.Height = d;
                 gridview_YZ.Height = d;
+                gridview_SJ.Height = d;
+                gridview_CW.Height = d;
                 //PageCount = 4;
             }
             else
             {
                 if (this.ActualWidth <= 800)
                 {
-                    ViewBox2_num.Width = ActualWidth / 3 - 15;
+                    ViewBox2_num.Width = ActualWidth / 3 - 13;
                     double d = ((ViewBox2_num.Width + 12) / 1.15) * 2;
                     gridview_Hot.Height = d;
                     gridview_DJ.Height = d;
@@ -57,14 +59,16 @@ namespace bilibili2.Controls
                     gridview_HH.Height = d;
                     gridview_JJ.Height = d;
                     gridview_MZ.Height = d;
-                    gridview_SH.Height = d;
+                    //gridview_SH.Height = d;
                     gridview_WL.Height = d;
                     gridview_YZ.Height = d;
+                    gridview_SJ.Height = d;
+                    gridview_CW.Height = d;
                 }
                 else
                 {
                     int i = Convert.ToInt32(ActualWidth / 200);
-                    ViewBox2_num.Width = ActualWidth / i - 15;
+                    ViewBox2_num.Width = ActualWidth / i - 14;
                     double d = ((ViewBox2_num.Width + 12) / 1.15);
                     gridview_Hot.Height = d;
                     gridview_DJ.Height = d;
@@ -72,9 +76,11 @@ namespace bilibili2.Controls
                     gridview_HH.Height = d;
                     gridview_JJ.Height = d;
                     gridview_MZ.Height = d;
-                    gridview_SH.Height = d;
+                    //gridview_SH.Height = d;
                     gridview_WL.Height = d;
                     gridview_YZ.Height = d;
+                    gridview_SJ .Height= d;
+                    gridview_CW.Height = d;
                 }
             }
         }
@@ -85,16 +91,18 @@ namespace bilibili2.Controls
             {
                 pr_Load.Visibility = Visibility.Visible;
                 gridview_Hot.Items.Clear();
+                gridview_SJ.Items.Clear();
                 gridview_DJ.Items.Clear();
                 gridview_FY.Items.Clear();
                 gridview_HH.Items.Clear();
                 gridview_JJ.Items.Clear();
                 gridview_MZ.Items.Clear();
-                gridview_SH.Items.Clear();
+                //gridview_SH.Items.Clear();
                 gridview_WL.Items.Clear();
                 gridview_YZ.Items.Clear();
+                gridview_CW.Items.Clear();
                 WebClientClass wc = new WebClientClass();
-                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&platform=android&scale=xxhdpi", ApiHelper.access_key, ApiHelper._appKey);
+                string url = string.Format("http://live.bilibili.com/AppIndex/home?_device=wp&_ulv=10000&access_key={0}&appkey={1}&build=411005&platform=android&scale=xxhdpi&rnd={2}", ApiHelper.access_key, ApiHelper._appKey,new Random().Next(1,9999));
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 HomeLiveModel model = JsonConvert.DeserializeObject<HomeLiveModel>(results);
@@ -118,6 +126,30 @@ namespace bilibili2.Controls
                                     livesModel[i].mid = ownerModel.mid;
                                     livesModel[i].face = ownerModel.face;
                                     gridview_Hot.Items.Add(livesModel[i]);
+                                }
+                                break;
+                            case "手机直播":
+                                for (int i = 0; i < livesModel.Count - 1; i++)
+                                {
+                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
+                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
+                                    livesModel[i].src = coverModel.src;
+                                    livesModel[i].name = ownerModel.name;
+                                    livesModel[i].mid = ownerModel.mid;
+                                    livesModel[i].face = ownerModel.face;
+                                    gridview_SJ.Items.Add(livesModel[i]);
+                                }
+                                break;
+                            case "唱见舞见":
+                                for (int i = 0; i < livesModel.Count - 1; i++)
+                                {
+                                    HomeLiveModel ownerModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].owner.ToString());
+                                    HomeLiveModel coverModel = JsonConvert.DeserializeObject<HomeLiveModel>(livesModel[i].cover.ToString());
+                                    livesModel[i].src = coverModel.src;
+                                    livesModel[i].name = ownerModel.name;
+                                    livesModel[i].mid = ownerModel.mid;
+                                    livesModel[i].face = ownerModel.face;
+                                    gridview_CW.Items.Add(livesModel[i]);
                                 }
                                 break;
                             case "萌宅推荐":
@@ -165,7 +197,7 @@ namespace bilibili2.Controls
                                     livesModel[i].name = ownerModel.name;
                                     livesModel[i].mid = ownerModel.mid;
                                     livesModel[i].face = ownerModel.face;
-                                    gridview_SH.Items.Add(livesModel[i]);
+                                    //gridview_SH.Items.Add(livesModel[i]);
                                 }
                                 break;
                             case "单机联机":

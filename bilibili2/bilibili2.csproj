@@ -11,8 +11,8 @@
     <AssemblyName>bilibili2</AssemblyName>
     <DefaultLanguage>zh-CN</DefaultLanguage>
     <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
-    <TargetPlatformVersion>10.0.10586.0</TargetPlatformVersion>
-    <TargetPlatformMinVersion>10.0.10240.0</TargetPlatformMinVersion>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.10586.0</TargetPlatformMinVersion>
     <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
     <FileAlignment>512</FileAlignment>
     <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
@@ -98,6 +98,34 @@
     </Content>
     <None Include="bilibili2_StoreKey.pfx" />
     <None Include="project.json" />
+    <Content Include="Assets\bp10.png" />
+    <Content Include="Assets\bp450.png" />
+    <Content Include="Assets\bp50.png" />
+    <Content Include="Assets\Cd\battery-20.png" />
+    <Content Include="Assets\Cd\battery-450.png" />
+    <Content Include="Assets\Cd\battery-66.png" />
+    <Content Include="Assets\Cd\battery-user.png" />
+    <Content Include="Assets\coins.png" />
+    <Content Include="Assets\Icon\ic_bangumi_calendar_1.png" />
+    <Content Include="Assets\Icon\ic_bangumi_calendar_2.png" />
+    <Content Include="Assets\Icon\ic_bangumi_calendar_3.png" />
+    <Content Include="Assets\Icon\ic_bangumi_calendar_4.png" />
+    <Content Include="Assets\Icon\ic_bangumi_calendar_5.png" />
+    <Content Include="Assets\Icon\ic_bangumi_calendar_6.png" />
+    <Content Include="Assets\Icon\ic_bangumi_calendar_7.png" />
+    <Content Include="Assets\Icon\ic_bangumi_category.png" />
+    <Content Include="Assets\Icon\ic_following_bangumi.png" />
+    <Content Include="Assets\ic_splash_default.png" />
+    <Content Include="Assets\ic_video_pay_movie_22.png" />
+    <Content Include="Assets\nsLogoS.png" />
+    <Content Include="Assets\PartIcon\BAD.png" />
+    <Content Include="Assets\PartIcon\ic_category_t160.png" />
+    <Content Include="Assets\PartIcon\ic_category_t5.png" />
+    <Content Include="Assets\PartIcon\ic_header_hot.png" />
+    <Content Include="Assets\zfb.jpg" />
+    <Content Include="Assets\艾米莉亞_婚紗.png" />
+    <Content Include="Assets\HappyBirthDay.png" />
+    <Content Include="Resources\icon.ttf" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Class\ApiHelper.cs" />
@@ -105,6 +133,7 @@
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
     <Compile Include="Class\CheckNetworkHelper.cs" />
+    <Compile Include="Class\DeriveHelper.cs" />
     <Compile Include="Class\DownloadManage.cs" />
     <Compile Include="Class\GetSilverHelper.cs" />
     <Compile Include="Class\MD5.cs" />
@@ -112,6 +141,9 @@
     <Compile Include="Class\SqlHelper.cs" />
     <Compile Include="Class\UserClass.cs" />
     <Compile Include="Class\WebClientClass.cs" />
+    <Compile Include="Controls\FastReply.xaml.cs">
+      <DependentUpon>FastReply.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\LoadControl.xaml.cs">
       <DependentUpon>LoadControl.xaml</DependentUpon>
     </Compile>
@@ -121,10 +153,25 @@
     <Compile Include="Controls\MyLiveControl.xaml.cs">
       <DependentUpon>MyLiveControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\MyMessageDialog.xaml.cs">
+      <DependentUpon>MyMessageDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\OrientedSize.cs" />
+    <Compile Include="Controls\QuanReportDialog.xaml.cs">
+      <DependentUpon>QuanReportDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Controls\WrapPanel.cs" />
     <Compile Include="Controls\MessageShow.xaml.cs">
       <DependentUpon>MessageShow.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="HomePage\H_BangumiPage.xaml.cs">
+      <DependentUpon>H_BangumiPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ActivityPage.xaml.cs">
+      <DependentUpon>ActivityPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\AllBangumiPage.xaml.cs">
+      <DependentUpon>AllBangumiPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\AllLivePage.xaml.cs">
       <DependentUpon>AllLivePage.xaml</DependentUpon>
@@ -140,6 +187,9 @@
     </Compile>
     <Compile Include="Pages\BanTimelinePage.xaml.cs">
       <DependentUpon>BanTimelinePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\ChatPage.xaml.cs">
+      <DependentUpon>ChatPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\CommentPage.xaml.cs">
       <DependentUpon>CommentPage.xaml</DependentUpon>
@@ -165,6 +215,9 @@
     <Compile Include="Pages\LiveInfoPage.xaml.cs">
       <DependentUpon>LiveInfoPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\LivePlayerPage.xaml.cs">
+      <DependentUpon>LivePlayerPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\LoadPage.xaml.cs">
       <DependentUpon>LoadPage.xaml</DependentUpon>
     </Compile>
@@ -181,8 +234,23 @@
     <Compile Include="Pages\MessagePage.xaml.cs">
       <DependentUpon>MessagePage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\NewVideoInfoPage.xaml.cs">
+      <DependentUpon>NewVideoInfoPage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\PlayerPage.xaml.cs">
       <DependentUpon>PlayerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\QRScanningPage.xaml.cs">
+      <DependentUpon>QRScanningPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\QuanInfoPage.xaml.cs">
+      <DependentUpon>QuanInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\QuanPage.xaml.cs">
+      <DependentUpon>QuanPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\QuanziPage.xaml.cs">
+      <DependentUpon>QuanziPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\RankPage.xaml.cs">
       <DependentUpon>RankPage.xaml</DependentUpon>
@@ -192,6 +260,9 @@
     </Compile>
     <Compile Include="Pages\SearchPage.xaml.cs">
       <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SPPage.xaml.cs">
+      <DependentUpon>SPPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="Pages\TestPlayerPage.xaml.cs">
       <DependentUpon>TestPlayerPage.xaml</DependentUpon>
@@ -205,42 +276,16 @@
     <Compile Include="Pages\UserInfoPage.xaml.cs">
       <DependentUpon>UserInfoPage.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Pages\VideoTest.xaml.cs">
+      <DependentUpon>VideoTest.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Pages\WebViewPage.xaml.cs">
       <DependentUpon>WebViewPage.xaml</DependentUpon>
     </Compile>
     <Compile Include="PartPages\DHPage.xaml.cs">
       <DependentUpon>DHPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="PartPages\DSJPage.xaml.cs">
-      <DependentUpon>DSJPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\DYPage.xaml.cs">
-      <DependentUpon>DYPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\FJPage.xaml.cs">
-      <DependentUpon>FJPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\GCPage.xaml.cs">
-      <DependentUpon>GCPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\KJPage.xaml.cs">
-      <DependentUpon>KJPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\SSPage.xaml.cs">
-      <DependentUpon>SSPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\WDPage.xaml.cs">
-      <DependentUpon>WDPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\YLPage.xaml.cs">
-      <DependentUpon>YLPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\YXPage.xaml.cs">
-      <DependentUpon>YXPage.xaml</DependentUpon>
-    </Compile>
-    <Compile Include="PartPages\YYPage.xaml.cs">
-      <DependentUpon>YYPage.xaml</DependentUpon>
-    </Compile>
+    <Compile Include="PartPages\PartPage.xaml.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Pages\VideoInfoPage.xaml.cs">
       <DependentUpon>VideoInfoPage.xaml</DependentUpon>
@@ -259,11 +304,27 @@
     <Content Include="Assets\BadgeLogo.scale-100.png" />
     <Content Include="Assets\BadgeLogo.scale-200.png" />
     <Content Include="Assets\bg1.png" />
-    <Content Include="Assets\bili_img_4180877.jpg" />
+    <Content Include="Assets\BQ_TV\tv_450.png" />
+    <Content Include="Assets\BQ_TV\tv_angry.png" />
+    <Content Include="Assets\BQ_TV\tv_cheers.png" />
+    <Content Include="Assets\BQ_TV\tv_doge.png" />
+    <Content Include="Assets\BQ_TV\tv_happy.png" />
+    <Content Include="Assets\BQ_TV\tv_huaji.png" />
+    <Content Include="Assets\BQ_TV\tv_ji.png" />
+    <Content Include="Assets\BQ_TV\tv_kira.png" />
+    <Content Include="Assets\BQ_TV\tv_mygod.png" />
+    <Content Include="Assets\BQ_TV\tv_pill.png" />
+    <Content Include="Assets\BQ_TV\tv_sad.png" />
+    <Content Include="Assets\BQ_TV\tv_shocking.png" />
+    <Content Include="Assets\BQ_TV\tv_spitting.png" />
+    <Content Include="Assets\BQ_TV\tv_thinking.png" />
+    <Content Include="Assets\BQ_TV\tv_xuejie.png" />
+    <Content Include="Assets\BQ_TV\tv_zhuangb.png" />
     <Content Include="Assets\Icon\DM.png" />
     <Content Include="Assets\Icon\DY.png" />
     <Content Include="Assets\Icon\ic_info_danmakus2.png" />
     <Content Include="Assets\Icon\ic_info_views2.png" />
+    <Content Include="Assets\Icon\ic_quanzi.png" />
     <Content Include="Assets\Icon\Play.png" />
     <Content Include="Assets\Icon\Time.png" />
     <Content Include="Assets\Icon\Type.png" />
@@ -274,6 +335,8 @@
     <Content Include="Assets\ic_33.png" />
     <Content Include="Assets\ic_33_hide.png" />
     <Content Include="Assets\ic_bili_logo.png" />
+    <Content Include="Assets\ic_group_header_bg.png" />
+    <Content Include="Assets\ic_post_history.png" />
     <Content Include="Assets\LOGO88.png" />
     <Content Include="Assets\MiniIcon\DM.png" />
     <Content Include="Assets\MiniIcon\DY.png" />
@@ -314,6 +377,7 @@
     <Content Include="Assets\PartIcon\BZB.png" />
     <Content Include="Assets\PartIcon\ic_header_dynamic.png" />
     <Content Include="Assets\Square71x71Logo.scale-125.png" />
+    <Content Include="Assets\StoreLogo.scale-100.png" />
     <Content Include="Assets\StoreLogo.scale-200.png" />
     <None Include="Package.StoreAssociation.xml" />
     <Content Include="Properties\Default.rd.xml" />
@@ -324,12 +388,23 @@
     <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
     <Content Include="Assets\StoreLogo.png" />
     <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avcodec-57.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avdevice-57.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avfilter-6.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avformat-57.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avutil-55.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\swresample-2.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\swscale-4.dll" />
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Controls\FastReply.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Controls\LoadControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -343,6 +418,26 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Controls\MyLiveControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MyMessageDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\QuanReportDialog.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="HomePage\H_BangumiPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ActivityPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\AllBangumiPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -363,6 +458,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\BanTimelinePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\ChatPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -398,6 +497,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\LivePlayerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\LoadPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -418,7 +521,27 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\NewVideoInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\PlayerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\QRScanningPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\QuanInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\QuanPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\QuanziPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -431,6 +554,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SPPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -450,6 +577,10 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+    <Page Include="Pages\VideoTest.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Pages\WebViewPage.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -462,49 +593,18 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="PartPages\DSJPage.xaml">
-      <SubType>Designer</SubType>
+    <Page Include="PartPages\PartPage.xaml">
       <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\DYPage.xaml">
       <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\FJPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\GCPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\KJPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\SSPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\WDPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\YLPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\YXPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="PartPages\YYPage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Theme\BlueTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\EMTTheme.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Page>
     <Page Include="Theme\GreenTheme.xaml">
       <Generator>MSBuild:Compile</Generator>
@@ -532,20 +632,32 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\bilibili2.BackTask\bilibili2.BackTask.csproj">
-      <Project>{a138e7d5-614a-4d37-a282-7fc3eee9f910}</Project>
-      <Name>bilibili2.BackTask</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <SDKReference Include="SQLite.UWP.2015, Version=3.12.2">
-      <Name>SQLite for Universal Windows Platform</Name>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
     </SDKReference>
-    <SDKReference Include="WindowsMobile, Version=10.0.10240.0">
+    <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Universal</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.13.0">
+      <Name>SQLite for Universal Windows Platform %28SQLite.UWP.2015, Version=3.13.0%29</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
       <Name>Windows Mobile Extensions for the UWP</Name>
     </SDKReference>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <ProjectReference Include="..\bilibili2.BackTask\BackTask.csproj">
+      <Project>{a138e7d5-614a-4d37-a282-7fc3eee9f910}</Project>
+      <Name>BackTask</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FFmpegInterop\Win10\FFmpegInterop\FFmpegInterop.vcxproj">
+      <Project>{9cfa3b3e-b7af-4629-84e2-c962c5b046b1}</Project>
+      <Name>FFmpegInterop</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Service References\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

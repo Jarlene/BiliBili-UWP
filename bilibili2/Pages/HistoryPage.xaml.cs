@@ -45,9 +45,10 @@ namespace bilibili2.Pages
             }
         }
         private int pageNum_His = 1;
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
+            await Task.Delay(200);
             if (e.NavigationMode== NavigationMode.New)
             {
                 pageNum_His = 1;
@@ -108,6 +109,24 @@ namespace bilibili2.Pages
             }
           
         }
+        WebClientClass wc;
+        private async void btn_ClearHistory_Click(object sender, RoutedEventArgs e)
+        {
+            //http://api.bilibili.com/x/v2/history/clear?_device=android&_hwid=bd2e7034b953cffe&_ulv=10000&access_key=1a8cd71c9830c73819989dade872ff55&appkey=1d8b6e7d45233436&build=421000&mobi_app=android&platform=android&sign=69e2689cd0b82f9b67aef4624360ae1b
+            try
+            {
+                wc = new WebClientClass();
+                string url = string.Format("http://api.bilibili.com/x/v2/history/clear?_device=android&access_key={0}&appkey={1}&build=421000&mobi_app=android&platform=android",ApiHelper.access_key,ApiHelper._appKey_Android);
+                url += "&sign=" + ApiHelper.GetSign_Android(url);
+                string results = await wc.PostResults(new Uri(url),"");
+                User_ListView_History.Items.Clear();
+                pageNum_His = 1;
+            }
+            catch (Exception)
+            {
+                
+            }
 
+        }
     }
 }

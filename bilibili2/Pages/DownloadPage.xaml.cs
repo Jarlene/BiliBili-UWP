@@ -12,8 +12,11 @@ using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
+using Windows.Storage.Pickers;
 using Windows.System.Display;
+using Windows.UI.Core;
 using Windows.UI.Popups;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -56,7 +59,12 @@ namespace bilibili2.Pages
         //跳转，开始监视，需要判断是否已经监视，否则会出现N个通知
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
-
+            if (e.NavigationMode== NavigationMode.Back)
+            {
+                SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Collapsed;
+                pivot.SelectedIndex = 1;
+            }
+            //messShow.Show("Tips：如果下载完成后应用不显示\r\n请点击已完成右下角的'导入已完成'", 5000);
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.Parameter!=null)
             {
@@ -76,7 +84,7 @@ namespace bilibili2.Pages
                 list_Downing.Items.Clear();
                 downlingModel.Clear();
                 IReadOnlyList<DownloadOperation> downloads = null;
-                GetDownOk();
+               
             GetDownOk_New();
                 // 获取所有后台下载任务
                 downloads = await BackgroundDownloader.GetCurrentDownloadsForTransferGroupAsync(DownloadManage.DownModel.group);
@@ -129,51 +137,7 @@ namespace bilibili2.Pages
             string json = await FileIO.ReadTextAsync(files);
             return JsonConvert.DeserializeObject<DownloadManage.DownModel>(json);
         }
-        //读取完成
-        public async void GetDownOk()
-        {
-            try
-            {
-                list_DownOk.Items.Clear();
-                await Task.Run(async () =>
-                {
-                    StorageFolder folder = ApplicationData.Current.LocalFolder;
-                    StorageFolder DownFolder = await KnownFolders.VideosLibrary.CreateFolderAsync("Bili-Download", CreationCollisionOption.OpenIfExists);
-                    StorageFolder DowFolder = await folder.CreateFolderAsync("DownLoad", CreationCollisionOption.OpenIfExists);
-                    foreach (var item in await DowFolder.GetFilesAsync())
-                    {
-                        if (item.FileType == ".json")
-                        {
-                            StorageFile file = item;
-                            string json = await FileIO.ReadTextAsync(item);
-                            DownloadManage.DownModel model = JsonConvert.DeserializeObject<DownloadManage.DownModel>(json);
-                            if (model.downloaded == true)
-                            {
-                                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { list_DownOk.Items.Add(model); });
-                            }
-                        }
-                    }
-                    foreach (var item in await DownFolder.GetFilesAsync())
-                    {
-                        if (item.FileType == ".json")
-                        {
-                            StorageFile file = item;
-                            string json = await FileIO.ReadTextAsync(item);
-                            DownloadManage.DownModel model = JsonConvert.DeserializeObject<DownloadManage.DownModel>(json);
-                            if (model.downloaded == true)
-                            {
-                                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { list_DownOk.Items.Add(model); });
-                            }
-                        }
-                    }
-
-                });
-            }
-            catch (Exception)
-            {
-            }
-
-        }
+       
 
         private async void GetDownOk_New()
         {
@@ -197,19 +161,25 @@ namespace bilibili2.Pages
                         {
                             foreach (var item2 in await item1.GetFilesAsync())
                             {
-                                if (item2.FileType == ".json")
+                                try
                                 {
-                                    StorageFile files = item2;
-                                    string json = await FileIO.ReadTextAsync(item2);
-                                    DownloadManage.DownModel model123 = JsonConvert.DeserializeObject<DownloadManage.DownModel>(json);
-                                    if (model123.downloaded == true)
+                                    if (item2.FileType == ".json")
                                     {
-                                        list_file.Add(model123);
-                                        model.downedCount++;
-                                        DownloadManage.Downloaded.Add(model123.mid);
+                                        StorageFile files = item2;
+                                        string json = await FileIO.ReadTextAsync(item2);
+                                        DownloadManage.DownModel model123 = JsonConvert.DeserializeObject<DownloadManage.DownModel>(json);
+                                        if (model123.downloaded == true)
+                                        {
+                                            list_file.Add(model123);
+                                            model.downedCount++;
+                                            DownloadManage.Downloaded.Add(model123.mid);
+                                        }
+                                        model.IsBangumi = model123.isBangumi;
+                                        model.aid = model123.aid;
                                     }
-                                    model.IsBangumi = model123.isBangumi;
-                                    model.aid = model123.aid;
+                                }
+                                catch (Exception)
+                                {
                                 }
                             }
                             model.count++;
@@ -221,8 +191,9 @@ namespace bilibili2.Pages
                     await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { list_Downed.ItemsSource = list; });
                 });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
+                messShow.Show("读取已下载失败\r\n"+ex.Message,2000);
             }
 
         }
@@ -374,90 +345,34 @@ namespace bilibili2.Pages
         }
         private void Pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            txt_Hea_0.FontWeight = FontWeights.Normal;
+            txt_Hea_1.FontWeight = FontWeights.Normal;
             switch ((sender as Pivot).SelectedIndex)
             {
                 case 0:
                     bar_down.Visibility = Visibility.Visible;
                     bar_down_OK_New.Visibility = Visibility.Collapsed;
-                    bar_down_OK.Visibility = Visibility.Collapsed;
+                    txt_Hea_0.FontWeight = FontWeights.Bold;
                     break;
                 case 1:
                     bar_down.Visibility = Visibility.Collapsed;
-                    bar_down_OK.Visibility = Visibility.Collapsed;
                     bar_down_OK_New.Visibility = Visibility.Visible;
+                    txt_Hea_1.FontWeight = FontWeights.Bold;
                     break;
-                case 2:
-                    bar_down.Visibility = Visibility.Collapsed;
-                    bar_down_OK_New.Visibility = Visibility.Collapsed;
-                    bar_down_OK.Visibility = Visibility.Visible;
-                    break;
+
                 default:
                     break;
             }
 
         }
-        //播放
-        private void btn_Play_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //StorageFile file = await StorageFile.GetFileFromPathAsync(((DownMangentClass.DownModel)list_DownOk.SelectedItem).path);
-                DownloadManage.DownModel model = (DownloadManage.DownModel)list_DownOk.SelectedItem;
-                List<VideoModel> ls = new List<VideoModel>() {
-                    new VideoModel {
-                     path = model.path,
-                    title = model.title??"",
-                    cid =model.mid,
-                     IsOld=true
-                    }
-                };
-                KeyValuePair<List<VideoModel>, int> Par = new KeyValuePair<List<VideoModel>, int>(ls, 0);
-                this.Frame.Navigate(typeof(PlayerPage), Par);
-
-            }
-            catch (Exception)
-            {
-            }
-
-        }
-        //删除
-        private async void btn_Delete_Click(object sender, RoutedEventArgs e)
-        {
-            try
-            {
-                //KnownFolders.VideosLibrary
-                StorageFolder folder = ApplicationData.Current.LocalFolder;
-                StorageFolder DownFolder = await folder.GetFolderAsync("DownLoad");
-                StorageFile fileText = await DownFolder.CreateFileAsync(((DownloadManage.DownModel)list_DownOk.SelectedItem).Guid + ".json", CreationCollisionOption.OpenIfExists);
-                StorageFile fileXml = await DownFolder.CreateFileAsync(((DownloadManage.DownModel)list_DownOk.SelectedItem).mid + ".xml", CreationCollisionOption.OpenIfExists);
-                StorageFolder DowFolder = await KnownFolders.VideosLibrary.CreateFolderAsync("Bili-Download", CreationCollisionOption.OpenIfExists);
-                StorageFile fileText1 = await DowFolder.CreateFileAsync(((DownloadManage.DownModel)list_DownOk.SelectedItem).Guid + ".json", CreationCollisionOption.OpenIfExists);
-                StorageFile fileXml2 = await DowFolder.CreateFileAsync(((DownloadManage.DownModel)list_DownOk.SelectedItem).mid + ".xml", CreationCollisionOption.OpenIfExists);
-                //StorageFile fileText = await DownFolder.GetFileAsync(((DownMangentClass.DownModel)list_DownOk.SelectedItem).Guid + ".json");
-                //StorageFile fileXml = await DownFolder.GetFileAsync(((DownMangentClass.DownModel)list_DownOk.SelectedItem).mid+ ".xml");
-
-                StorageFile file = await StorageFile.GetFileFromPathAsync(((DownloadManage.DownModel)list_DownOk.SelectedItem).path);
-                await fileText.DeleteAsync();
-                await fileXml.DeleteAsync();
-                await fileText1.DeleteAsync();
-                await fileXml2.DeleteAsync();
-                await file.DeleteAsync();
-
-                GetDownOk();
-            }
-            catch (Exception)
-            {
-                MessageDialog md = new MessageDialog("无权限访问，已从列表删除，请到文件所在位置自行删除文件!");
-                await md.ShowAsync();
-            }
-        }
+       
+       
 
         private void btn_Refresh_Click(object sender, RoutedEventArgs e)
         {
             GetDownOk_New();
         }
 
-        
 
         private void list_Downed_ItemClick(object sender, ItemClickEventArgs e)
         {
@@ -620,6 +535,87 @@ namespace bilibili2.Pages
                 dispRequest = null;
             }
             settings.SetSettingValue("HoldLight", tw_Light.IsChecked.Value);
+        }
+
+        private async void btn_Input_Click(object sender, RoutedEventArgs e)
+        {
+            await new MessageDialog("此功能能修复一些已经下载完成，但应用里不显示的问题\r\n只需要选择视频库\\Bili-Down\\[视频标题]\\[集数]\\[很长一段ID].josn，然后稍等片刻即可").ShowAsync();
+            FileOpenPicker filePicker = new FileOpenPicker();
+            filePicker.ViewMode = PickerViewMode.Thumbnail;
+            filePicker.SuggestedStartLocation = PickerLocationId.VideosLibrary;
+            filePicker.FileTypeFilter.Add(".json");
+            StorageFile file = await filePicker.PickSingleFileAsync();
+            if (file==null)
+            {
+                return;
+            }
+            if (file.FileType!=".json")
+            {
+                await new MessageDialog("错误的文件格式！").ShowAsync();
+                
+            }
+            string json = await FileIO.ReadTextAsync(file);
+            DownloadManage.DownModel info = JsonConvert.DeserializeObject<DownloadManage.DownModel>(json);
+            info.downloaded = true;
+            string jsonInfo = JsonConvert.SerializeObject(info);
+            //StorageFile fileWrite = await folder.CreateFileAsync(info.Guid + ".json", CreationCollisionOption.ReplaceExisting);
+            await FileIO.WriteTextAsync(file, jsonInfo);
+            GetDownOk_New();
+            messShow.Show("导入完成",3000);
+        }
+
+        private void btn_Pause_Click_1(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                ((sender as AppBarButton).DataContext as DownloadManage.HandleModel).downOp.Pause();
+            }
+            catch (Exception)
+            {
+                messShow.Show("操作失败", 2000);
+            }
+          
+        }
+
+        private void btn_Download_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                var ss = ((sender as AppBarButton).DataContext as DownloadManage.HandleModel);
+                if (ss.downOp.Progress.Status == BackgroundTransferStatus.PausedByApplication)
+                {
+                    ss.downOp.Resume();
+                }
+            }
+            catch (Exception)
+            {
+                messShow.Show("操作失败", 2000);
+            }
+           
+        }
+
+        private async void btn_Canacel_Click(object sender, RoutedEventArgs e)
+        {
+            var ss = ((sender as AppBarButton).DataContext as DownloadManage.HandleModel);
+            ss.cts.Cancel(false);
+            ss.cts.Dispose();
+            try
+            {
+
+                StorageFolder DowFolder = await KnownFolders.VideosLibrary.CreateFolderAsync("ZF-Down", CreationCollisionOption.OpenIfExists);
+                StorageFile file = await DowFolder.GetFileAsync(ss.Guid + ".bili");
+                //用Url编码是因为不支持读取中文名
+                //含会出现：在多字节的目标代码页中，没有此 Unicode 字符可以映射到的字符。错误
+                string path = WebUtility.UrlDecode(await FileIO.ReadTextAsync(file));
+                StorageFolder folder = await StorageFolder.GetFolderFromPathAsync(path);
+                await folder.DeleteAsync(StorageDeleteOption.Default);
+                await file.DeleteAsync(StorageDeleteOption.Default);
+            }
+            catch (Exception)
+            {
+                messShow.Show("操作失败",2000);
+                //throw;
+            }
         }
     }
 }

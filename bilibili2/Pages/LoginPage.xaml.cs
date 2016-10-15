@@ -8,6 +8,7 @@ using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.Storage;
+using Windows.System;
 using Windows.UI.Core;
 using Windows.UI.Popups;
 using Windows.UI.Xaml;
@@ -142,43 +143,110 @@ namespace bilibili2
 
         private async void Login_Pass_KeyDown(object sender, KeyRoutedEventArgs e)
         {
-            if (txt_User.Text.Length == 0)
+            if (e.Key == VirtualKey.Enter)
             {
-                MessageDialog md = new MessageDialog("账号或密码不能为空！");
-                await md.ShowAsync();
-            }
-            else
-            {
-                if (cb_SavaPass.IsChecked == true)
+                if (txt_User.Text.Length == 0)
                 {
-                    SavePass();
-                    container.Values["AutoLogin"] = "true";
+                    MessageDialog md = new MessageDialog("账号或密码不能为空！");
+                    await md.ShowAsync();
                 }
                 else
                 {
-                    container.Values["AutoLogin"] = "fasle";
+                    if (cb_SavaPass.IsChecked == true)
+                    {
+                        SavePass();
+                        container.Values["AutoLogin"] = "true";
+                    }
+                    else
+                    {
+                        container.Values["AutoLogin"] = "fasle";
+                    }
+                    sc.IsEnabled = false;
+                    btn_Login.Content = "正在登录";
+                    pr_Load.Visibility = Visibility.Visible;
+                    string result = await ApiHelper.LoginBilibili(txt_User.Text, txt_Pass.Password);
+                    if (result == "登录成功")
+                    {
+                        LoginEd();
+                        BackEvent();
+                    }
+                    else
+                    {
+                        await new MessageDialog(result).ShowAsync();
+                    }
+                    pr_Load.Visibility = Visibility.Collapsed;
+                    btn_Login.Content = "登录";
+                    sc.IsEnabled = true;
                 }
-                sc.IsEnabled = false;
-                btn_Login.Content = "正在登录";
-                pr_Load.Visibility = Visibility.Visible;
-                string result = await ApiHelper.LoginBilibili(txt_User.Text, txt_Pass.Password);
-                if (result == "登录成功")
-                {
-                    LoginEd();
-                    BackEvent();
-                }
-                else
-                {
-                    await new MessageDialog(result).ShowAsync();
-                }
-                pr_Load.Visibility = Visibility.Collapsed;
-                btn_Login.Content = "登录";
-                sc.IsEnabled = true;
             }
+
+           
         }
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+
+        }
+
+        private async void btn_SignIn_Click(object sender, RoutedEventArgs e)
+        {
+            //string js = "";  //构建脚本
+            //js += "document.getElementById('login-username').setAttribute('value','" + txt_User.Text + "');"; //设置用户名
+            //js += "document.getElementById('login-passwd').setAttribute('value','" + txt_Pass.Password + "');";  //设置密码
+            //js += "document.getElementById('login-submit').click();";  //点击登录
+            //await web.InvokeScriptAsync("eval", new string[] { js });   //eval函数大家都知道，就是执行一段字符串
+            await Launcher.LaunchUriAsync(new Uri("https://passport.bilibili.com/register/phone"));
+        }
+
+        private void web_NavigationStarting(WebView sender, WebViewNavigationStartingEventArgs args)
+        {
+            string a = args.Uri.AbsoluteUri;
+            if (a== "https://passport.bilibili.com/ajax/miniLogin/redirect")
+            {
+                LoginEd();
+                BackEvent();
+            }
+        }
+
+        private async void txt_Pass_KeyDown(object sender, KeyRoutedEventArgs e)
+        {
+            if (e.Key== VirtualKey.Enter)
+            {
+                if (txt_User.Text.Length == 0)
+                {
+                    MessageDialog md = new MessageDialog("账号或密码不能为空！");
+                    await md.ShowAsync();
+                }
+                else
+                {
+                    if (cb_SavaPass.IsChecked == true)
+                    {
+                        SavePass();
+                        container.Values["AutoLogin"] = "true";
+                    }
+                    else
+                    {
+                        container.Values["AutoLogin"] = "fasle";
+                    }
+                    sc.IsEnabled = false;
+                    btn_Login.Content = "正在登录";
+                    pr_Load.Visibility = Visibility.Visible;
+                    string result = await ApiHelper.LoginBilibili(txt_User.Text, txt_Pass.Password);
+                    if (result == "登录成功")
+                    {
+                        LoginEd();
+                        BackEvent();
+                    }
+                    else
+                    {
+                        await new MessageDialog(result).ShowAsync();
+                    }
+                    pr_Load.Visibility = Visibility.Collapsed;
+                    btn_Login.Content = "登录";
+                    sc.IsEnabled = true;
+                }
+            }
+            
 
         }
     }

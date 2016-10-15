@@ -34,14 +34,14 @@ namespace bilibili2.Pages
         {
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
-          
+
         }
-        
+
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
+            
         }
-      
 
         private void btn_back_Click(object sender, RoutedEventArgs e)
         {
@@ -55,34 +55,27 @@ namespace bilibili2.Pages
                 BackEvent();
             }
         }
-
-        HttpClient hc;
+        WebClientClass wc;
         public async Task GetQZRank()
         {
             try
             {
-                
-                    WebClientClass wc = new WebClientClass();
-                    string results = await wc.GetResults(new Uri("http://api.bilibili.cn/list?appkey=84b739484c36d653&order=hot&original=0&page=1&pagesize=20"));
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_QZ.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
+                {
+                    if (i<3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_QZ.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
+                }
+                QQ_Rank_QZ.ItemsSource = ReList;
             }
             catch (Exception ex)
             {
@@ -94,27 +87,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                WebClientClass wc = new WebClientClass();
-                    string results = await wc.GetResults(new Uri("http://api.bilibili.com/list?appkey=422fd9d7289a1dd9&order=hot&original=1&page=1&pagesize=20"));
-                InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_YC.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/origin-03.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
+                {
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_YC.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
+                }
+                QQ_Rank_YC.ItemsSource = ReList;
 
             }
             catch (Exception ex)
@@ -127,31 +115,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-3-33.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 15; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=13 "));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_FJ.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_FJ.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_FJ.ItemsSource = ReList;
 
             }
             catch (Exception ex)
@@ -164,31 +143,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-1.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=1"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_DH.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_DH.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_DH.ItemsSource = ReList;
             }
             catch (Exception ex)
             {
@@ -202,31 +172,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-3.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=3"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_YY.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_YY.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_YY.ItemsSource = ReList;
             }
             catch (Exception ex)
             {
@@ -239,31 +200,23 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-129.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=129"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_WD.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_WD.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+               
+                    QQ_Rank_WD.ItemsSource = ReList;
 
             }
             catch (Exception ex)
@@ -278,27 +231,20 @@ namespace bilibili2.Pages
         {
             try
             {
-                HttpClient hc = new HttpClient();
-                HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=4"));
-                hr.EnsureSuccessStatusCode();
-                string results = await hr.Content.ReadAsStringAsync();
-                InfoModel model = new InfoModel();
-                model = JsonConvert.DeserializeObject<InfoModel>(results);
-                JObject json = JObject.Parse(model.list.ToString());
-                QQ_Rank_YX.Items.Clear();
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-4.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
                 List<InfoModel> ReList = new List<InfoModel>();
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 30; i++)
                 {
-                    ReList.Add(new InfoModel
+                    if (i < 3)
                     {
-                        aid = (string)json[i.ToString()]["aid"],
-                        title = (string)json[i.ToString()]["title"],
-                        pic = (string)json[i.ToString()]["pic"],
-                        author = (string)json[i.ToString()]["author"],
-                        play = (string)json[i.ToString()]["play"],
-                        video_review = (string)json[i.ToString()]["video_review"],
-                        num = i + 1
-                    });
+                        ls[i].forColor = bg;
+                    }
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
                 QQ_Rank_YX.ItemsSource = ReList;
             }
@@ -313,31 +259,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-36.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=36"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_KJ.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_KJ.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_KJ.ItemsSource = ReList;
 
 
             }
@@ -353,31 +290,50 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-5.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=5"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_YL.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_YL.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_YL.ItemsSource = ReList;
+            }
+            catch (Exception ex)
+            {
+                MessageDialog md = new MessageDialog(ex.Message);
+                await md.ShowAsync();
+            }
+
+        }
+        public async Task GetSHRank()
+        {
+            try
+            {
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-160.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
+                {
+                    if (i < 3)
+                    {
+                        ls[i].forColor = bg;
+                    }
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
+                }
+                QQ_Rank_SH.ItemsSource = ReList;
             }
             catch (Exception ex)
             {
@@ -390,27 +346,20 @@ namespace bilibili2.Pages
         {
             try
             {
-                HttpClient hc = new HttpClient();
-                HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=119"));
-                hr.EnsureSuccessStatusCode();
-                string results = await hr.Content.ReadAsStringAsync();
-                InfoModel model = new InfoModel();
-                model = JsonConvert.DeserializeObject<InfoModel>(results);
-                JObject json = JObject.Parse(model.list.ToString());
-                QQ_Rank_GC.Items.Clear();
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-119.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
                 List<InfoModel> ReList = new List<InfoModel>();
-                for (int i = 0; i < 20; i++)
+                for (int i = 0; i < 30; i++)
                 {
-                    ReList.Add(new InfoModel
+                    if (i < 3)
                     {
-                        aid = (string)json[i.ToString()]["aid"],
-                        title = (string)json[i.ToString()]["title"],
-                        pic = (string)json[i.ToString()]["pic"],
-                        author = (string)json[i.ToString()]["author"],
-                        play = (string)json[i.ToString()]["play"],
-                        video_review = (string)json[i.ToString()]["video_review"],
-                        num = i + 1
-                    });
+                        ls[i].forColor = bg;
+                    }
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
                 QQ_Rank_GC.ItemsSource = ReList;
             }
@@ -427,31 +376,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-23.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=422fd9d7289a1dd9&order=hot&original=0&page=1&pagesize=20&tid=23"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_DY.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_DY.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_DY.ItemsSource = ReList;
             }
             catch (Exception ex)
             {
@@ -464,31 +404,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-11.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=84b739484c36d653&order=hot&original=0&page=1&pagesize=20&tid=11"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_DSJ.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_DSJ.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_DSJ.ItemsSource = ReList;
             }
             catch (Exception ex)
             {
@@ -501,31 +432,22 @@ namespace bilibili2.Pages
         {
             try
             {
-                using (hc = new HttpClient())
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/rank/all-03-155.json"));
+                InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
+                InfoModel model1 = JsonConvert.DeserializeObject<InfoModel>(model.rank.ToString());
+                List<InfoModel> ls = JsonConvert.DeserializeObject<List<InfoModel>>(model1.list.ToString());
+                List<InfoModel> ReList = new List<InfoModel>();
+                for (int i = 0; i < 30; i++)
                 {
-                    HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.cn/list?appkey=84b739484c36d653&order=hot&original=0&page=1&pagesize=20&tid=155"));
-                    hr.EnsureSuccessStatusCode();
-                    string results = await hr.Content.ReadAsStringAsync();
-                    InfoModel model = new InfoModel();
-                    model = JsonConvert.DeserializeObject<InfoModel>(results);
-                    JObject json = JObject.Parse(model.list.ToString());
-                    QQ_Rank_SS.Items.Clear();
-                    List<InfoModel> ReList = new List<InfoModel>();
-                    for (int i = 0; i < 20; i++)
+                    if (i < 3)
                     {
-                        ReList.Add(new InfoModel
-                        {
-                            aid = (string)json[i.ToString()]["aid"],
-                            title = (string)json[i.ToString()]["title"],
-                            pic = (string)json[i.ToString()]["pic"],
-                            author = (string)json[i.ToString()]["author"],
-                            play = (string)json[i.ToString()]["play"],
-                            video_review = (string)json[i.ToString()]["video_review"],
-                            num = i + 1
-                        });
+                        ls[i].forColor = bg;
                     }
-                    QQ_Rank_SS.ItemsSource = ReList;
+                    ls[i].num = i + 1;
+                    ReList.Add(ls[i]);
                 }
+                QQ_Rank_SS.ItemsSource = ReList;
             }
             catch (Exception ex)
             {
@@ -553,6 +475,7 @@ namespace bilibili2.Pages
         bool DYLoad = false;
         bool DSJLoad = false;
         bool SSLoad = false;
+        bool SHLoad = false;
         private async void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             switch (pivot.SelectedIndex)
@@ -560,6 +483,7 @@ namespace bilibili2.Pages
                 case 0:
                     if (!YCLoad)
                     {
+                        await Task.Delay(200);
                         pr_loading.Visibility = Visibility.Visible;
                         await GetYCRank();
                         YCLoad = true;
@@ -630,6 +554,15 @@ namespace bilibili2.Pages
                     }
                     break;
                 case 8:
+                    if (!SHLoad)
+                    {
+                        pr_loading.Visibility = Visibility.Visible;
+                        await GetSHRank();
+                        SHLoad = true;
+                        pr_loading.Visibility = Visibility.Collapsed;
+                    }
+                    break;
+                case 9:
                     if (!YLLoad)
                     {
                         pr_loading.Visibility = Visibility.Visible;
@@ -638,7 +571,7 @@ namespace bilibili2.Pages
                         pr_loading.Visibility = Visibility.Collapsed;
                     }
                     break;
-                case 9:
+                case 10:
                     if (!GCLoad)
                     {
                         pr_loading.Visibility = Visibility.Visible;
@@ -647,7 +580,7 @@ namespace bilibili2.Pages
                         pr_loading.Visibility = Visibility.Collapsed;
                     }
                     break;
-                case 10:
+                case 11:
                     if (!DYLoad)
                     {
                         pr_loading.Visibility = Visibility.Visible;
@@ -656,7 +589,7 @@ namespace bilibili2.Pages
                         pr_loading.Visibility = Visibility.Collapsed;
                     }
                     break;
-                case 11:
+                case 12:
                     if (!DSJLoad)
                     {
                         pr_loading.Visibility = Visibility.Visible;
@@ -665,7 +598,7 @@ namespace bilibili2.Pages
                         pr_loading.Visibility = Visibility.Collapsed;
                     }
                     break;
-                case 12:
+                case 13:
                     if (!SSLoad)
                     {
                         pr_loading.Visibility = Visibility.Visible;
@@ -677,6 +610,16 @@ namespace bilibili2.Pages
                 default:
                     break;
             }
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            int d = Convert.ToInt32(this.ActualWidth / 400);
+            if (d > 3)
+            {
+                d = 3;
+            }
+            bor_Width.Width = this.ActualWidth / d - 22;
         }
     }
 }

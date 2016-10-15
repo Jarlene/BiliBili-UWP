@@ -8,15 +8,21 @@
     mc:Ignorable="d"
     Loaded="Page_Loaded"
     >
-
-    <Grid Background="#FFDF85A0" x:Name="grid">
+    <!--Background="#FFDF85A0"-->
+    <Grid Background="{ThemeResource Bili-ForeColor}" x:Name="grid" >
         <StackPanel VerticalAlignment="Center">
-            <Image Source="ms-appx:///Assets/Wide310x150Logo.png" Width="300" Height="150" ></Image>
+            <Image x:Name="load_img" Source="ms-appx:///Assets/ic_splash_default.png" Width="300" ></Image>
+            <!--<Image Source="ms-appx:///HappyBirthDay.png"  Width="300"></Image>-->
         </StackPanel>
         <StackPanel VerticalAlignment="Bottom" Margin="0 30">
             <ProgressRing Width="50" Height="50" IsActive="True" Margin="0 5" Foreground="White"></ProgressRing>
             <TextBlock x:Name="txt_Load" HorizontalAlignment="Center"  Foreground="White" ></TextBlock>
         </StackPanel>
-
+        <Grid x:Name="grid_Load" Tapped="grid_Load_Tapped">
+            <Grid.Background>
+                <ImageBrush x:Name="img"  Stretch="Uniform" ImageSource="{Binding Path=image}"/>
+            </Grid.Background>
+          
+        </Grid>
     </Grid>
 </Page>

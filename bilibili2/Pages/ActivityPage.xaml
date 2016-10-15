@@ -1,0 +1,67 @@
+﻿<Page
+    x:Class="bilibili2.Pages.ActivityPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:bilibili2.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Tag="活动中心"
+    SizeChanged="Page_SizeChanged"
+    xmlns:c="using:bilibili2"
+    >
+    <Page.Resources>
+        <SolidColorBrush x:Key="BG" x:Name="bg" Color="#FFDF85A0"/>
+    </Page.Resources>
+    <Grid Background="{ThemeResource Bili-Background}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"/>
+            <RowDefinition/>
+            <RowDefinition Height="auto"/>
+        </Grid.RowDefinitions>
+        <Border x:Name="bor_Width" Width="450" VerticalAlignment="Top"></Border>
+        <Grid Background="{StaticResource BG}"  Grid.Row="0" Height="48" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
+            <TextBlock  Text="活动中心" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
+        </Grid>
+        <GridView x:Name="grid_View" IsItemClickEnabled="True" SelectionMode="None" ItemClick="grid_View_ItemClick" Style="{StaticResource GridViewStyle1}" Grid.Row="1">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"></Setter>
+                    <Setter Property="Margin" Value="5"></Setter>
+                </Style>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
+                <DataTemplate>
+                    <Border Width="{Binding ElementName=bor_Width,Path=Width}" >
+                        <Grid >
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition Height="auto"/>
+                            </Grid.RowDefinitions>
+                            <Image  Source="{Binding cover}" Stretch="UniformToFill"></Image>
+
+                            <Grid Grid.Row="1"   Margin="5">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition Width="auto"/>
+                                </Grid.ColumnDefinitions>
+                                <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                <TextBlock Grid.Column="1" Foreground="{StaticResource BG}" Visibility="{Binding state_0}">进行中</TextBlock>
+                                <TextBlock Grid.Column="1" Foreground="Gray" Visibility="{Binding state_1}">已结束</TextBlock>
+                            </Grid>
+
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
+        <c:MessageShow x:Name="messShow" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" Grid.RowSpan="2"/>
+        <ProgressRing x:Name="pr_Load" Width="56" Height="56" Grid.RowSpan="2" IsActive="True"></ProgressRing>
+    </Grid>
+</Page>

@@ -7,7 +7,9 @@
     xmlns:bilibili2="using:bilibili2"
     x:Class="bilibili2.Pages.TopicPage"
     mc:Ignorable="d"
+xmlns:c="using:bilibili2"
     Tag="话题"
+    SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
         <SolidColorBrush x:Key="BG" x:Name="bg" Color="#FFDF85A0"></SolidColorBrush>
@@ -17,7 +19,7 @@
             <RowDefinition Height="48"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-
+        <Border x:Name="bor_Width" Width="450" VerticalAlignment="Top"></Border>
         <Grid Background="{StaticResource BG}" Grid.Row="0" Height="48" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="48"/>
@@ -27,29 +29,44 @@
             <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
             <TextBlock  Text="话题" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
-        <GridView x:Name="list_Topic" Grid.Row="1"  ScrollViewer.VerticalScrollBarVisibility="Auto" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_Topic_ItemClick">
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsStackPanel Orientation="Vertical"/>
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-            <GridView.ItemContainerStyle>
-                <Style TargetType="GridViewItem">
-                    <Setter Property="Margin" Value="10 5"/>
-                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                </Style>
-            </GridView.ItemContainerStyle>
-            <GridView.ItemTemplate>
-                <DataTemplate>
-                    <Grid>
-                        <Image ToolTipService.ToolTip="{Binding title}" Source="{Binding img}"/>
-                    </Grid>
-                </DataTemplate>
-            </GridView.ItemTemplate>
-        </GridView>
-        <ProgressBar x:Name="pr_Load" VerticalAlignment="Top" Background="{x:Null}" IsIndeterminate="True"/>
+        <ScrollViewer x:Name="sc" ViewChanged="sc_ViewChanged" Style="{StaticResource ScrollViewerStyle1}" Grid.Row="1">
+            <StackPanel>
+                <GridView x:Name="grid_View" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Hidden" IsItemClickEnabled="True" SelectionMode="None" ItemClick="list_Topic_ItemClick" Style="{StaticResource GridViewStyle1}" Grid.Row="1">
+                    <GridView.ItemContainerStyle>
+                        <Style TargetType="GridViewItem">
+                            <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"></Setter>
+                            <Setter Property="Margin" Value="5"></Setter>
+                        </Style>
+                    </GridView.ItemContainerStyle>
+                    <GridView.ItemTemplate>
+                        <DataTemplate>
+                            <Border Width="{Binding ElementName=bor_Width,Path=Width}" >
+                                <Grid >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Image  Source="{Binding cover}" Stretch="UniformToFill"></Image>
 
-        <bilibili2:MessageShow  x:Name="messShow" HorizontalAlignment="Center"  Grid.RowSpan="2" VerticalAlignment="Bottom" Margin="10"/>
+                                    <Grid Grid.Row="1"   Margin="5">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition Width="auto"/>
+                                        </Grid.ColumnDefinitions>
+                                        <TextBlock TextTrimming="CharacterEllipsis" Text="{Binding title}"></TextBlock>
+                                    </Grid>
 
+                                </Grid>
+                            </Border>
+                        </DataTemplate>
+                    </GridView.ItemTemplate>
+                </GridView>
+                <Button x:Name="btn_More_Video" Click="btn_More_Video_Click" Background="{StaticResource BG}" HorizontalAlignment="Center" Foreground="White">加载更多</Button>
+            </StackPanel>
+           
+        </ScrollViewer>
+       
+        <c:MessageShow x:Name="messShow" HorizontalAlignment="Center" VerticalAlignment="Bottom" Margin="10" Grid.RowSpan="2"/>
+        <ProgressRing x:Name="pr_Load" Width="56" Height="56" Grid.RowSpan="2" IsActive="True"></ProgressRing>
     </Grid>
 </Page>

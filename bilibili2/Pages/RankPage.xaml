@@ -7,39 +7,44 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     Tag="排行榜"
+    SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
         <SolidColorBrush x:Key="BG" x:Name="bg" Color="#FFDF85A0"></SolidColorBrush>
-        <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
-            <Setter Property="BorderBrush" Value="#33000000"></Setter>
-            <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>
+        <Style x:Key="ListViewItemStyle" TargetType="GridViewItem">
+            <!--<Setter Property="BorderBrush" Value="#33000000"></Setter>
+            <Setter Property="BorderThickness" Value="0,0,0,1"></Setter>-->
+            <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
         </Style>
         <DataTemplate x:Name="RankItem">
-            <Grid Margin="0,5">
-                <Grid.RowDefinitions>
-                    <RowDefinition></RowDefinition>
-                    <RowDefinition  ></RowDefinition>
-                    <RowDefinition></RowDefinition>
-                </Grid.RowDefinitions>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="24"></ColumnDefinition>
-                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                    <ColumnDefinition></ColumnDefinition>
-                </Grid.ColumnDefinitions>
-                <TextBlock Text="{Binding num}" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.RowSpan="3" FontSize="20"></TextBlock>
-                <Image Width="100" Grid.Column="1" Margin="10,0" Source="{Binding pic}" Grid.RowSpan="3"></Image>
-                <TextBlock Text="{Binding title}" TextTrimming="CharacterEllipsis" MaxLines="1" FontSize="14" Grid.Column="2" TextWrapping="Wrap"></TextBlock>
-                <StackPanel Orientation="Horizontal" Grid.Column="2"  Grid.Row="1" VerticalAlignment="Center">
-                    <TextBlock Text="UP主："   FontSize="12" Foreground="#FF707070"></TextBlock>
-                    <TextBlock Text="{Binding author}"   FontSize="12" Foreground="#FF707070"></TextBlock>
-                </StackPanel>
-                <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom">
-                    <TextBlock Text="播放："   FontSize="12" Foreground="#FF707070"></TextBlock>
-                    <TextBlock Text="{Binding play}"   FontSize="12" Foreground="#FF707070" Margin="0,0,10,0"></TextBlock>
-                    <TextBlock Text="弹幕："   FontSize="12" Foreground="#FF707070"></TextBlock>
-                    <TextBlock Text="{Binding video_review}"   FontSize="12" Foreground="#FF707070"></TextBlock>
-                </StackPanel>
-            </Grid>
+            <Border Width="{Binding ElementName=bor_Width,Path=Width}" Margin="5">
+                <Grid Height="80">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition ></RowDefinition>
+                        <RowDefinition ></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="24"></ColumnDefinition>
+                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                        <ColumnDefinition></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Foreground="{Binding forColor}" Text="{Binding num}" VerticalAlignment="Center" HorizontalAlignment="Center" Grid.RowSpan="3" FontSize="20"></TextBlock>
+                    <Image Width="100" Height="70" Grid.Column="1" Margin="10,0" Source="{Binding pic}" Grid.RowSpan="3" Stretch="UniformToFill"></Image>
+                    <TextBlock Text="{Binding title}" TextWrapping="Wrap" MaxLines="2"  TextTrimming="CharacterEllipsis" FontSize="14" Grid.Column="2" ></TextBlock>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2"  Grid.Row="1" VerticalAlignment="Center">
+                        <TextBlock Text="UP主："   FontSize="12" Foreground="#FF707070"></TextBlock>
+                        <TextBlock Text="{Binding author}"   FontSize="12" Foreground="#FF707070"></TextBlock>
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal" Grid.Column="2" Grid.Row="2" VerticalAlignment="Bottom">
+                        <TextBlock Text="播放："   FontSize="12" Foreground="#FF707070"></TextBlock>
+                        <TextBlock Text="{Binding play}"   FontSize="12" Foreground="#FF707070" Margin="0,0,10,0"></TextBlock>
+                        <TextBlock Text="弹幕："   FontSize="12" Foreground="#FF707070"></TextBlock>
+                        <TextBlock Text="{Binding video_review}"   FontSize="12" Foreground="#FF707070"></TextBlock>
+                    </StackPanel>
+                </Grid>
+            </Border>
         </DataTemplate>
     </Page.Resources>
     <Grid Background="{ThemeResource Bili-Background}">
@@ -47,7 +52,7 @@
             <RowDefinition Height="48"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-       
+        <Border x:Name="bor_Width" Width="450" VerticalAlignment="Top"></Border>
         <Grid Background="{StaticResource BG}" Grid.Row="0" Height="48" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="48"/>
@@ -58,108 +63,116 @@
             <TextBlock  Text="排行榜" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
         <Pivot x:Name="pivot" Grid.Row="1" SelectionChanged="pivot_SelectionChanged">
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin=" 0">
                 <PivotItem.Header>
                     <TextBlock Text="原创" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_YC" SelectionMode="None" ItemClick="QQ_Rank_YC_ItemClick" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_YC" SelectionMode="None" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="全站" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_QZ" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_QZ" Style="{StaticResource GridViewStyle1}" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="番剧" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_FJ" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_FJ" Style="{StaticResource GridViewStyle1}" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="动画" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_DH" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_DH"  Style="{StaticResource GridViewStyle1}" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="音乐" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_YY" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_YY" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="舞蹈" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_WD" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_WD" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="游戏" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_YX" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_YX" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="科技" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_KJ" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_KJ" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
+                <PivotItem.Header>
+                    <TextBlock Text="生活" FontSize="18"></TextBlock>
+                </PivotItem.Header>
+                <Grid>
+                    <GridView x:Name="QQ_Rank_SH" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="娱乐" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_YL" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_YL" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="鬼畜" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_GC" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_GC" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="电影" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_DY" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_DY" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="电视剧" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_DSJ" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_DSJ" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
-            <PivotItem Margin="-1 0">
+            <PivotItem Margin="0">
                 <PivotItem.Header>
                     <TextBlock Text="时尚" FontSize="18"></TextBlock>
                 </PivotItem.Header>
                 <Grid>
-                    <ListView x:Name="QQ_Rank_SS" ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></ListView>
+                    <GridView x:Name="QQ_Rank_SS" Style="{StaticResource GridViewStyle1}"  ItemClick="QQ_Rank_YC_ItemClick" SelectionMode="None" ItemTemplate="{StaticResource RankItem}" IsItemClickEnabled="True" ItemContainerStyle="{StaticResource ListViewItemStyle}"></GridView>
                 </Grid>
             </PivotItem>
         </Pivot>

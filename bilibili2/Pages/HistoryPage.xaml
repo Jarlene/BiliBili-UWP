@@ -24,10 +24,11 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
-                <TextBlock  Text="历史纪录" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
+                <TextBlock  Text="历史记录" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
                 <ProgressBar x:Name="pro_Load" Grid.ColumnSpan="3" VerticalAlignment="Top" Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
+                <AppBarButton x:Name="btn_ClearHistory" Click="btn_ClearHistory_Click" HorizontalAlignment="Right" Icon="Delete" ToolTipService.ToolTip="清空" Grid.Column="2" Width="48" Foreground="White"></AppBarButton>
             </Grid>
-            <ScrollViewer x:Name="sv_Ho" Grid.Row="1" ViewChanged="sv_Ho_ViewChanged" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer x:Name="sv_Ho" Style="{StaticResource ScrollViewerStyle1}" Grid.Row="1" ViewChanged="sv_Ho_ViewChanged" HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
                     <ListView  x:Name="User_ListView_History" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled"  SelectionMode="None" IsItemClickEnabled="True" ItemClick="User_ListView_History_ItemClick" >
                         <ListView.ItemContainerStyle>
@@ -52,11 +53,11 @@
                                     <TextBlock Text="{Binding title}" FontSize="14" Grid.Column="1" TextWrapping="Wrap" MaxLines="2" Margin="10,0" ></TextBlock>
                                     <StackPanel Orientation="Horizontal" Grid.Row="1" Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
                                         <Image Source="ms-appx:///Assets/MiniIcon/Type.png" Width="16" Height="16"></Image>
-                                        <TextBlock Text="{Binding typename}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF898989" VerticalAlignment="Center"></TextBlock>
+                                        <TextBlock Text="{Binding tname}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF898989" VerticalAlignment="Center"></TextBlock>
                                     </StackPanel>
                                     <StackPanel Orientation="Horizontal" Grid.Row="3" Grid.Column="1" Margin="10,0" VerticalAlignment="Center">
                                         <Image Source="ms-appx:///Assets/MiniIcon/Time.png" Width="16" Height="16"></Image>
-                                        <TextBlock Text="{Binding view_at}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF898989"></TextBlock>
+                                        <TextBlock Text="{Binding View_at}"  FontSize="12"  TextWrapping="Wrap" MaxLines="2"  Foreground="#FF898989"></TextBlock>
                                     </StackPanel>
                                 </Grid>
                             </DataTemplate>

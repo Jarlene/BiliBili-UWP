@@ -64,12 +64,28 @@
                 <ColumnDefinition/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
-            <Button x:Name="btn_HF" Background="#00000000"  FontSize="16"  Foreground="#B2FFFFFF" Tag="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="回复我的" Click="btn_HF_Click"/>
+            <Grid>
+                <Button x:Name="btn_HF" Background="#00000000"  FontSize="16"  Foreground="#B2FFFFFF" Tag="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="回复我的" Click="btn_HF_Click"/>
+                <Ellipse x:Name="bor_HF" Visibility="Collapsed" Fill="Red" Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5 8"/>
+            </Grid>
+
+            <Grid  Grid.Column="1">
+                <Button x:Name="btn_At"  FontSize="16"  Foreground="#B2FFFFFF" Tag="1"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="@我的" Click="btn_HF_Click"/>
+                <Ellipse x:Name="bor_At" Visibility="Collapsed" Fill="Red" Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5 8"/>
+            </Grid>
+            <Grid Grid.Column="2" >
+                <Button  x:Name="btn_Zan" FontSize="16"  Foreground="#B2FFFFFF" Tag="2"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="收到的赞" Click="btn_HF_Click"/>
+                <Ellipse x:Name="bor_Zan" Visibility="Collapsed" Fill="Red" Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5 8"/>
+            </Grid>
+            <Grid Grid.Column="3" >
+                <Button  x:Name="btn_TZ" FontSize="16"  Foreground="#B2FFFFFF" Tag="3"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="系统通知" Click="btn_HF_Click"/>
+                <Ellipse x:Name="bor_TZ" Visibility="Collapsed" Fill="Red" Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5 8"/>
+            </Grid>
+            <Grid Grid.Column="4">
+                <Button  x:Name="btn_SX"  FontSize="16"  Foreground="#B2FFFFFF" Tag="4"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="我的私信" Click="btn_HF_Click"/>
+                <Ellipse x:Name="bor_SX" Visibility="Collapsed" Fill="Red" Width="5" Height="5" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="5 8"/>
+            </Grid>
           
-            <Button x:Name="btn_At"  Grid.Column="1" FontSize="16"  Foreground="#B2FFFFFF" Tag="1"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="@我的" Click="btn_HF_Click"/>
-            <Button  x:Name="btn_Zan" Grid.Column="2" FontSize="16"  Foreground="#B2FFFFFF" Tag="2"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="收到的赞" Click="btn_HF_Click"/>
-            <Button  x:Name="btn_TZ" Grid.Column="3" FontSize="16"  Foreground="#B2FFFFFF" Tag="3"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="系统通知" Click="btn_HF_Click"/>
-            <Button  x:Name="btn_SX" Grid.Column="4" FontSize="16"  Foreground="#B2FFFFFF" Tag="4"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch"  Content="我的私信" Click="btn_HF_Click"/>
         </Grid>
         <Pivot x:Name="pivot" Grid.Row="2" Style="{StaticResource PivotStyle1}" Margin="0" SelectionChanged="pivot_SelectionChanged">
             <PivotItem Margin="0">
@@ -112,10 +128,82 @@
                 </ListView>
             </PivotItem>
             <PivotItem Margin="0">
-                <TextBlock Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center">待完成</TextBlock>
+                <ListView x:Name="list_AtMe" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_Reply_ItemClick">
+                    <ListView.ItemContainerStyle>
+                        <Style  TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0 5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <HyperlinkButton Grid.RowSpan="2" Click="HyperlinkButton_Click">
+                                    <Ellipse Width="48" Height="48" >
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding face}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </HyperlinkButton>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="5 0" Text="{Binding name}"/>
+                                <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Foreground="Gray" FontSize="12" Margin="5 0" Text="{Binding time_at}"/>
+                                <TextBlock Grid.Column="1" Grid.Row="2"  Margin="5 2" TextWrapping="Wrap" Text="{Binding Content}"/>
+                                <Border CornerRadius="5" Grid.Column="1" Grid.Row="3" Background="#4C808080">
+                                    <TextBlock  FontSize="14" Margin="5" TextWrapping="Wrap" Foreground="Gray" Text="{Binding Title}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </PivotItem>
             <PivotItem Margin="0">
-                <TextBlock Foreground="Gray" HorizontalAlignment="Center" VerticalAlignment="Center">待完成</TextBlock>
+                <ListView x:Name="list_Zan" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_Reply_ItemClick">
+                    <ListView.ItemContainerStyle>
+                        <Style  TargetType="ListViewItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                        </Style>
+                    </ListView.ItemContainerStyle>
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid Margin="0 5">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="auto"/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                <HyperlinkButton Grid.RowSpan="2" Click="HyperlinkButton_Click">
+                                    <Ellipse Width="48" Height="48" >
+                                        <Ellipse.Fill>
+                                            <ImageBrush ImageSource="{Binding face}"/>
+                                        </Ellipse.Fill>
+                                    </Ellipse>
+                                </HyperlinkButton>
+
+                                <TextBlock Grid.Column="1" VerticalAlignment="Bottom" Margin="5 0" Text="{Binding name}"/>
+                                <TextBlock Grid.Column="1" Grid.Row="1" VerticalAlignment="Top" Foreground="Gray" FontSize="12" Margin="5 0" Text="{Binding time_at}"/>
+                                <TextBlock Grid.Column="1" Grid.Row="2"  Margin="5 2" TextWrapping="Wrap" Text="{Binding Content}"/>
+                                <Border CornerRadius="5" Grid.Column="1" Grid.Row="3" Background="#4C808080">
+                                    <TextBlock  FontSize="14" Margin="5" TextWrapping="Wrap" Foreground="Gray" Text="{Binding Title}"/>
+                                </Border>
+                            </Grid>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
             </PivotItem>
             <PivotItem Margin="0">
                 <ListView x:Name="list_Notify" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_Notify_ItemClick">
@@ -179,7 +267,7 @@
                 </ListView>
             </PivotItem>
         </Pivot>
-
+        <ProgressBar x:Name="pr_Load" IsIndeterminate="True" VerticalAlignment="Top" Foreground="White" Background="#00000000"></ProgressBar>
         <bilibili2:MessageShow x:Name="messShow" Grid.RowSpan="3" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20"/>
 
     </Grid>

@@ -95,7 +95,7 @@ namespace bilibili2.Pages
             }
             catch (Exception)
             {
-                messShow.Show("读取信息失败", 3000);
+                messShow.Show("搜索信息失败", 3000);
             }
             finally
             {

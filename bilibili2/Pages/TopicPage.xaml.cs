@@ -54,22 +54,41 @@ namespace bilibili2.Pages
                 GetTopic();
             }
         }
+        WebClientClass wc;
+        int page = 1;
         private async void GetTopic()
         {
             try
             {
+                IsLoading = true;
+                btn_More_Video.Visibility = Visibility.Collapsed;
+                wc = new WebClientClass();
                 pr_Load.Visibility = Visibility.Visible;
-                WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/slideshow.json"));
-                TopicModel model = JsonConvert.DeserializeObject<TopicModel>(results);
-                list_Topic.ItemsSource = JsonConvert.DeserializeObject<List<TopicModel>>(model.list.ToString());
+                string url = string.Format("http://api.bilibili.com/topic/getlist?access_key={0}&appkey={1}&build=424000&mobi_app=android&page={2}&pagesize=20&platform=android&ts={3}", ApiHelper.access_key, ApiHelper._appKey_Android, page, ApiHelper.GetTimeSpen);
+                url += "&sign=" + ApiHelper.GetSign_Android(url);
+                string results = await wc.GetResults(new Uri(url));
+                TopicModel m = Newtonsoft.Json.JsonConvert.DeserializeObject<TopicModel>(results);
+
+                m.list.ForEach(x =>
+                {
+                    if (x.link.Length!=0)
+                    {
+                        grid_View.Items.Add(x);
+                    }
+                }
+                );
+                page++;
+                //grid_View.ItemsSource = m.list;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-                messShow.Show("读取话题失败\r\n" + ex.Message, 3000);
+                messShow.Show("读取失败了", 2000);
+                //throw;
             }
             finally
             {
+                IsLoading = false;
+                btn_More_Video.Visibility = Visibility.Visible;
                 pr_Load.Visibility = Visibility.Collapsed;
             }
         }
@@ -92,6 +111,31 @@ namespace bilibili2.Pages
                 {
                     this.Frame.Navigate(typeof(WebViewPage), ((TopicModel)e.ClickedItem).link);
                 }
+            }
+        }
+        bool IsLoading = true;
+        private void sc_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
+        {
+            if (sc.VerticalOffset == sc.ScrollableHeight)
+            {
+                if (!IsLoading)
+                {
+                    GetTopic();
+                }
+            }
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            int i = Convert.ToInt32(this.ActualWidth / 400);
+            bor_Width.Width = this.ActualWidth / i - 12;
+        }
+
+        private void btn_More_Video_Click(object sender, RoutedEventArgs e)
+        {
+            if (!IsLoading)
+            {
+                GetTopic();
             }
         }
     }

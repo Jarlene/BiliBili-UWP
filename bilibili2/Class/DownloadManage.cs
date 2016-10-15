@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Windows.Networking.BackgroundTransfer;
 using Windows.Storage;
 using Windows.UI.Popups;
+using Windows.UI.Xaml;
 
 namespace bilibili2.Class
 {
@@ -27,9 +28,57 @@ namespace bilibili2.Class
         **/
    public class DownloadManage:IDisposable
     {
+        public DownloadManage()
+        {
+            settings = new SettingHelper();
+            GetSetting();
+            if (settings.SettingContains("DownMode"))
+            {
+
+                Mode = int.Parse(settings.GetSettingValue("DownMode").ToString());
+            }
+            else
+            {
+                settings.SetSettingValue("DownMode", 0);
+                Mode = 0;
+            }
+        }
+        int Mode = 0;
+        SettingHelper settings;
         ApplicationDataContainer container = ApplicationData.Current.LocalSettings;
         WebClientClass wc;
+        bool useHkIp = false;
+        bool userTwIp = false;
+        bool userDlIp = false;
+        private void GetSetting()
+        {
+            //UseTW,UseHK,UseCN
+            if (setting.SettingContains("UseTW"))
+            {
+                userTwIp = (bool)setting.GetSettingValue("UseTW");
+            }
+            else
+            {
+                userTwIp = false;
+            }
+            if (setting.SettingContains("UseHK"))
+            {
+                useHkIp = (bool)setting.GetSettingValue("UseHK");
+            }
+            else
+            {
+                useHkIp = false;
+            }
+            if (setting.SettingContains("UseCN"))
+            {
+                userDlIp = (bool)setting.GetSettingValue("UseCN");
+            }
+            else
+            {
+                userDlIp = false;
+            }
 
+        }
         public static List<string> Downloaded = new List<string>();//保存已经下载过的CID数据
         public void Dispose()
         {
@@ -73,8 +122,58 @@ namespace bilibili2.Class
             try
             {
                 wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://interface.bilibili.com/playurl?platform=android&cid=" + cid + "&quality=" + quality + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4"));
-                VideoUriModel model = JsonConvert.DeserializeObject<VideoUriModel>(results);
+                string url = "http://interface.bilibili.com/playurl?platform=android&cid=" + cid + "&quality=" + quality + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4";
+                url+="&sign="+ ApiHelper.GetSign(url);
+               // url += "&sign=" + ApiHelper.GetSign(url);
+
+                string results = "";
+                VideoUriModel model = null;
+                string area = "";
+                if (useHkIp)
+                {
+                    area = "hk";
+                }
+                if (userTwIp)
+                {
+                    area = "tw";
+                }
+                if (userDlIp)
+                {
+                    area = "cn";
+                }
+                if (!userDlIp && !userTwIp && !useHkIp)
+                {
+                    results = await wc.GetResults(new Uri(url));
+
+                    model = JsonConvert.DeserializeObject<VideoUriModel>(results);
+
+
+                }
+                else
+                {
+                    results = await wc.GetResults(new Uri("http://52uwp.com/api/BiliBili?area=" + area + "&url=" + Uri.EscapeDataString(url)));
+                    MessageModel ms = JsonConvert.DeserializeObject<MessageModel>(results);
+
+
+                    if (ms.code == 0)
+                    {
+                        model = JsonConvert.DeserializeObject<VideoUriModel>(ms.message);
+                    }
+                    if (ms.code == -100)
+                    {
+                        await new MessageDialog("远程代理失效，请联系开发者更新！").ShowAsync();
+                    }
+                    if (ms.code == -200)
+                    {
+                        await new MessageDialog("代理读取信息失败，请重试！").ShowAsync();
+                    }
+
+                }
+                //-5021
+                if (model.code == -5021)
+                {
+                    await new MessageDialog("不支持你所在地区！").ShowAsync();
+                }
                 List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
                 return model1[0].url;
             }
@@ -89,7 +188,16 @@ namespace bilibili2.Class
             try
             {
                 BackgroundDownloader downloader = new BackgroundDownloader();
+                if (Mode==0)
+                {
+                    DownModel.group.TransferBehavior = BackgroundTransferBehavior.Serialized;
+                }
+                else
+                {
+                    DownModel.group.TransferBehavior = BackgroundTransferBehavior.Parallel;
+                }
                 downloader.TransferGroup = DownModel.group;
+
                 if (setting.SettingContains("UseWifi"))
                 {
                     if ((bool)setting.GetSettingValue("UseWifi"))
@@ -184,9 +292,9 @@ namespace bilibili2.Class
         }
 
 
-
         public class DownModel
         {
+
             public static StorageFolder DownFlie = null;//下载文件夹
             public static BackgroundTransferGroup group = BackgroundTransferGroup.CreateGroup("BILIBILI-UWP-20");//下载组，方便管理
             public string aid { get; set; }
@@ -247,7 +355,23 @@ namespace bilibili2.Class
                     thisPropertyChanged("Size");
                 }
             }
+
             public string Guid { get { return downOp.Guid.ToString(); } }
+
+            private Visibility _PauseVis;
+            public Visibility PauseVis
+            {
+                get { return _PauseVis; }
+                set { _PauseVis = value; thisPropertyChanged("PauseVis"); }
+            }
+            private Visibility _DownVis;
+            public Visibility DownVis
+            {
+                get { return _DownVis; }
+                set { _DownVis = value; thisPropertyChanged("DownVis"); }
+            }
+
+
             public string _Status;
             public string Status
             {
@@ -258,30 +382,48 @@ namespace bilibili2.Class
                     {
                         case BackgroundTransferStatus.Idle:
                             _Status = "空闲中";
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Collapsed;
                             break;
                         case BackgroundTransferStatus.Running:
                             _Status = "下载中";
+                            PauseVis = Visibility.Visible;
+                            DownVis = Visibility.Collapsed;
                             break;
                         case BackgroundTransferStatus.PausedByApplication:
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Visible;
                             _Status = "暂停中";
                             break;
                         case BackgroundTransferStatus.PausedCostedNetwork:
                             _Status = "因网络暂停";
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Collapsed;
                             break;
                         case BackgroundTransferStatus.PausedNoNetwork:
-                            _Status = "没有连接至网络";
+                            _Status = "挂起";
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Visible;
                             break;
                         case BackgroundTransferStatus.Completed:
                             _Status = "完成";
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Collapsed;
                             break;
                         case BackgroundTransferStatus.Canceled:
                             _Status = "取消";
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Collapsed;
                             break;
                         case BackgroundTransferStatus.Error:
                             _Status = "下载错误";
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Collapsed;
                             break;
                         case BackgroundTransferStatus.PausedSystemPolicy:
                             _Status = "因系统问题暂停";
+                            PauseVis = Visibility.Collapsed;
+                            DownVis = Visibility.Collapsed;
                             break;
                         default:
                             _Status = "Wait...";

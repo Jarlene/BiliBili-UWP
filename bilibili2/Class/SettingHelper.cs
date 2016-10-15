@@ -5,9 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using Windows.ApplicationModel;
 using Windows.Storage;
-
+using Windows.System.Profile;
+using Windows.UI.ViewManagement;
+public enum DeriveTypes
+{
+    Phone=0,
+    PC=1,
+    Pad=2
+}
 namespace bilibili2.Class
 {
+
     class SettingHelper
     {
 
@@ -43,6 +51,6 @@ namespace bilibili2.Class
         {
             return  string.Format("{0}.{1}.{2}.{3}", pack.Version.Major, pack.Version.Minor, pack.Version.Build, pack.Version.Revision);
         }
-
+       
     }
 }

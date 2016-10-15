@@ -1,4 +1,5 @@
 ﻿using bilibili2.Class;
+using bilibili2.HomePage;
 using bilibili2.Pages;
 using bilibili2.PartPages;
 using JyUserFeedback;
@@ -18,8 +19,11 @@ using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.Graphics.Display;
+using Windows.Media;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.Core;
 using Windows.UI.Popups;
@@ -51,12 +55,18 @@ namespace bilibili2
         {
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Required;
+            //infoFrame.CacheSize = 1;
             pivot_Home.SelectedIndex = 2;
             SystemNavigationManager.GetForCurrentView().BackRequested += MainPage_BackRequested;
+            //DisplayInformation.DisplayContentsInvalidated += DisplayInformation_DisplayContentsInvalidated;
+            DisplayInformation.GetForCurrentView().OrientationChanged += MainPage_OrientationChanged;
+            // DisplayProperties.OrientationChanged += DisplayProperties_OrientationChanged; ;
             home_Items.PlayEvent += Home_Items_PlayEvent;
             home_Items.ErrorEvent += Home_Items_ErrorEvent;
+            home_Items.PartEvent += Home_Items_PartEvent;
             liveinfo.ErrorEvent += Home_Items_ErrorEvent;
             liveinfo.PlayEvent += Liveinfo_PlayEvent;
+
             JyFeedbackControl.FeedbackImageRequested += async delegate
             {
                 var fileOpenPicker = new FileOpenPicker();
@@ -68,13 +78,175 @@ namespace bilibili2
                     _jyUserFeedbackSdkManager.UploadPicture(ApiHelper.JyAppkey, ApiHelper.JySecret, file);
                 }
             };
+            //if (DeriveHelper.GetDeriveType()== DeriveTypes.PC)
+            //{
+            //    var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            //    coreTitleBar.ExtendViewIntoTitleBar = true;
+            //    Window.Current.SetTitleBar(_title_bar);
+            //}
+            //else
+            //{
+            //    _title_bar.Visibility = Visibility.Collapsed;
+            //}
             ChangeTitbarColor();
-            //this.RequestedTheme = ElementTheme.Dark;
+        }
+
+        private async void MainPage_OrientationChanged(DisplayInformation sender, object args)
+        {
+            if (!settings.SettingContains("HideTitleBar"))
+            {
+                settings.SetSettingValue("HideTitleBar", true);
+            }
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+            {
+                StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                await statusBar.ShowAsync();
+            }
+            if (DisplayInformation.GetForCurrentView().CurrentOrientation == DisplayOrientations.Landscape || DisplayInformation.GetForCurrentView().CurrentOrientation == DisplayOrientations.LandscapeFlipped)
+            {
+                if ((bool)settings.GetSettingValue("HideTitleBar"))
+                {
+                    if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+                    {
+                        StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                        await statusBar.HideAsync();
+                    }
+                }
+            }
+
+        }
+
+        private async void DisplayInformation_DisplayContentsInvalidated(DisplayInformation sender, object args)
+        {
+            if (!settings.SettingContains("HideTitleBar"))
+            {
+                settings.SetSettingValue("HideTitleBar", true);
+            }
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+            {
+                StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                await statusBar.ShowAsync();
+            }
+            if (DisplayInformation.GetForCurrentView().CurrentOrientation == DisplayOrientations.Landscape || DisplayInformation.GetForCurrentView().CurrentOrientation == DisplayOrientations.LandscapeFlipped)
+            {
+                if ((bool)settings.GetSettingValue("HideTitleBar"))
+                {
+                    if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+                    {
+                        StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                        await statusBar.HideAsync();
+                    }
+                }
+            }
+
+
+        }
+
+        private async void DisplayProperties_OrientationChanged(object sender)
+        {
+            if (!settings.SettingContains("HideTitleBar"))
+            {
+                settings.SetSettingValue("HideTitleBar", true);
+            }
+
+            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+            {
+                StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                await statusBar.ShowAsync();
+            }
+            if (DisplayInformation.GetForCurrentView().CurrentOrientation == DisplayOrientations.Landscape || DisplayInformation.GetForCurrentView().CurrentOrientation == DisplayOrientations.LandscapeFlipped)
+            {
+                if ((bool)settings.GetSettingValue("HideTitleBar"))
+                {
+                    if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+                    {
+                        StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+                        await statusBar.HideAsync();
+                    }
+                }
+            }
+
+
+
+            //ApplicationView av = ApplicationView.GetForCurrentView();
+            //switch (av.Orientation)
+            //{
+            //    case ApplicationViewOrientation.Landscape:
+            //        if ((bool)settings.GetSettingValue("HideTitleBar"))
+            //        {
+            //            if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+            //            {
+            //                StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            //                await statusBar.HideAsync();
+            //            }
+            //        }
+            //        break;
+            //    case ApplicationViewOrientation.Portrait:
+            //        if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
+            //        {
+            //            StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
+            //            await statusBar.ShowAsync();
+            //        }
+            //        break;
+            //    default:
+            //        break;
+            //}
+
+        }
+
+        private void Home_Items_PartEvent(string aid)
+        {
+            switch (aid)
+            {
+                case "Hot":
+                    infoFrame.Navigate(typeof(RankPage));
+                    break;
+                case "FJ":
+                    infoFrame.Navigate(typeof(PartPage), Parts.bangumi);
+                    break;
+                case "DH":
+                    infoFrame.Navigate(typeof(PartPage), Parts.douga);
+                    break;
+                case "YY":
+                    infoFrame.Navigate(typeof(PartPage), Parts.music);
+                    break;
+                case "WD":
+                    infoFrame.Navigate(typeof(PartPage), Parts.dance);
+                    break;
+                case "KJ":
+                    infoFrame.Navigate(typeof(PartPage), Parts.technology);
+                    break;
+                case "YX":
+                    infoFrame.Navigate(typeof(PartPage), Parts.game);
+                    break;
+                case "GC":
+                    infoFrame.Navigate(typeof(PartPage), Parts.kichiku);
+                    break;
+                case "YL":
+                    infoFrame.Navigate(typeof(PartPage), Parts.ent);
+                    break;
+                case "DY":
+                    infoFrame.Navigate(typeof(PartPage), Parts.movie);
+                    break;
+                case "DSJ":
+                    infoFrame.Navigate(typeof(PartPage), Parts.tv);
+                    break;
+                case "SS":
+                    infoFrame.Navigate(typeof(PartPage), Parts.fashion);
+                    break;
+                case "SH":
+                    infoFrame.Navigate(typeof(PartPage), Parts.life);
+                    break;
+                default:
+                    break;
+            }
         }
 
         private void Liveinfo_PlayEvent(string aid)
         {
-            infoFrame.Navigate(typeof(LiveInfoPage),aid);
+            infoFrame.Navigate(typeof(LiveInfoPage), aid);
         }
 
         string navInfo = string.Empty;
@@ -82,56 +254,137 @@ namespace bilibili2
         DispatcherTimer timer = new DispatcherTimer();
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
+
             if (e.NavigationMode == NavigationMode.New)
             {
                 GetFeedInfo();
                 GetLoadInfo();
                 SetHomeInfo();
-                SetWeekInfo();
+                //SetWeekInfo();
                 home_Items.SetHomeInfo();
                 timer.Interval = new TimeSpan(0, 0, 5);
                 timer.Start();
                 timer.Tick += Timer_Tick;
+                string Info = @"";
 
+                //string Info = @"新版更新";
+                if (!settings.SettingContains(settings.GetVersion()))
+                {
+
+                    mess_Info.Show(string.Format("{0}更新内容", settings.GetVersion()), Info, false);
+                }
             }
             GetSetting();
             ChangeTheme();
             ChangeDrak();
-           
             navInfo = infoFrame.GetNavigationState();
             infoFrame.Tag = (SolidColorBrush)top_grid.Background;
+            CheckUpdate();
+            if (e.Parameter != null && e.Parameter.ToString().Length != 0)
+            {
+
+                object[] par = e.Parameter as object[];
+                LoadType type = (LoadType)par[0];
+                switch (type)
+                {
+                    case LoadType.OpenAvNum:
+                        infoFrame.Navigate(typeof(VideoInfoPage), (string)par[1]);
+                        break;
+                    case LoadType.OpenVideo:
+                        infoFrame.Navigate(typeof(PlayerPage), (KeyValuePair<List<VideoModel>, int>)par[1]);
+                        break;
+                    case LoadType.OpenLive:
+                        infoFrame.Navigate(typeof(LiveInfoPage), (string)par[1]);
+                        break;
+                    case LoadType.OpenWeb:
+                        infoFrame.Navigate(typeof(WebViewPage), (string)par[1]);
+                        break;
+                    default:
+                        break;
+                }
+            }
+
+
+        }
+        private async void CheckUpdate()
+        {
+            try
+            {
+                wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri("http://7xpria.dl1.z0.glb.clouddn.com/CheckVersion.json?r=" + new Random().Next(1, 9999)));
+
+                CheckUpdateModel info = JsonConvert.DeserializeObject<CheckUpdateModel>(results);
+                if (!settings.SettingContains("new" + info.Version) && settings.GetVersion() != info.Version)
+                {
+                    mess_Update.Show("发现新版本 " + info.Version, info.UpdateText, true);
+                    mess_Update.LeftClick += async (s, e) =>
+                    {
+                        await Launcher.LaunchUriAsync(new Uri(info.Url));
+                        mess_Update.Close();
+                    };
+                    mess_Update.RightClick += (s, e) =>
+                    {
+                        settings.SetSettingValue("new" + info.Version, true);
+                        mess_Update.Close();
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                //messShow.Show("读取设置失败了", 3000);
+                //throw;
+            }
+
+        }
+        public class CheckUpdateModel
+        {
+            public bool Beta { get; set; }
+            public string Url { get; set; }
+            public string Version { get; set; }
+            public string UpdateText { get; set; }
         }
 
         private async void Timer_Tick(object sender, object e)
         {
             if (await HasMessage())
             {
-                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    //menu_bor_HasMessage
+                    if (!sp_View.IsPaneOpen)
+                    {
+                        menu_bor_HasMessage.Visibility = Visibility.Visible;
+                    }
                     bor_HasMessage.Visibility = Visibility.Visible;
                 });
             }
             else
             {
-                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () => {
+
+                await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                {
+                    menu_bor_HasMessage.Visibility = Visibility.Collapsed;
                     bor_HasMessage.Visibility = Visibility.Collapsed;
                 });
             }
         }
-
+        MessageModel message = new MessageModel();
         private async Task<bool> HasMessage()
         {
             try
             {
-                 wc = new WebClientClass();
+                wc = new WebClientClass();
                 // http://message.bilibili.com/api/msg/query.room.list.do?access_key=a36a84cc8ef4ea2f92c416951c859a25&actionKey=appkey&appkey=c1b107428d337928&build=414000&page_size=100&platform=android&ts=1461404884000&sign=5e212e424761aa497a75b0fb7fbde775
                 string url = string.Format("http://message.bilibili.com/api/notify/query.notify.count.do?_device=wp&_ulv=10000&access_key={0}&actionKey=appkey&appkey={1}&build=411005&platform=android&ts={2}", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
                 MessageModel model = JsonConvert.DeserializeObject<MessageModel>(results);
+
                 if (model.code == 0)
                 {
                     MessageModel list = JsonConvert.DeserializeObject<MessageModel>(model.data.ToString());
-                    if (list.reply_me != 0||list.chat_me!=0|| list.notify_me!=0)
+                    message = list;
+                    if (list.reply_me != 0 || list.chat_me != 0 || list.notify_me != 0 || list.praise_me != 0 || list.at_me != 0)
                     {
                         return true;
                     }
@@ -154,15 +407,45 @@ namespace bilibili2
 
         private void GetSetting()
         {
-            if (!settings.SettingContains("PlayLocal"))
+            try
             {
-                settings.SetSettingValue("PlayLocal",true);
+                if (!settings.SettingContains("PlayLocal"))
+                {
+                    settings.SetSettingValue("PlayLocal", true);
+                }
+                if (!settings.SettingContains("CloseMenu"))
+                {
+                    settings.SetSettingValue("CloseMenu", false);
+                }
+
+                if (settings.SettingContains("CloseADS"))
+                {
+                    if ((bool)settings.GetSettingValue("CloseADS"))
+                    {
+                        juanzeng.Visibility = Visibility.Collapsed;
+                    }
+                    else
+                    {
+                        juanzeng.Visibility = Visibility.Visible;
+                    }
+                }
+
+                if ((bool)settings.GetSettingValue("CloseMenu"))
+                {
+                    sp_View.IsPaneOpen = false;
+                }
+
             }
+            catch (Exception)
+            {
+            }
+
+
         }
         //首页错误
         private void Home_Items_ErrorEvent(string aid)
         {
-            messShow.Show("读取首页信息失败\r\n" + aid, 3000);
+            messShow.Show("读取信息失败", 3000);
         }
         //首页跳转
         private void Home_Items_PlayEvent(string aid)
@@ -181,14 +464,16 @@ namespace bilibili2
                 e.Handled = true;
                 if (infoFrame.CanGoBack)
                 {
-                    // e.Handled = true;
                     infoFrame.GoBack();
+                    // e.Handled = true;
+
                 }
                 else
                 {
-                    // e.Handled = true;
-                    tuic.To = this.ActualWidth;
-                    storyboardPopOut.Begin();
+                    e.Handled = true;
+                    MainPage_BackEvent();
+                    //tuic.To = this.ActualWidth;
+                    // storyboardPopOut.Begin();
                 }
             }
             else
@@ -276,69 +561,60 @@ namespace bilibili2
             else
             {
                 sp_View.IsPaneOpen = true;
+                menu_bor_HasMessage.Visibility = Visibility.Collapsed;
             }
+
         }
+
         // pivot改变
+        bool Ban_IsLoad = false;
         private async void pivot_Home_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             UpdateUI();
             switch (pivot_Home.SelectedIndex)
             {
                 case 0:
-                 
+                    await Task.Delay(1500);
                     if (!liveinfo.isLoaded)
                     {
                         GetLiveBanner();
                         liveinfo.GetLiveInfo();
-
                     }
                     break;
                 case 1:
-                    if (!LoadBan)
+
+                    if (!Ban_IsLoad)
                     {
-                        LoadBan = false;
-                        await GetBanUpdate();
-                        await GetBanBanner();
-                        await GetBanTJ();
-                        LoadBan = true;
-                    }
-                    if (!liveinfo.isLoaded)
-                    {
-                        GetLiveBanner();
-                        liveinfo.GetLiveInfo();
+                        Ban_frame.Navigate(typeof(H_BangumiPage));
+                        (Ban_frame.Content as H_BangumiPage).NavigatedTo += new H_BangumiPage.NavigatedToHandel((Type t, object obj) =>
+                        {
+                            infoFrame.Navigate(t, obj);
+                        });
+                        Ban_IsLoad = true;
                     }
                     break;
                 case 2:
-                    if (!LoadBan)
-                    {
-                        LoadBan = false;
-                        await GetBanUpdate();
-                        await GetBanBanner();
-                        await GetBanTJ();
-                        LoadBan = true;
-                    }
+
                     break;
                 case 3:
+
+                    await Task.Delay(500);
                     if (!LoadDT)
                     {
+                        DT_noLoad.Visibility = Visibility.Visible;
                         GetDt();
                     }
-                    if (!LoadBan)
-                    {
-                        LoadBan = false;
-                        await GetBanUpdate();
-                        await GetBanBanner();
-                        await GetBanTJ();
-                        LoadBan = true;
-                    }
+
                     break;
                 case 4:
+                    await Task.Delay(1000);
                     if (!LoadDT)
                     {
                         GetDt();
                     }
                     break;
                 case 5:
+                    await Task.Delay(1500);
                     if (!LoadHot)
                     {
                         GetHotKeyword();
@@ -453,36 +729,9 @@ namespace bilibili2
         }
         #endregion
         //页面大小改变
-        private async void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            if (!settings.SettingContains("HideTitleBar"))
-            {
-                settings.SetSettingValue("HideTitleBar", true);
-            }
-            ApplicationView av = ApplicationView.GetForCurrentView();
-            switch (av.Orientation)
-            {
-                case ApplicationViewOrientation.Landscape:
-                    if ((bool)settings.GetSettingValue("HideTitleBar"))
-                    {
-                        if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
-                        {
-                            StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                            await statusBar.HideAsync();
-                        }
-                    }
-                    break;
-                case ApplicationViewOrientation.Portrait:
-                    if (Windows.Foundation.Metadata.ApiInformation.IsTypePresent(typeof(StatusBar).ToString()))
-                    {
-                        StatusBar statusBar = Windows.UI.ViewManagement.StatusBar.GetForCurrentView();
-                        await statusBar.ShowAsync();
-                    }
-                    break;
-                default:
-                    break;
-            }
-
+            GetSetting();
             if (this.ActualWidth <= 640)
             {
                 fvLeft.Visibility = Visibility.Collapsed;
@@ -490,11 +739,6 @@ namespace bilibili2
                 grid_c_left.Width = new GridLength(0, GridUnitType.Auto);
                 grid_c_right.Width = new GridLength(0, GridUnitType.Auto);
                 grid_c_center.Width = new GridLength(1, GridUnitType.Star);
-                fvLeft_Ban.Visibility = Visibility.Collapsed;
-                fvRight_Ban.Visibility = Visibility.Collapsed;
-                grid_c_left_Ban.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_right_Ban.Width = new GridLength(0, GridUnitType.Auto);
-                grid_c_center_Ban.Width = new GridLength(1, GridUnitType.Star);
                 fvLeft_Live.Visibility = Visibility.Collapsed;
                 fvRight_Live.Visibility = Visibility.Collapsed;
                 grid_c_left_Live.Width = new GridLength(0, GridUnitType.Auto);
@@ -508,16 +752,19 @@ namespace bilibili2
                 grid_c_left.Width = new GridLength(1, GridUnitType.Star);
                 grid_c_right.Width = new GridLength(1, GridUnitType.Star);
                 grid_c_center.Width = new GridLength(0, GridUnitType.Auto);
-                fvLeft_Ban.Visibility = Visibility.Visible;
-                fvRight_Ban.Visibility = Visibility.Visible;
-                grid_c_left_Ban.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_right_Ban.Width = new GridLength(1, GridUnitType.Star);
-                grid_c_center_Ban.Width = new GridLength(0, GridUnitType.Auto);
                 fvLeft_Live.Visibility = Visibility.Visible;
                 fvRight_Live.Visibility = Visibility.Visible;
                 grid_c_left_Live.Width = new GridLength(1, GridUnitType.Star);
                 grid_c_right_Live.Width = new GridLength(1, GridUnitType.Star);
                 grid_c_center_Live.Width = new GridLength(0, GridUnitType.Auto);
+            }
+            if (this.ActualWidth > 500)
+            {
+                dh_frame.Edge = EdgeTransitionLocation.Bottom;
+            }
+            else
+            {
+                dh_frame.Edge = EdgeTransitionLocation.Right;
             }
 
             if (this.ActualWidth < 1000)
@@ -529,16 +776,7 @@ namespace bilibili2
                 top_txt_Header.HorizontalAlignment = HorizontalAlignment.Center;
             }
 
-            if (this.ActualWidth < 640)
-            {
-                //double i = (double)test.ActualWidth;
-                test.Width = double.NaN;
-            }
-            else
-            {
-                int i = Convert.ToInt32(pivot_Home.ActualWidth / 500);
-                test.Width = pivot_Home.ActualWidth / i - 20;
-            }
+
         }
         //打开搜索框
         private void btn_GoFind_Click(object sender, RoutedEventArgs e)
@@ -564,37 +802,43 @@ namespace bilibili2
                     pivot_Home.SelectedIndex = 0;
                     break;
                 case 1:
-                    infoFrame.Navigate(typeof(FJPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.bangumi);
                     break;
                 case 2:
-                    infoFrame.Navigate(typeof(DHPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.douga);
                     break;
                 case 3:
-                    infoFrame.Navigate(typeof(YYPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.music);
                     break;
                 case 4:
-                    infoFrame.Navigate(typeof(WDPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.dance);
                     break;
                 case 5:
-                    infoFrame.Navigate(typeof(KJPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.technology);
                     break;
                 case 6:
-                    infoFrame.Navigate(typeof(YXPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.game);
                     break;
                 case 7:
-                    infoFrame.Navigate(typeof(GCPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.kichiku);
                     break;
                 case 8:
-                    infoFrame.Navigate(typeof(YLPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.ent);
                     break;
                 case 9:
-                    infoFrame.Navigate(typeof(DYPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.movie);
                     break;
                 case 10:
-                    infoFrame.Navigate(typeof(DSJPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.tv);
                     break;
                 case 11:
-                    infoFrame.Navigate(typeof(SSPage));
+                    infoFrame.Navigate(typeof(PartPage), Parts.fashion);
+                    break;
+                case 12:
+                    infoFrame.Navigate(typeof(PartPage), Parts.life);
+                    break;
+                case 13:
+                    infoFrame.Navigate(typeof(PartPage), Parts.ad);
                     break;
                 default:
                     break;
@@ -604,8 +848,11 @@ namespace bilibili2
         //子页面后退
         private void MainPage_BackEvent()
         {
-            tuic.To = this.ActualWidth;
-            storyboardPopOut.Begin();
+            // tuic.To = this.ActualWidth;
+            //storyboardPopOut.Begin();
+            GetSetting();
+            infoFrame.Content = null;
+            infoFrame.SetNavigationState(navInfo);
         }
         //子页面后退动画完成
         private void StoryboardPopOut_Completed(object sender, object e)
@@ -654,42 +901,7 @@ namespace bilibili2
                 return;
             }
         }
-        //番剧Banner选择改变
-        private void home_flipView_SelectionChanged_1(object sender, SelectionChangedEventArgs e)
-        {
-            if (home_flipView_Ban.Items.Count == 0 || fvLeft_Ban.Items.Count == 0 || fvRight_Ban.Items.Count == 0)
-            {
-                return;
-            }
-            if (fvLeft_Ban.Visibility == Visibility.Collapsed || fvRight_Ban.Visibility == Visibility.Collapsed)
-            {
-                return;
-            }
-            if (this.home_flipView_Ban.SelectedIndex == 0)
-            {
-                this.fvLeft_Ban.SelectedIndex = this.fvLeft_Ban.Items.Count - 1;
-                this.fvRight_Ban.SelectedIndex = 1;
-            }
-            else if (this.home_flipView_Ban.SelectedIndex == 1)
-            {
-                this.fvLeft_Ban.SelectedIndex = 0;
-                this.fvRight_Ban.SelectedIndex = this.fvRight_Ban.Items.Count - 1;
-            }
-            else if (this.home_flipView_Ban.SelectedIndex == this.home_flipView_Ban.Items.Count - 1)
-            {
-                this.fvLeft_Ban.SelectedIndex = this.fvLeft_Ban.Items.Count - 2;
-                this.fvRight_Ban.SelectedIndex = 0;
-            }
-            else if ((this.home_flipView_Ban.SelectedIndex < (this.home_flipView_Ban.Items.Count - 1)) && this.home_flipView_Ban.SelectedIndex > -1)
-            {
-                this.fvLeft_Ban.SelectedIndex = this.home_flipView_Ban.SelectedIndex - 1;
-                this.fvRight_Ban.SelectedIndex = this.home_flipView_Ban.SelectedIndex + 1;
-            }
-            else
-            {
-                return;
-            }
-        }
+
         //Banner的加载
         public void SetListView(string results)
         {
@@ -724,7 +936,16 @@ namespace bilibili2
             }
             catch (Exception ex)
             {
-                messShow.Show("读取Banner失败！\r\n" + ex.Message, 3000);
+                if (ex.HResult == -2147012867)
+                {
+                    messShow.Show("检查你的网络连接！", 3000);
+                }
+                else
+                {
+                    messShow.Show("读取Banner信息失败\r\n" + ex.Message, 3000);
+                }
+
+                // messShow.Show("读取Banner失败！\r\n" + ex.Message, 3000);
                 //MessageDialog md = new MessageDialog("读取首页信息失败！\r\n"+ex.Message);
                 //await md.ShowAsync();
             }
@@ -745,12 +966,17 @@ namespace bilibili2
             {
                 infoFrame.Navigate(typeof(UserInfoPage));
             }
+            if (sp_View.DisplayMode != SplitViewDisplayMode.Inline)
+            {
+                sp_View.IsPaneOpen = false;
+            }
             //this.Frame.Navigate(typeof(LoginPage));
         }
         //用户登录成功，读取用户信息
         private void MainPage_LoginEd()
         {
             GetLoadInfo();
+
         }
         //读取用户信息
         private async void GetLoadInfo()
@@ -765,14 +991,28 @@ namespace bilibili2
                     if (container.Values["AutoLogin"].ToString() == "true" && container.Values["UserName"].ToString() != "" && container.Values["UserPass"].ToString() != "")
                     {
                         //读取登录结果
+
                         string result = await ApiHelper.LoginBilibili(container.Values["UserName"].ToString(), container.Values["UserPass"].ToString());
-                        GetLoginInfoModel model = await getLogin.GetUserInfo();
+                        UserInfoModel model = await getLogin.GetMyUserInfo();
                         if (model != null)
                         {
-                            txt_UserName.Text = model.name;
+                            txt_UserName.Text = model.uname;
                             txt_Sign.Visibility = Visibility.Visible;
                             txt_Sign.Text = model.RankStr;
+                            //if (model.vip.vipType != 0)
+                            //{
+                            //    txt_Sign.Text += "/大会员";
+                            //}
                             img_user.ImageSource = new BitmapImage(new Uri(model.face));
+                            settings.SetSettingValue("BirthDay", model.birthday);
+                            if (model.RankStr == "注册会员")
+                            {
+                                btn_DTZZ.Visibility = Visibility.Visible;
+                            }
+                            else
+                            {
+                                btn_DTZZ.Visibility = Visibility.Collapsed;
+                            }
                         }
                         messShow.Show(result, 3000);
                     }
@@ -793,20 +1033,38 @@ namespace bilibili2
 
                     img_user.ImageSource = new BitmapImage(new Uri("ms-appx:///Assets/other/NoAvatar.png"));
                 }
+
             }
             else
             {
                 StorageFolder folder = ApplicationData.Current.LocalFolder;
                 StorageFile file = await folder.CreateFileAsync("us.bili", CreationCollisionOption.OpenIfExists);
                 ApiHelper.access_key = await FileIO.ReadTextAsync(file);
-                GetLoginInfoModel model = await getLogin.GetUserInfo();
+                UserInfoModel model = await getLogin.GetMyUserInfo();
+
                 if (model != null)
                 {
-                    txt_UserName.Text = model.name;
+                    txt_UserName.Text = model.uname;
                     txt_Sign.Visibility = Visibility.Visible;
                     txt_Sign.Text = model.RankStr;
+                    //if (model.vip.vipType != 0)
+                    //{
+                    //    txt_Sign.Text += "/大会员";
+                    //        }
+                    settings.SetSettingValue("BirthDay", model.birthday);
+                    if (model.RankStr == "注册会员")
+                    {
+                        btn_DTZZ.Visibility = Visibility.Visible;
+                    }
+                    else
+                    {
+                        btn_DTZZ.Visibility = Visibility.Collapsed;
+                    }
                     img_user.ImageSource = new BitmapImage(new Uri(model.face));
                 }
+                DT_PageNum = 1;
+                User_ListView_Attention.Items.Clear();
+                GetDt();
             }
         }
 
@@ -850,6 +1108,7 @@ namespace bilibili2
                 finally
                 {
                     pr_Load_DT.Visibility = Visibility.Collapsed;
+                    DT_noLoad.Visibility = Visibility.Collapsed;
                 }
             }
             else
@@ -893,7 +1152,7 @@ namespace bilibili2
             switch ((e.ClickedItem as StackPanel).Tag.ToString())
             {
                 case "M_Drak_Light":
-                    if (RequestedTheme== ElementTheme.Dark)
+                    if (RequestedTheme == ElementTheme.Dark)
                     {
                         settings.SetSettingValue("Drak", false);
                         txt_D_L.Text = "夜间模式";
@@ -932,7 +1191,7 @@ namespace bilibili2
                 case "Message":
                     if (isLogin)
                     {
-                        infoFrame.Navigate(typeof(MessagePage));
+                        infoFrame.Navigate(typeof(MessagePage), message);
                     }
                     else
                     {
@@ -946,12 +1205,30 @@ namespace bilibili2
                     infoFrame.Navigate(typeof(SettingPage));
                     break;
                 case "Feedback":
-                    Feedback();
+                    var x = new ContentDialog();
+                    StackPanel st = new StackPanel();
+                    st.Children.Add(new Image()
+                    {
+                        Source = new BitmapImage(new Uri("ms-appx:///Assets/zfb.jpg"))
+                    });
+                    st.Children.Add(new TextBlock()
+                    {
+                        TextWrapping = TextWrapping.Wrap,
+                        IsTextSelectionEnabled = true,
+                        Text = "\r\n如果觉得应用不错，给我点打赏我会很感谢的!\r\n支付宝：2500655055@qq.com,**程\r\n\r\n看这个菜单不爽？请到设置中隐藏"
+                    });
+                    x.Content = st;
+                    x.PrimaryButtonText = "知道了";
+                    x.IsPrimaryButtonEnabled = true;
+                    x.ShowAsync();
                     break;
                 default:
                     break;
             }
-
+            if (sp_View.DisplayMode == SplitViewDisplayMode.Overlay)
+            {
+                sp_View.IsPaneOpen = false;
+            }
         }
         //触发主题改变
         private void MainPage_ChangeDrak()
@@ -972,6 +1249,7 @@ namespace bilibili2
                 ThemeName = "Pink";
                 settings.SetSettingValue("Theme", "Pink");
             }
+            bg_img.Visibility = Visibility.Collapsed;
             ResourceDictionary newDictionary = new ResourceDictionary();
             switch (ThemeName)
             {
@@ -1059,11 +1337,26 @@ namespace bilibili2
                         RequestedTheme = ElementTheme.Light;
                     }
                     break;
+                case "EMT":
+                    newDictionary.Source = new Uri("ms-appx:///Theme/EMTTheme.xaml", UriKind.RelativeOrAbsolute);
+                    bg_img.Visibility = Visibility.Visible;
+                    Application.Current.Resources.MergedDictionaries.Clear();
+                    Application.Current.Resources.MergedDictionaries.Add(newDictionary);
+                    if (txt_D_L.Text == "日间模式")
+                    {
+                        RequestedTheme = ElementTheme.Dark;
+                    }
+                    else
+                    {
+                        RequestedTheme = ElementTheme.Dark;
+                        RequestedTheme = ElementTheme.Light;
+                    }
+                    break;
                 default:
                     break;
             }
-            tuic.To = this.ActualWidth;
-            storyboardPopOut.Begin();
+            //tuic.To = this.ActualWidth;
+            //storyboardPopOut.Begin();
             ChangeTitbarColor();
         }
         private void ChangeTitbarColor()
@@ -1105,7 +1398,7 @@ namespace bilibili2
                 txt_D_L.Text = "夜间模式";
                 font_D_L.Glyph = "\uE708";
             }
-             ChangeTitbarColor();
+            ChangeTitbarColor();
         }
         //动态加载更多
         bool Moreing = true;
@@ -1124,20 +1417,25 @@ namespace bilibili2
                     User_load_more.Content = "加载中..";
                     List<GetAttentionUpdate> list_Attention = await new UserClass().GetUserAttentionUpdate(DT_PageNum);
                     //User_ListView_Attention.ItemsSource = list_Attention;
-                    DT_PageNum++;
-                    foreach (GetAttentionUpdate item in list_Attention)
+
+                    if (list_Attention != null)
                     {
-                        User_ListView_Attention.Items.Add(item);
-                    }
-                    User_load_more.IsEnabled = true;
-                    User_load_more.Content = "加载更多";
-                    if (list_Attention.Count == 0)
-                    {
-                        User_load_more.IsEnabled = false;
-                        User_load_more.Content = "没有更多了...";
+                        DT_PageNum++;
+                        foreach (GetAttentionUpdate item in list_Attention)
+                        {
+                            User_ListView_Attention.Items.Add(item);
+                        }
+                        User_load_more.IsEnabled = true;
+                        User_load_more.Content = "加载更多";
+                        if (list_Attention.Count == 0)
+                        {
+                            User_load_more.IsEnabled = false;
+                            User_load_more.Content = "没有更多了...";
+                        }
+
+                        Moreing = true;
                     }
 
-                    Moreing = true;
                 }
             }
 
@@ -1145,14 +1443,27 @@ namespace bilibili2
         //点击动态
         private void User_ListView_Attention_ItemClick(object sender, ItemClickEventArgs e)
         {
-            infoFrame.Navigate(typeof(VideoInfoPage), (e.ClickedItem as GetAttentionUpdate).aid);
+            var model = e.ClickedItem as GetAttentionUpdate;
+            infoFrame.Navigate(typeof(VideoInfoPage), model.addition.aid);
         }
         //Banner点击
         private void HyperlinkButton_Click_1(object sender, RoutedEventArgs e)
         {
+
+
             if (((BannerModel)home_flipView.SelectedItem).type == 2)
             {
-                infoFrame.Navigate(typeof(WebViewPage), ((BannerModel)home_flipView.SelectedItem).value);
+                if (Regex.IsMatch(((BannerModel)home_flipView.SelectedItem).value, "/video/av(.*)?[/|+](.*)?"))
+                {
+
+                    string a = Regex.Match(((BannerModel)home_flipView.SelectedItem).value, "/video/av(.*)?[/|+](.*)?").Groups[1].Value;
+                    infoFrame.Navigate(typeof(VideoInfoPage), a);
+                }
+                else
+                {
+                    infoFrame.Navigate(typeof(WebViewPage), ((BannerModel)home_flipView.SelectedItem).value);
+                }
+
                 //jinr.From = this.ActualWidth;
             }
             if (((BannerModel)home_flipView.SelectedItem).type == 3)
@@ -1166,38 +1477,38 @@ namespace bilibili2
         //打开话题
         private void Find_btn_Topic_Click(object sender, RoutedEventArgs e)
         {
-            if (this.ActualWidth > 500)
-            {
-                sp_Find.IsPaneOpen = true;
-                GetTopic();
-            }
-            else
-            {
-                infoFrame.Navigate(typeof(TopicPage));
-                //jinr.From = this.ActualWidth;
-            }
+            //if (this.ActualWidth > 500)
+            //{
+            //   sp_Find.IsPaneOpen = true;
+            //   GetTopic();
+            // }
+            // else
+            //{
+            infoFrame.Navigate(typeof(TopicPage));
+            //jinr.From = this.ActualWidth;
+            //}
 
         }
         //读取话题
-        private async void GetTopic()
-        {
-            try
-            {
-                pr_Load_Topic.Visibility = Visibility.Visible;
-                WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/slideshow.json"));
-                TopicModel model = JsonConvert.DeserializeObject<TopicModel>(results);
-                list_Topic.ItemsSource = JsonConvert.DeserializeObject<List<TopicModel>>(model.list.ToString());
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取话题失败\r\n" + ex.Message, 3000);
-            }
-            finally
-            {
-                pr_Load_Topic.Visibility = Visibility.Collapsed;
-            }
-        }
+        //private async void GetTopic()
+        //{
+        //    //try
+        //    //{
+        //    //    pr_Load_Topic.Visibility = Visibility.Visible;
+        //    //    WebClientClass wc = new WebClientClass();
+        //    //    string results = await wc.GetResults(new Uri("http://www.bilibili.com/index/slideshow.json"));
+        //    //    TopicModel model = JsonConvert.DeserializeObject<TopicModel>(results);
+        //    //    list_Topic.ItemsSource = JsonConvert.DeserializeObject<List<TopicModel>>(model.list.ToString());
+        //    //}
+        //    //catch (Exception ex)
+        //    //{
+        //    //    messShow.Show("读取话题失败\r\n" + ex.Message, 3000);
+        //    //}
+        //    //finally
+        //    //{
+        //    //    pr_Load_Topic.Visibility = Visibility.Collapsed;
+        //    //}
+        //}
         //infoFrame跳转
         private void infoFrame_Navigated(object sender, NavigationEventArgs e)
         {
@@ -1251,9 +1562,6 @@ namespace bilibili2
                     (infoFrame.Content as SettingPage).BackEvent += MainPage_BackEvent;
                     (infoFrame.Content as SettingPage).ChangeTheme += MainPage_ChangeTheme;
                     (infoFrame.Content as SettingPage).ChangeDrak += MainPage_ChangeDrak;
-                    (infoFrame.Content as SettingPage).Feedback += delegate {
-                        Feedback();
-                    };
                     break;
                 case "播放器":
                     (infoFrame.Content as PlayerPage).BackEvent += MainPage_BackEvent;
@@ -1261,38 +1569,8 @@ namespace bilibili2
                 case "历史":
                     (infoFrame.Content as HistoryPage).BackEvent += MainPage_BackEvent;
                     break;
-                case "番剧":
-                    (infoFrame.Content as FJPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "动画":
-                    (infoFrame.Content as DHPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "音乐":
-                    (infoFrame.Content as YYPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "舞蹈":
-                    (infoFrame.Content as WDPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "科技":
-                    (infoFrame.Content as KJPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "游戏":
-                    (infoFrame.Content as YXPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "鬼畜":
-                    (infoFrame.Content as GCPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "娱乐":
-                    (infoFrame.Content as YLPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "电影":
-                    (infoFrame.Content as DYPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "电视剧":
-                    (infoFrame.Content as DSJPage).BackEvent += MainPage_BackEvent;
-                    break;
-                case "时尚":
-                    (infoFrame.Content as SSPage).BackEvent += MainPage_BackEvent;
+                case "私聊":
+                    (infoFrame.Content as ChatPage).BackEvent += MainPage_BackEvent;
                     break;
                 case "消息中心":
                     (infoFrame.Content as MessagePage).BackEvent += MainPage_BackEvent;
@@ -1318,6 +1596,27 @@ namespace bilibili2
                 case "编辑资料":
                     (infoFrame.Content as EditPage).BackEvent += MainPage_BackEvent;
                     break;
+                case "兴趣圈":
+                    (infoFrame.Content as QuanPage).BackEvent += MainPage_BackEvent;
+                    break;
+                case "帖子信息":
+                    (infoFrame.Content as QuanInfoPage).BackEvent += MainPage_BackEvent;
+                    break;
+                case "圈子":
+                    (infoFrame.Content as QuanziPage).BackEvent += MainPage_BackEvent;
+                    break;
+                case "专题":
+                    (infoFrame.Content as SPPage).BackEvent += MainPage_BackEvent;
+                    break;
+                case "分区":
+                    (infoFrame.Content as PartPage).BackEvent += MainPage_BackEvent;
+                    break;
+                case "全部番剧":
+                    (infoFrame.Content as AllBangumiPage).BackEvent += MainPage_BackEvent;
+                    break;
+                case "活动中心":
+                    (infoFrame.Content as ActivityPage).BackEvent += MainPage_BackEvent;
+                    break;
                 default:
                     break;
             }
@@ -1325,8 +1624,8 @@ namespace bilibili2
 
         private void MainPage_ExitEvent()
         {
-            tuic.To = this.ActualWidth;
-            storyboardPopOut.Begin();
+            // //tuic.To = this.ActualWidth;
+            //storyboardPopOut.Begin();
             GetLoadInfo();
         }
 
@@ -1340,587 +1639,17 @@ namespace bilibili2
         private void Find_btn_Random_Click(object sender, RoutedEventArgs e)
         {
             infoFrame.Navigate(typeof(VideoInfoPage), new Random().Next(2000000, 4999999).ToString());
-            //jinr.From = this.ActualWidth;
-            //storyboardPopIn.Begin();
         }
         //infoFrame跳转动画
         private void infoFrame_Navigating(object sender, NavigatingCancelEventArgs e)
         {
-            dh.TranslateX = 0;
-            EdgeUIThemeTransition edge = new EdgeUIThemeTransition();
-            if (e.NavigationMode == NavigationMode.New)
-            {
-                edge.Edge = EdgeTransitionLocation.Right;
-                TransitionCollection tc = new TransitionCollection();
-                tc.Add(edge);
-                infoFrame.ContentTransitions = tc;
-            }
         }
         //点击排行榜
         private void Find_btn_Rank_Click(object sender, RoutedEventArgs e)
         {
             infoFrame.Navigate(typeof(RankPage));
         }
-        //番剧时间表点击
-        private void list_0_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(BanInfoPage), (e.ClickedItem as BangumiTimeLineModel).season_id);
-        }
-        int taday = 0;
-        public void SetWeekInfo()
-        {
-            date_2.Text = DateTime.Now.AddDays(-2).Date.Month + "月" + DateTime.Now.AddDays(-2).Date.Day + "日";
-            date_3.Text = DateTime.Now.AddDays(-3).Date.Month + "月" + DateTime.Now.AddDays(-3).Date.Day + "日";
-            date_4.Text = DateTime.Now.AddDays(-4).Date.Month + "月" + DateTime.Now.AddDays(-4).Date.Day + "日";
-            date_5.Text = DateTime.Now.AddDays(-5).Date.Month + "月" + DateTime.Now.AddDays(-5).Date.Day + "日";
-            date_6.Text = DateTime.Now.AddDays(-6).Date.Month + "月" + DateTime.Now.AddDays(-6).Date.Day + "日";
 
-            switch (DateTime.Now.DayOfWeek)
-            {
-                case DayOfWeek.Monday:
-                    week_0.Text = "周一";
-                    week_1.Text = "周日";
-                    week_2.Text = "周六";
-                    week_3.Text = "周五";
-                    week_4.Text = "周四";
-                    week_5.Text = "周三";
-                    week_5.Text = "周二";
-                    taday = 1;
-                    break;
-                case DayOfWeek.Tuesday:
-                    week_1.Text = "周一";
-                    week_2.Text = "周日";
-                    week_3.Text = "周六";
-                    week_4.Text = "周五";
-                    week_5.Text = "周四";
-                    week_6.Text = "周三";
-                    week_0.Text = "周二";
-                    taday = 2;
-                    break;
-                case DayOfWeek.Wednesday:
-                    week_2.Text = "周一";
-                    week_3.Text = "周日";
-                    week_4.Text = "周六";
-                    week_5.Text = "周五";
-                    week_6.Text = "周四";
-                    week_0.Text = "周三";
-                    week_1.Text = "周二";
-                    taday = 3;
-                    break;
-                case DayOfWeek.Thursday:
-                    week_3.Text = "周一";
-                    week_4.Text = "周日";
-                    week_5.Text = "周六";
-                    week_6.Text = "周五";
-                    week_0.Text = "周四";
-                    week_1.Text = "周三";
-                    week_2.Text = "周二";
-                    taday = 4;
-                    break;
-                case DayOfWeek.Friday:
-                    week_4.Text = "周一";
-                    week_5.Text = "周日";
-                    week_6.Text = "周六";
-                    week_0.Text = "周五";
-                    week_1.Text = "周四";
-                    week_2.Text = "周三";
-                    week_3.Text = "周二";
-                    taday = 5;
-                    break;
-                case DayOfWeek.Saturday:
-                    week_5.Text = "周一";
-                    week_6.Text = "周日";
-                    week_0.Text = "周六";
-                    week_1.Text = "周五";
-                    week_2.Text = "周四";
-                    week_3.Text = "周三";
-                    week_4.Text = "周二";
-                    taday = 6;
-                    break;
-                case DayOfWeek.Sunday:
-                    week_6.Text = "周一";
-                    week_0.Text = "周日";
-                    week_1.Text = "周六";
-                    week_2.Text = "周五";
-                    week_3.Text = "周四";
-                    week_4.Text = "周三";
-                    week_5.Text = "周二";
-                    taday = 0;
-                    break;
-                default:
-                    break;
-            }
-        }
-        //时间表
-        public async void GetBangumiTimeLine()
-        {
-            try
-            {
-                pr_Load_Ban.Visibility = Visibility.Visible;
-                wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://app.bilibili.com/bangumi/timeline_v2"));
-                BangumiTimeLineModel model = new BangumiTimeLineModel();
-                model = JsonConvert.DeserializeObject<BangumiTimeLineModel>(results);
-                List<BangumiTimeLineModel> ban = JsonConvert.DeserializeObject<List<BangumiTimeLineModel>>(model.list.ToString());
-                list_0.Items.Clear();
-                list_1.Items.Clear();
-                list_2.Items.Clear();
-                list_3.Items.Clear();
-                list_4.Items.Clear();
-                list_5.Items.Clear();
-                list_6.Items.Clear();
-                list_7.Items.Clear();
-                foreach (BangumiTimeLineModel item in ban)
-                {
-                    switch (item.weekday)
-                    {
-                        case -1:
-                            list_7.Items.Add(item);
-                            break;
-                        case 0:
-                            switch (taday)
-                            {
-                                case 0:
-                                    list_0.Items.Add(item);
-                                    break;
-                                case 1:
-                                    list_1.Items.Add(item);
-                                    break;
-                                case 2:
-                                    list_2.Items.Add(item);
-                                    break;
-                                case 3:
-                                    list_3.Items.Add(item);
-                                    break;
-                                case 4:
-                                    list_4.Items.Add(item);
-                                    break;
-                                case 5:
-                                    list_5.Items.Add(item);
-                                    break;
-                                case 6:
-                                    list_6.Items.Add(item);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 1:
-                            switch (taday)
-                            {
-                                case 1:
-                                    list_0.Items.Add(item);
-                                    break;
-                                case 2:
-                                    list_1.Items.Add(item);
-                                    break;
-                                case 3:
-                                    list_2.Items.Add(item);
-                                    break;
-                                case 4:
-                                    list_3.Items.Add(item);
-                                    break;
-                                case 5:
-                                    list_4.Items.Add(item);
-                                    break;
-                                case 6:
-                                    list_5.Items.Add(item);
-                                    break;
-                                case 0:
-                                    list_6.Items.Add(item);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 2:
-                            switch (taday)
-                            {
-                                case 2:
-                                    list_0.Items.Add(item);
-                                    break;
-                                case 3:
-                                    list_1.Items.Add(item);
-                                    break;
-                                case 4:
-                                    list_2.Items.Add(item);
-                                    break;
-                                case 5:
-                                    list_3.Items.Add(item);
-                                    break;
-                                case 6:
-                                    list_4.Items.Add(item);
-                                    break;
-                                case 0:
-                                    list_5.Items.Add(item);
-                                    break;
-                                case 1:
-                                    list_6.Items.Add(item);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 3:
-                            switch (taday)
-                            {
-                                case 3:
-                                    list_0.Items.Add(item);
-                                    break;
-                                case 4:
-                                    list_1.Items.Add(item);
-                                    break;
-                                case 5:
-                                    list_2.Items.Add(item);
-                                    break;
-                                case 6:
-                                    list_3.Items.Add(item);
-                                    break;
-                                case 0:
-                                    list_4.Items.Add(item);
-                                    break;
-                                case 1:
-                                    list_5.Items.Add(item);
-                                    break;
-                                case 2:
-                                    list_6.Items.Add(item);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 4:
-                            switch (taday)
-                            {
-                                case 4:
-                                    list_0.Items.Add(item);
-                                    break;
-                                case 5:
-                                    list_1.Items.Add(item);
-                                    break;
-                                case 6:
-                                    list_2.Items.Add(item);
-                                    break;
-                                case 0:
-                                    list_3.Items.Add(item);
-                                    break;
-                                case 1:
-                                    list_4.Items.Add(item);
-                                    break;
-                                case 2:
-                                    list_5.Items.Add(item);
-                                    break;
-                                case 3:
-                                    list_6.Items.Add(item);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 5:
-                            switch (taday)
-                            {
-                                case 5:
-                                    list_0.Items.Add(item);
-                                    break;
-                                case 6:
-                                    list_1.Items.Add(item);
-                                    break;
-                                case 0:
-                                    list_2.Items.Add(item);
-                                    break;
-                                case 1:
-                                    list_3.Items.Add(item);
-                                    break;
-                                case 2:
-                                    list_4.Items.Add(item);
-                                    break;
-                                case 3:
-                                    list_5.Items.Add(item);
-                                    break;
-                                case 4:
-                                    list_6.Items.Add(item);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        case 6:
-                            switch (taday)
-                            {
-                                case 6:
-                                    list_0.Items.Add(item);
-                                    break;
-                                case 0:
-                                    list_1.Items.Add(item);
-                                    break;
-                                case 1:
-                                    list_2.Items.Add(item);
-                                    break;
-                                case 2:
-                                    list_3.Items.Add(item);
-                                    break;
-                                case 3:
-                                    list_4.Items.Add(item);
-                                    break;
-                                case 4:
-                                    list_5.Items.Add(item);
-                                    break;
-                                case 5:
-                                    list_6.Items.Add(item);
-                                    break;
-                                default:
-                                    break;
-                            }
-                            break;
-                        default:
-                            break;
-                    }
-
-                }
-                pr_Load_Ban.Visibility = Visibility.Collapsed;
-            }
-            catch (Exception ex)
-            {
-                MessageDialog md = new MessageDialog("读取番剧更新失败\r\n" + ex.Message);
-                await md.ShowAsync();
-            }
-        }
-        //索引
-        public async void GetTagInfo()
-        {
-            try
-            {
-                pr_Load_Ban.Visibility = Visibility.Visible;
-                WebClientClass wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/tags?_device=wp&_ulv=10000&appkey=422fd9d7289a1dd9&build=411005&page=" + 1 + "&pagesize=60&platform=android&ts=" + ApiHelper.GetTimeSpen + "000";
-                string sign = ApiHelper.GetSign(uri);
-                uri += "&sign=" + sign;
-                string results = await wc.GetResults(new Uri(uri));
-                JObject jo = JObject.Parse(results);
-                List<TagModel> list = JsonConvert.DeserializeObject<List<TagModel>>(jo["result"].ToString());
-                gridview_List.ItemsSource = list;
-            }
-            catch (Exception ex)
-            {
-                await new MessageDialog("读取索引信息失败！\r\n" + ex.Message).ShowAsync();
-            }
-            finally
-            {
-                pr_Load_Ban.Visibility = Visibility.Collapsed;
-                // IsLoading = false;
-            }
-        }
-        //番剧时间表点击
-        private void Ban_btn_Timeline_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.ActualWidth > 500)
-            {
-                B_Timeline.Visibility = Visibility.Visible;
-                gridview_List.Visibility = Visibility.Collapsed;
-                sp_Bangumi.IsPaneOpen = true;
-                GetBangumiTimeLine();
-            }
-            else
-            {
-                infoFrame.Navigate(typeof(BanTimelinePage));
-            }
-        }
-        //索引点击
-        private void gridview_List_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(BanByTagPage), new string[] { (e.ClickedItem as TagModel).tag_id.ToString(), (e.ClickedItem as TagModel).tag_name });
-        }
-        //索引表点击
-        private void Ban_btn_Tag_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.ActualWidth > 500)
-            {
-                B_Timeline.Visibility = Visibility.Collapsed;
-                gridview_List.Visibility = Visibility.Visible;
-                sp_Bangumi.IsPaneOpen = true;
-                GetTagInfo();
-            }
-            else
-            {
-                infoFrame.Navigate(typeof(BanTagPage));
-            }
-        }
-        //追番点击
-        private void user_GridView_Bangumi_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(BanInfoPage), (e.ClickedItem as GetUserBangumi).season_id);
-        }
-        //番剧最近更新
-        bool LoadBan = false;
-        private async Task GetBanUpdate()
-        {
-            try
-            {
-                wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://bangumi.bilibili.com/api/app_index_page"));
-                BannumiIndexModel model = JsonConvert.DeserializeObject<BannumiIndexModel>(results);
-                JObject json = JObject.Parse(model.result.ToString());
-                List<BannumiIndexModel> ban = JsonConvert.DeserializeObject<List<BannumiIndexModel>>(json["latestUpdate"]["list"].ToString());
-                GridView_Bangumi_NewUpdate.ItemsSource = ban;
-                // LoadBan = true;
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取番剧最近更新失败\r\n" + ex.Message, 3000);
-                //LoadBan = false;
-            }
-        }
-        //番剧更新点击
-        private void GridView_Bangumi_NewUpdate_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            infoFrame.Navigate(typeof(BanInfoPage), (e.ClickedItem as BannumiIndexModel).season_id);
-        }
-        //读取我的追番
-        private void Ban_btn_MyBan_Click(object sender, RoutedEventArgs e)
-        {
-            if (new UserClass().IsLogin())
-            {
-                infoFrame.Navigate(typeof(UserBangumiPage), UserClass.Uid);
-            }
-            else
-            {
-                messShow.Show("请先登录", 3000);
-            }
-        }
-        //读取番剧Banner
-        private async Task GetBanBanner()
-        {
-            try
-            {
-                wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://bangumi.bilibili.com/api/app_index_page_v2?rnd" + new Random().Next(1000, 9999)));
-                BanBannerModel model = JsonConvert.DeserializeObject<BanBannerModel>(results);
-                if (model.code == 0)
-                {
-                    JObject jo = JObject.Parse(results);
-                    List<BanBannerModel> list = JsonConvert.DeserializeObject<List<BanBannerModel>>(jo["result"]["banners"].ToString());
-                    home_flipView_Ban.ItemsSource = list;
-                    fvLeft_Ban.ItemsSource = list;
-                    fvRight_Ban.ItemsSource = list;
-                    this.home_flipView_Ban.SelectedIndex = 0;
-                    if (fvLeft_Ban.Visibility != Visibility.Collapsed || fvRight_Ban.Visibility != Visibility.Collapsed)
-                    {
-                        this.fvLeft_Ban.SelectedIndex = this.fvLeft_Ban.Items.Count - 1;
-                        this.fvRight_Ban.SelectedIndex = this.home_flipView_Ban.SelectedIndex + 1;
-                    }
-                }
-                else
-                {
-                    messShow.Show("读取番剧Banner失败！" + model.message, 3000);
-                }
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取番剧Banner失败！" + ex.Message, 3000);
-                //throw;
-            }
-
-        }
-        //读取番剧推荐
-        string Page_BanTJ = "-1";
-        private async Task GetBanTJ()
-        {
-            try
-            {
-                Ban_TJ_more.Text = "正在加载...";
-                wc = new WebClientClass();
-                string uri = "http://bangumi.bilibili.com/api/bangumi_recommend?_device=wp&appkey=422fd9d7289a1dd9&build=411005&cursor=" + Page_BanTJ + "&pagesize=10&platform=android&ts=" + ApiHelper.GetTimeSpen;
-                uri += "&sign=" + ApiHelper.GetSign(uri);
-                string results = await wc.GetResults(new Uri(uri));
-                BanTJModel model = JsonConvert.DeserializeObject<BanTJModel>(results);
-                if (model.code == 0)
-                {
-                    JObject jo = JObject.Parse(results);
-                    List<BanTJModel> list = JsonConvert.DeserializeObject<List<BanTJModel>>(model.result.ToString());
-                    foreach (BanTJModel item in list)
-                    {
-                        list_Ban_TJ.Items.Add(item);
-                    }
-                    if (list.Count != 0)
-                    {
-                        Page_BanTJ = (list[list.Count - 1] as BanTJModel).cursor;
-                        Ban_TJ_more.Text = "加载更多";
-                    }
-                    else
-                    {
-                        Ban_TJ_more.Text = "没有更多了...";
-                    }
-                }
-                else
-                {
-                    messShow.Show("读取番剧推荐失败！" + model.message, 3000);
-                }
-
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取番剧推荐失败！" + ex.Message, 3000);
-                // throw;
-            }
-
-        }
-        //番剧Banner点击
-        private void btn_Banner_Ban_Click(object sender, RoutedEventArgs e)
-        {
-            string tag = Regex.Match((home_flipView_Ban.SelectedItem as BanBannerModel).link, @"^http://bangumi.bilibili.com/anime/category/(.*?)$").Groups[1].Value;
-            if (tag.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanByTagPage), new string[] { tag, (home_flipView_Ban.SelectedItem as BanBannerModel).title });
-                return;
-            }
-            string ban = Regex.Match((home_flipView_Ban.SelectedItem as BanBannerModel).link, @"^http://bangumi.bilibili.com/anime/(.*?)$").Groups[1].Value;
-            if (ban.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanInfoPage), ban);
-                return;
-            }
-            infoFrame.Navigate(typeof(WebViewPage), (home_flipView_Ban.SelectedItem as BanBannerModel).link);
-        }
-        //番剧推荐加载更多
-        bool LoadBaning = false;
-        private async void sc_Ban_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
-            if (sc_Ban.VerticalOffset == sc_Ban.ScrollableHeight)
-            {
-                if (!LoadBaning && Ban_TJ_more.Text != "没有更多了...")
-                {
-                    LoadBaning = true;
-                    await GetBanTJ();
-                    LoadBaning = false;
-                }
-            }
-        }
-        //番剧推荐点击
-        private void list_Ban_TJ_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            //妈蛋，B站就一定要返回个链接么,就不能返回个类型加参数吗
-            string tag = Regex.Match((e.ClickedItem as BanTJModel).link, @"^http://bangumi.bilibili.com/anime/category/(.*?)$").Groups[1].Value;
-            if (tag.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanByTagPage), new string[] { tag, (e.ClickedItem as BanTJModel).title });
-                return;
-            }
-            string ban = Regex.Match((e.ClickedItem as BanTJModel).link, @"^http://bangumi.bilibili.com/anime/(.*?)$").Groups[1].Value;
-            if (ban.Length != 0)
-            {
-                infoFrame.Navigate(typeof(BanInfoPage), ban);
-                return;
-            }
-            //
-            string aid = Regex.Match((e.ClickedItem as BanTJModel).link, @"^http://www.bilibili.com/video/av(.*?)/$").Groups[1].Value;
-            if (aid.Length != 0)
-            {
-                infoFrame.Navigate(typeof(VideoInfoPage), aid);
-                return;
-            }
-            infoFrame.Navigate(typeof(WebViewPage), (e.ClickedItem as BanTJModel).link);
-        }
         //搜索
         private void txt_auto_Find_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
         {
@@ -2063,7 +1792,7 @@ namespace bilibili2
         }
         private void list_AttLive_ItemClick(object sender, ItemClickEventArgs e)
         {
-            infoFrame.Navigate(typeof(LiveInfoPage),(e.ClickedItem as GetAttentionLive).roomid);
+            infoFrame.Navigate(typeof(LiveInfoPage), (e.ClickedItem as GetAttentionLive).roomid);
         }
         //刷新动态
         private void btn_refresh_Atton_Click(object sender, RoutedEventArgs e)
@@ -2098,8 +1827,17 @@ namespace bilibili2
 
                     if (fvLeft_Live.Visibility != Visibility.Collapsed || fvRight_Live.Visibility != Visibility.Collapsed)
                     {
-                        this.fvLeft_Live.SelectedIndex = this.fvLeft_Live.Items.Count - 1;
-                        this.fvRight_Live.SelectedIndex = this.home_flipView_Live.SelectedIndex + 1;
+                        if (bannerModel.Count == 1)
+                        {
+                            this.fvLeft_Live.SelectedIndex = 0;
+                            this.fvRight_Live.SelectedIndex = 0;
+                        }
+                        else
+                        {
+                            this.fvLeft_Live.SelectedIndex = this.fvLeft_Live.Items.Count - 1;
+                            this.fvRight_Live.SelectedIndex = this.home_flipView_Live.SelectedIndex + 1;
+                        }
+
                     }
                 }
             }
@@ -2116,6 +1854,7 @@ namespace bilibili2
                 infoFrame.Navigate(typeof(LiveInfoPage), ban);
                 return;
             }
+            infoFrame.Navigate(typeof(WebViewPage), (home_flipView_Live.SelectedItem as HomeLiveModel).link);
         }
         //直播Banner选择改变
         private void home_flipView_Live_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -2161,7 +1900,7 @@ namespace bilibili2
         private readonly JyUserFeedbackSDKManager _jyUserFeedbackSdkManager = new JyUserFeedbackSDKManager();
         private async void Feedback()
         {
-            if (_userInfo==null)
+            if (_userInfo == null)
             {
                 var userInfo = await JyUserInfoManager.QuickLogin(ApiHelper.JyAppkey);
                 if (userInfo.isLoginSuccess)
@@ -2182,13 +1921,13 @@ namespace bilibili2
         }
         private async void GetFeedInfo()
         {
-        
+
             var userInfo = await JyUserInfoManager.QuickLogin(ApiHelper.JyAppkey);
             if (userInfo.isLoginSuccess)
             {
                 _userInfo = userInfo;
                 var newFeedBackRemindCount = await _jyUserFeedbackSdkManager.GetNewFeedBackRemindCount(ApiHelper.JyAppkey, _userInfo.U_Key);
-                if (newFeedBackRemindCount!=0)
+                if (newFeedBackRemindCount != 0)
                 {
                     bor_HasFeedback.Visibility = Visibility.Visible;
                 }
@@ -2208,14 +1947,7 @@ namespace bilibili2
             liveinfo.GetLiveInfo();
         }
 
-        private async void pr_Bangumi_RefreshInvoked(DependencyObject sender, object args)
-        {
-            LoadBan = false;
-            await GetBanUpdate();
-            await GetBanBanner();
-            await GetBanTJ();
-            LoadBan = true;
-        }
+
 
         private void pr_Home_RefreshInvoked(DependencyObject sender, object args)
         {
@@ -2236,5 +1968,139 @@ namespace bilibili2
         {
             infoFrame.Navigate(typeof(SearchLivePage));
         }
+
+        private void Find_btn_Quan_Click(object sender, RoutedEventArgs e)
+        {
+            if (new UserClass().IsLogin())
+            {
+                infoFrame.Navigate(typeof(QuanPage));
+            }
+            else
+            {
+                messShow.Show("请先登录！", 3000);
+            }
+
+        }
+
+
+        private void mess_Info_RightClick(object sender, RoutedEventArgs e)
+        {
+            settings.SetSettingValue(settings.GetVersion(), true);
+            mess_Info.Close();
+        }
+
+        private void btn_DTZZ_Click(object sender, RoutedEventArgs e)
+        {
+            //https://account.bilibili.com/answer/base
+            infoFrame.Navigate(typeof(WebViewPage), "https://account.bilibili.com/answer/base");
+
+            //await Launcher.LaunchUriAsync(new Uri("http://www.bilibili.com/video/av" + aid));
+        }
+
+        private void btn_Tucao_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private async void btn_FLI_Click(object sender, RoutedEventArgs e)
+        {
+            await new MessageDialog("你发现一个福利应用，去下载吧").ShowAsync();
+            await Launcher.LaunchUriAsync(new Uri("https://pan.baidu.com/s/1boHbqv9"));
+        }
+
+        private void Ban_btn_MyBan_Click(object sender, RoutedEventArgs e)
+        {
+            if (new UserClass().IsLogin())
+            {
+                infoFrame.Navigate(typeof(UserBangumiPage), UserClass.Uid);
+            }
+            else
+            {
+                messShow.Show("请先登录", 3000);
+            }
+        }
+
+        private void user_GridView_Bangumi_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            infoFrame.Navigate(typeof(BanInfoPage), (e.ClickedItem as GetUserBangumi).season_id);
+        }
+
+        private void HyperlinkButton_Click_2(object sender, RoutedEventArgs e)
+        {
+            if (new UserClass().IsLogin())
+            {
+                infoFrame.Navigate(typeof(UserBangumiPage), UserClass.Uid);
+            }
+            else
+            {
+                messShow.Show("请先登录", 3000);
+            }
+        }
+
+        private void sp_View_PaneClosed(SplitView sender, object args)
+        {
+
+        }
+
+        private void sc_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            int i = Convert.ToInt32(sc.ActualWidth / 400);
+            if (i > 3)
+            {
+                i = 3;
+            }
+            bor_Width.Width = sc.ActualWidth / i - 22;
+        }
+
+        private void Find_btn_Activity_Click(object sender, RoutedEventArgs e)
+        {
+            this.infoFrame.Navigate(typeof(ActivityPage));
+        }
+
+        private async void User_load_more_Click(object sender, RoutedEventArgs e)
+        {
+            if (User_load_more.Content.ToString() == "没有更多了...")
+            {
+                return;
+            }
+            if (Moreing)
+            {
+                Moreing = false;
+                User_load_more.IsEnabled = false;
+                User_load_more.Content = "加载中..";
+                List<GetAttentionUpdate> list_Attention = await new UserClass().GetUserAttentionUpdate(DT_PageNum);
+                //User_ListView_Attention.ItemsSource = list_Attention;
+                DT_PageNum++;
+                foreach (GetAttentionUpdate item in list_Attention)
+                {
+                    User_ListView_Attention.Items.Add(item);
+                }
+                User_load_more.IsEnabled = true;
+                User_load_more.Content = "加载更多";
+                if (list_Attention.Count == 0)
+                {
+                    User_load_more.IsEnabled = false;
+                    User_load_more.Content = "没有更多了...";
+                }
+
+                Moreing = true;
+            }
+        }
     }
+
+    public class FeedItemDataTemplateSelector : DataTemplateSelector
+    {
+        protected override DataTemplate SelectTemplateCore(object item, DependencyObject container)
+        {
+            if ((item as GetAttentionUpdate).type == 3)
+            {
+                return App.Current.Resources["Feed2"] as DataTemplate;
+            }
+            else
+            {
+                return App.Current.Resources["Feed1"] as DataTemplate;
+            }
+        }
+    }
+
 }

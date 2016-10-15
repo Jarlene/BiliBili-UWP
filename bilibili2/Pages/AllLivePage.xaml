@@ -69,7 +69,7 @@
             
             <Border x:Name="ViewBox_num" Width="200" Height="1" VerticalAlignment="Top"></Border>
           
-            <Pivot x:Name="pivot" SelectionChanged="pivot_SelectionChanged">
+            <Pivot x:Name="pivot" Style="{StaticResource PivotStyle2}" BorderBrush="{StaticResource BG}" SelectionChanged="pivot_SelectionChanged">
                 <Pivot.ItemContainerStyle>
                     <Style TargetType="PivotItem">
                         <Setter Property="Margin" Value="0"></Setter>
@@ -77,72 +77,95 @@
                 </Pivot.ItemContainerStyle>
                 <PivotItem >
                     <PivotItem.Header>
-                        <TextBlock Text="热门直播" FontSize="18"></TextBlock>
+                        <TextBlock x:Name="txt_hea_0" Text="热门直播" FontSize="16" Foreground="White"></TextBlock>
                     </PivotItem.Header>
                     <!--<pr:PullToRefreshBox x:Name="Pull1" RefreshInvoked="Pull_RefreshInvoked">-->
-                    <ScrollViewer x:Name="Sc_Live" ViewChanged="Sc_Live_ViewChanged">
-                        <GridView x:Name="live_HOT" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_HOT_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
+                    <ScrollViewer x:Name="Sc_Live" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}" ViewChanged="Sc_Live_ViewChanged" >
+                        <StackPanel>
+                            <GridView x:Name="live_HOT" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_HOT_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
+                            <Button x:Name="hot_LoadMore" HorizontalAlignment="Center" Background="{StaticResource BG}" Foreground="White" Click="hot_LoadMore_Click">加载更多</Button>
+                        </StackPanel>
                     </ScrollViewer>
                     <!--</pr:PullToRefreshBox>-->
 
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Text="御宅文化" FontSize="18"></TextBlock>
+                        <TextBlock x:Name="txt_hea_1" Text="御宅文化" FontSize="16" Foreground="White"></TextBlock>
                     </PivotItem.Header>
                     <!--<pr:PullToRefreshBox x:Name="Pull2" RefreshInvoked="Pull_RefreshInvoked">-->
-                    <ScrollViewer x:Name="Sc_Yz" ViewChanged="Sc_Yz_ViewChanged">
+                    <ScrollViewer x:Name="Sc_Yz" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}" ViewChanged="Sc_Yz_ViewChanged">
                         <GridView x:Name="live_Yz" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
                     </ScrollViewer>
                     <!--</pr:PullToRefreshBox>-->
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Text="生活娱乐" FontSize="18"></TextBlock>
+                        <TextBlock x:Name="txt_hea_2" Text="生活娱乐" FontSize="16" Foreground="White"></TextBlock>
                     </PivotItem.Header>
                     <!--<pr:PullToRefreshBox x:Name="Pull3" RefreshInvoked="Pull_RefreshInvoked">-->
-                    <ScrollViewer x:Name="Sc_Sh">
+                    <ScrollViewer x:Name="Sc_Sh" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}">
                         <GridView x:Name="live_Sh" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
                     </ScrollViewer>
                     <!--</pr:PullToRefreshBox>-->
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Text="单机联网" FontSize="18"></TextBlock>
+                        <TextBlock x:Name="txt_hea_3" Text="单机联网" FontSize="16" Foreground="White"></TextBlock>
                     </PivotItem.Header>
                     <!--<pr:PullToRefreshBox x:Name="Pull4" RefreshInvoked="Pull_RefreshInvoked">-->
-                    <ScrollViewer x:Name="Sc_D">
+                    <ScrollViewer x:Name="Sc_D" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}">
                         <GridView x:Name="live_Dj" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
                     </ScrollViewer>
                     <!--</pr:PullToRefreshBox>-->
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Text="网络游戏" FontSize="18"></TextBlock>
+                        <TextBlock x:Name="txt_hea_4" Text="网络游戏" FontSize="16" Foreground="White"></TextBlock>
                     </PivotItem.Header>
                     <!--<pr:PullToRefreshBox x:Name="Pull5" RefreshInvoked="Pull_RefreshInvoked">-->
-                    <ScrollViewer x:Name="Sc_W">
+                    <ScrollViewer x:Name="Sc_W" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}">
                         <GridView x:Name="live_Wl" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
                     </ScrollViewer>
                     <!--</pr:PullToRefreshBox>-->
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Text="电子竞技" FontSize="18"></TextBlock>
+                        <TextBlock x:Name="txt_hea_5" Text="电子竞技" FontSize="16" Foreground="White"></TextBlock>
                     </PivotItem.Header>
                     <!--<pr:PullToRefreshBox x:Name="Pull6" RefreshInvoked="Pull_RefreshInvoked">-->
-                    <ScrollViewer x:Name="Sc_Dj">
+                    <ScrollViewer x:Name="Sc_Dj" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}">
                         <GridView x:Name="live_Dzj" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
                     </ScrollViewer>
                     <!--</pr:PullToRefreshBox>-->
                 </PivotItem>
                 <PivotItem>
                     <PivotItem.Header>
-                        <TextBlock Text="放映厅" FontSize="18"></TextBlock>
+                        <TextBlock x:Name="txt_hea_6" Text="放映厅" FontSize="16" Foreground="White"></TextBlock>
                     </PivotItem.Header>
                     <!--<pr:PullToRefreshBox x:Name="Pull" RefreshInvoked="Pull_RefreshInvoked">-->
-                    <ScrollViewer x:Name="Sc_Dy">
+                    <ScrollViewer x:Name="Sc_Dy" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}">
                         <GridView x:Name="live_Dy" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
+                    </ScrollViewer>
+                    <!--</pr:PullToRefreshBox>-->
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock x:Name="txt_hea_7" Text="手机" FontSize="16" Foreground="White"></TextBlock>
+                    </PivotItem.Header>
+                    <!--<pr:PullToRefreshBox x:Name="Pull" RefreshInvoked="Pull_RefreshInvoked">-->
+                    <ScrollViewer x:Name="Sc_sj" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}">
+                        <GridView x:Name="live_Sj" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
+                    </ScrollViewer>
+                    <!--</pr:PullToRefreshBox>-->
+                </PivotItem>
+                <PivotItem>
+                    <PivotItem.Header>
+                        <TextBlock x:Name="txt_hea_8" Text="手游" FontSize="16" Foreground="White"></TextBlock>
+                    </PivotItem.Header>
+                    <!--<pr:PullToRefreshBox x:Name="Pull" RefreshInvoked="Pull_RefreshInvoked">-->
+                    <ScrollViewer x:Name="Sc_sy" ScrollViewer.VerticalScrollBarVisibility="Auto" Style="{StaticResource ScrollViewerStyle1}">
+                        <GridView x:Name="live_Sy" SelectionMode="None" IsItemClickEnabled="True" ItemClick="live_Dzj_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" VerticalAlignment="Top" ItemContainerStyle="{StaticResource itemStyle}" ItemTemplate="{StaticResource GridItem}"></GridView>
                     </ScrollViewer>
                     <!--</pr:PullToRefreshBox>-->
                 </PivotItem>

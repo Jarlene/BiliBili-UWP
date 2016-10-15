@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -45,11 +46,12 @@ namespace bilibili2.Pages
                 BackEvent();
             }
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.NavigationMode== NavigationMode.New )
             {
+                await Task.Delay(200);
                 GetTagInfo();
             }
             

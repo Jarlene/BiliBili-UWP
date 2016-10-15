@@ -1,4 +1,5 @@
-﻿using System;
+﻿using bilibili2.Class;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -26,7 +27,16 @@ namespace bilibili2.Controls
         public MyDanmaku()
         {
             this.InitializeComponent();
-           
+            SettingHelper settings = new SettingHelper();
+            if (settings.SettingContains("DMBorder"))
+            {
+                D_Border = (bool)settings.GetSettingValue("DMBorder");
+            }
+            else
+            {
+                settings.SetSettingValue("DMBorder", true);
+                D_Border = true;
+            }
         }
         /// <summary>
         /// 弹幕字体
@@ -49,8 +59,9 @@ namespace bilibili2.Controls
         /// </summary>
         public bool IsPlaying = true;
         public MediaElementState state;
-        private int row = 0;//行数
+        public int row = 0;//行数
         private int maxRow = 10;
+        bool D_Border = true;
         /// <summary>
         /// 添加滚动弹幕
         /// </summary>
@@ -92,7 +103,11 @@ namespace bilibili2.Controls
                 }
 
                 //grid包含弹幕文本信息
-                grid.Children.Add(tx2);
+               
+                if (D_Border)
+                {
+                    grid.Children.Add(tx2);
+                }
                 grid.Children.Add(tx);
                 grid.VerticalAlignment = VerticalAlignment.Top;
                 grid.HorizontalAlignment = HorizontalAlignment.Left;
@@ -102,6 +117,7 @@ namespace bilibili2.Controls
                 grid.RenderTransform = moveTransform;
                 //将弹幕加载入控件中,并且设置位置
                 grid_Danmu.Children.Add(grid);
+               
                 Grid.SetRow(grid, row);
                 row++;
                 if (row == maxRow)
@@ -118,6 +134,13 @@ namespace bilibili2.Controls
                 grid.DataContext = model;
                 //更新弹幕UI，不更新无法获得弹幕的ActualWidth
                 grid.UpdateLayout();
+                D_height = grid.ActualHeight;
+                if (!wCnMdBUG)
+                {
+                    SetJJ();
+                }
+
+                //SetJJ();
                 //创建动画
                 Duration duration = new Duration(TimeSpan.FromSeconds(Speed));
                 DoubleAnimation myDoubleAnimationX = new DoubleAnimation();
@@ -173,10 +196,13 @@ namespace bilibili2.Controls
         {
             row = 0;
             grid_Danmu.Children.Clear();
-            grid_Danmu2.Children.Clear();
+            D_Top.Children.Clear();
+            D_Bottom.Children.Clear();
         }
 
         private bool Handling = false;//是否正在监听
+
+        private double D_height = 40;
         /// <summary>
         /// 添加顶部及底部弹幕
         /// </summary>
@@ -210,7 +236,10 @@ namespace bilibili2.Controls
                 tx.FontSize = fontSize - 2;
             }
             //grid包含弹幕文本信息
-            grid.Children.Add(tx2);
+            if (D_Border)
+            {
+                grid.Children.Add(tx2);
+            }
             grid.Children.Add(tx);
 
             // tx.FontSize = Double.Parse(model.DanSize) - fontSize;
@@ -225,7 +254,7 @@ namespace bilibili2.Controls
             grid.Opacity = Tran;
             grid.DataContext = model;
             grid.UpdateLayout();
-
+            D_height = grid.ActualHeight;
             if (istop)
             {
                 D_Top.Children.Add(grid);
@@ -477,6 +506,71 @@ namespace bilibili2.Controls
             public string DanRowID { get; set; }
             public string DanText { get; set; }//信息
         }
+        bool wCnMdBUG = false;
+        public void SetJJ()
+        {
+            try
+            {
+                //wCnMdBUG = false;
+                if (D_height == 0)
+                {
+                    D_height = 40;
+                }
+                maxRow = Convert.ToInt32(this.ActualHeight / D_height);
+                if (grid_Danmu.RowDefinitions.Count + 1 < maxRow)
+                {
+                    for (int i = 0; i < maxRow - grid_Danmu.RowDefinitions.Count + 1; i++)
+                    {
+                        grid_Danmu.RowDefinitions.Insert(grid_Danmu.RowDefinitions.Count - 1, new RowDefinition());
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < grid_Danmu.RowDefinitions.Count - maxRow; i++)
+                    {
+                        grid_Danmu.RowDefinitions.RemoveAt(grid_Danmu.RowDefinitions.Count - 1);
+                    }
+                }
+            }
+            catch (Exception)
+            {
+            }
 
+        }
+
+        private void UserControl_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //try
+            //{
+             wCnMdBUG = false;
+            SetJJ();
+            //    if (D_height == 0)
+            //    {
+            //        D_height = 40;
+            //    }
+            //    maxRow = Convert.ToInt32(this.ActualHeight / D_height);
+            //    if (grid_Danmu.RowDefinitions.Count + 1 < maxRow)
+            //    {
+            //        for (int i = 0; i < maxRow - grid_Danmu.RowDefinitions.Count + 1; i++)
+            //        {
+            //            grid_Danmu.RowDefinitions.Insert(grid_Danmu.RowDefinitions.Count - 1, new RowDefinition());
+            //        }
+            //    }
+            //    else
+            //    {
+            //        for (int i = 0; i < grid_Danmu.RowDefinitions.Count - maxRow; i++)
+            //        {
+            //            grid_Danmu.RowDefinitions.RemoveAt(grid_Danmu.RowDefinitions.Count - 1);
+            //            //grid_Danmu.RowDefinitions.Insert(grid_Danmu.RowDefinitions.Count - 1, new RowDefinition());
+            //        }
+            //    }
+
+            //}
+            //catch (Exception)
+            //{
+            //}
+
+
+        }
     }
 }

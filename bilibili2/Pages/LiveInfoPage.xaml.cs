@@ -23,6 +23,8 @@ using Windows.System.Display;
 using System.Threading.Tasks;
 using Windows.Graphics.Display;
 using Windows.UI.ViewManagement;
+using Windows.Media.Playback;
+using Windows.Media;
 
 // “空白页”项模板在 http://go.microsoft.com/fwlink/?LinkId=234238 上提供
 
@@ -39,13 +41,43 @@ namespace bilibili2.Pages
         {
             this.InitializeComponent();
             NavigationCacheMode = NavigationCacheMode.Enabled;
+            BackgroundMediaPlayer.MessageReceivedFromBackground += BackgroundMediaPlayer_MessageReceivedFromBackground;
         }
+
+        private async void BackgroundMediaPlayer_MessageReceivedFromBackground(object sender, MediaPlayerDataReceivedEventArgs e)
+        {
+
+            if (e.Data != null)
+            {
+                string values = (string)e.Data.ToList()[0].Value;
+                if (values== "Playing")
+                {
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        mediaElement.Play();
+                    });
+
+                }
+                else
+                {
+
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        mediaElement.Pause();
+                    });
+
+
+                }
+            }
+        }
+
         WebClientClass wc;
         string rommID = string.Empty;
         bool LoadDanmu = true;
         DispatcherTimer time = new DispatcherTimer();
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
+            await Task.Delay(200);
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             GetSetting();
             grid_Error.Visibility = Visibility.Collapsed;
@@ -67,7 +99,6 @@ namespace bilibili2.Pages
             {
                 GetUserInfo();
                 GetSignInfo();
-             
             }
             else
             {
@@ -90,16 +121,29 @@ namespace bilibili2.Pages
             GetFansTop(rommID);
             
         }
-
+        int i = 0;
         private async void Time_Tick(object sender, object e)
         {
+           
             GetComment();
+            danmu.SetJJ();
             await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => {
                 if (grid_Full.Visibility==Visibility.Visible)
                 {
                     txt_Timer.Text = DateTime.Now.ToString("HH-mm");
                 }
+                if (i == 4)
+                {
+                    danmu.row = 0;
+                    i = 0;
+                }
+                else
+                {
+                    i++;
+                }
+                
             });
+
         }
 
         private DisplayRequest dispRequest = null;
@@ -132,7 +176,9 @@ namespace bilibili2.Pages
             }
             else
             {
+                time.Stop();
                 BackEvent();
+               
             }
         }
 
@@ -519,7 +565,7 @@ namespace bilibili2.Pages
 
         }
 
-        private async void GetLiveUrl()
+        private  async void GetLiveUrl()
         {
             try
             {
@@ -531,7 +577,8 @@ namespace bilibili2.Pages
             }
             catch (Exception)
             {
-                throw;
+                await new MessageDialog("地址读取失败").ShowAsync();
+                //throw;
             }
         }
 
@@ -568,30 +615,56 @@ namespace bilibili2.Pages
                     btn_Pause.Visibility = Visibility.Collapsed;
                     progress.Visibility = Visibility.Visible;
                     LoadDanmu = false;
+
                     break;
                 case MediaElementState.Buffering:
                     btn_Play.Visibility = Visibility.Collapsed;
                     btn_Pause.Visibility = Visibility.Visible;
                     progress.Visibility = Visibility.Visible;
                     LoadDanmu = false;
+                    try{
+                        ValueSet vs = new ValueSet();
+                        vs.Add("Play", "Playing");
+                        BackgroundMediaPlayer.SendMessageToBackground(vs);
+                    }
+                    catch { }
                     break;
                 case MediaElementState.Playing:
                     btn_Play.Visibility = Visibility.Collapsed;
                     btn_Pause.Visibility = Visibility.Visible;
                     progress.Visibility = Visibility.Collapsed;
+
                     LoadDanmu = true;
+                    try{
+                        ValueSet vs = new ValueSet();
+                        vs.Add("Play", "Playing");
+                        BackgroundMediaPlayer.SendMessageToBackground(vs);
+                    }
+                    catch { }
                     break;
                 case MediaElementState.Paused:
                     btn_Play.Visibility = Visibility.Visible;
                     btn_Pause.Visibility = Visibility.Collapsed;
                     progress.Visibility = Visibility.Collapsed;
                     LoadDanmu = false;
+                    try{
+                        ValueSet vs = new ValueSet();
+                        vs.Add("Play", "Paused");
+                        BackgroundMediaPlayer.SendMessageToBackground(vs);
+                    }
+                    catch { }
                     break;
                 case MediaElementState.Stopped:
                     btn_Play.Visibility = Visibility.Visible;
                     btn_Pause.Visibility = Visibility.Collapsed;
                     progress.Visibility = Visibility.Collapsed;
                     LoadDanmu = false;
+                    try{
+                        ValueSet vs = new ValueSet();
+                        vs.Add("Play", "Paused");
+                        BackgroundMediaPlayer.SendMessageToBackground(vs);
+                    }
+                    catch { }
                     break;
                 default:
                     break;
@@ -611,6 +684,7 @@ namespace bilibili2.Pages
         {
             try
             {
+                
                 //http://live.bilibili.com/AppRoom/msg?_device=android&_hwid=68fc5d795c256cd1&appkey=c1b107428d337928&build=414000&platform=android&room_id=23058&sign=4bf8088300d9f4c90b62264c4a87585d
                 wc = new WebClientClass();
                 string url = string.Format("http://live.bilibili.com/AppRoom/msg?_device=wp&appkey={0}&build=411005&access_key={1}&platform=android&room_id={2}&ts={3}", ApiHelper._appKey, ApiHelper.access_key, rommID, ApiHelper.GetTimeSpen);
@@ -731,8 +805,14 @@ namespace bilibili2.Pages
                 AddComment("弹幕内容不能为空！", true);
                 return;
             }
+            if (txt_Comment.Text.Length>20)
+            {
+                AddComment("必需少于20字！", true);
+                return;
+            }
             try
             {
+                btn_SendComment.IsEnabled = false;
                 WebClientClass wc = new WebClientClass();
                 DateTime timeStamp = new DateTime(1970, 1, 1); //得到1970年的时间戳
                 long time = (DateTime.UtcNow.Ticks - timeStamp.Ticks) / 10000000;
@@ -747,9 +827,52 @@ namespace bilibili2.Pages
                         danmu.AddGunDanmu(new Controls.MyDanmaku.DanMuModel() { DanText = txt_Comment.Text, DanSize = "25", _DanColor = "16777215" }, true);
                     }
                     txt_Comment.Text = string.Empty;
-                    btn_SendComment.IsEnabled = false;
-                    await Task.Delay(3000);
-                    btn_SendComment.IsEnabled = true;
+                  
+                }
+                else
+                {
+                    AddComment("弹幕发送失败", true);
+                }
+                
+            }
+            catch (Exception)
+            {
+                AddComment("弹幕发送出现错误", true);
+            }
+            finally
+            {
+                btn_SendComment.IsEnabled = true;
+            }
+        }
+        public async void SendDanmu2()
+        {
+            if (auto_text.Text.Length == 0)
+            {
+                AddComment("弹幕内容不能为空！", true);
+                return;
+            }
+            if (auto_text.Text.Length > 20)
+            {
+                AddComment("必需少于20字！", true);
+                return;
+            }
+            try
+            {
+                auto_text.IsEnabled = false;
+                WebClientClass wc = new WebClientClass();
+                DateTime timeStamp = new DateTime(1970, 1, 1); //得到1970年的时间戳
+                long time = (DateTime.UtcNow.Ticks - timeStamp.Ticks) / 10000000;
+                string sendText = string.Format("color=16777215&fontsize=25&mode=1&msg={0}&rnd={1}&roomid={2}", auto_text.Text, time, rommID);
+                string result = await wc.PostResults(new Uri("http://live.bilibili.com/msg/send"), sendText);
+                JObject jb = JObject.Parse(result);
+                if ((int)jb["code"] == 0)
+                {
+                    AddComment("我:" + auto_text.Text, true);
+                    if (LoadDanmu)
+                    {
+                        danmu.AddGunDanmu(new Controls.MyDanmaku.DanMuModel() { DanText = auto_text.Text, DanSize = "25", _DanColor = "16777215" }, true);
+                    }
+                    auto_text.Text = string.Empty;
                 }
                 else
                 {
@@ -759,6 +882,10 @@ namespace bilibili2.Pages
             catch (Exception)
             {
                 AddComment("弹幕发送出现错误", true);
+            }
+            finally
+            {
+                auto_text.IsEnabled = true;
             }
         }
 
@@ -897,8 +1024,10 @@ namespace bilibili2.Pages
 
         private void btn_Full_Click(object sender, RoutedEventArgs e)
         {
+            
             btn_Full.Visibility = Visibility.Collapsed;
             btn_ExitFull.Visibility = Visibility.Visible;
+            //mediaElement.IsFullWindow = true;
             //Video_UP.Height = 0;
             //grid_Info.Width = 0;
             //row_2.Height = GridLength.Auto;
@@ -909,8 +1038,6 @@ namespace bilibili2.Pages
             grid_Full.Children.Add(en);
             DisplayInformation.AutoRotationPreferences = (DisplayOrientations)5;
             ApplicationView.GetForCurrentView().TryEnterFullScreenMode();
-
-            // 
         }
 
         private void btn_ExitFull_Click(object sender, RoutedEventArgs e)
@@ -1071,9 +1198,13 @@ namespace bilibili2.Pages
                 {
                     coinType = "silver";
                 }
+                //timestamp:1469523721
+               // rnd: 1469523678
+//token: 103d1b490ba4bad1ec65fdcd7e25a4ef3d1c9d22
                 string postContent = string.Format(
-                    "giftId={0}&roomid={1}&ruid={2}&num={3}&coinType={4}&Bag_id=0&rnd={5}",
-                    model.id, rommID, (Video_UP.DataContext as LiveInfoModel).mid, int.Parse(txt_Num.Text), coinType, ApiHelper.GetTimeSpen);
+                    "giftId={0}&roomid={1}&ruid={2}&num={3}&coinType={4}&Bag_id=0&rnd={5}&timestamp:{6}&access_key={7}",
+                    model.id, rommID, (Video_UP.DataContext as LiveInfoModel).mid, int.Parse(txt_Num.Text), coinType, ApiHelper.GetTimeSpen,ApiHelper.GetTimeSpen, ApiHelper.access_key);
+                //postContent+= 
                 //postContent += "&token=" + ApiHelper.GetSign(postContent);
                 HttpClient hc = new HttpClient();
                 hc.DefaultRequestHeaders.Referer = new Uri("http://live.bilibili.com/");
@@ -1112,5 +1243,19 @@ namespace bilibili2.Pages
             img_Chptcha.Source = await hr.GetCaptcha();
         }
 
+        private void slider_V_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+
+        }
+
+        private void btn_Resh_Click(object sender, RoutedEventArgs e)
+        {
+            GetLiveUrl();
+        }
+
+        private void auto_text_QuerySubmitted(AutoSuggestBox sender, AutoSuggestBoxQuerySubmittedEventArgs args)
+        {
+            SendDanmu2();
+        }
     }
 }

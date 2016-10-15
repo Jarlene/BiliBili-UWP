@@ -28,7 +28,7 @@
          
             
         </Grid>
-        <WebView x:Name="webview_WebView" Grid.Row="1" NavigationStarting="webview_WebView_NavigationStarting" DOMContentLoaded="webview_WebView_DOMContentLoaded" NewWindowRequested="webview_WebView_NewWindowRequested"/>
+        <WebView x:Name="webview_WebView"  Grid.Row="1" NavigationStarting="webview_WebView_NavigationStarting" DOMContentLoaded="webview_WebView_DOMContentLoaded" NewWindowRequested="webview_WebView_NewWindowRequested"/>
         <ProgressBar x:Name="webview_progressBar" VerticalAlignment="Top" Background="{x:Null}" Foreground="White" IsIndeterminate="True"></ProgressBar>
     </Grid>
 </Page>

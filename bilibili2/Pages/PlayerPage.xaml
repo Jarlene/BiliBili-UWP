@@ -9,6 +9,7 @@
     x:Class="bilibili2.Pages.PlayerPage"
     mc:Ignorable="d"
     Tag="播放器"
+    SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
         <local:PostThumbToolTipValueConverter x:Key="MyThumbToolTipValueConverter" />
@@ -370,7 +371,7 @@
                                     <VisualState x:Name="PointerOver">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="HorizontalTrackRect">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="#00000000"/>
                                             </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetProperty="Fill" Storyboard.TargetName="VerticalTrackRect">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlForegroundBaseMediumBrush}"/>
@@ -427,14 +428,15 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <Grid Background="{ThemeResource Bili-Background}" >
-        <MediaElement x:Name="mediaElement" Volume="{Binding Value, ElementName=slider_V, Mode=OneWay}" AutoPlay="True" BufferingProgressChanged="mediaElement_BufferingProgressChanged" CurrentStateChanged="mediaElement_CurrentStateChanged" DownloadProgressChanged="mediaElement_DownloadProgressChanged" MediaEnded="mediaElement_MediaEnded"/>
+    <Grid x:Name="grid" Background="Black" >
+
+        <MediaElement x:Name="mediaElement" AudioCategory="BackgroundCapableMedia" SeekCompleted="mediaElement_SeekCompleted" Volume="{Binding Value, ElementName=slider_V, Mode=OneWay}" AutoPlay="True" BufferingProgressChanged="mediaElement_BufferingProgressChanged" CurrentStateChanged="mediaElement_CurrentStateChanged" DownloadProgressChanged="mediaElement_DownloadProgressChanged" MediaEnded="mediaElement_MediaEnded"/>
         <Controls:MyDanmaku x:Name="danmu"/>
         <Border x:Name="bor_Back" Background="#00000000"  Grid.RowSpan="4" />
         <SplitView x:Name="splitView" PanePlacement="Right" OpenPaneLength="350" Foreground="White" PaneBackground="#CC6A6A6A">
             <SplitView.Pane>
                 <Grid>
-                    <Grid x:Name="grid_setting_SelectVideo" Visibility="Visible">
+                    <Grid x:Name="grid_setting_SelectVideo" Visibility="Collapsed">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition/>
@@ -453,23 +455,29 @@
                             </GridView.ItemTemplate>
                         </GridView>
                     </Grid>
-                    <Grid x:Name="grid_setting_Play" Visibility="Collapsed">
+                    <Grid x:Name="grid_setting_Play" Visibility="Visible">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
                         <TextBlock Text="播放设置" FontSize="18" Foreground="Black" Margin="5"/>
                         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-                            <StackPanel Margin="5">
+                            <StackPanel Margin="5" >
+                                <TextBlock Foreground="Black" >视频比例</TextBlock>
+                                <RadioButton x:Name="cb_setting_defu" GroupName="Sp" Content="默认" IsChecked="True" Checked="cb_setting_defu_Checked"/>
+                                <RadioButton x:Name="cb_setting_43"  GroupName="Sp" Content="4：3" Checked="cb_setting_43_Checked"/>
+                                <RadioButton x:Name="cb_setting_169"  GroupName="Sp" Content="16：9" Checked="cb_setting_169_Checked"/>
+
+                                <TextBlock Foreground="Black">播放模式</TextBlock>
                                 <RadioButton x:Name="cb_setting_0" IsChecked="True" Content="正常播放"/>
                                 <RadioButton x:Name="cb_setting_1" Content="单P循环"/>
                                 <RadioButton x:Name="cb_setting_2" Content="多P循环"/>
-                                <ToggleSwitch  x:Name="tw_Background" OnContent="后台播放" OffContent="关闭后台播放" Margin="0" Toggled="tw_Background_Toggled" />
+                                <ToggleSwitch  x:Name="tw_Background" Visibility="Collapsed" OnContent="后台播放" OffContent="关闭后台播放" Margin="0" Toggled="tw_Background_Toggled" />
                                 <ToggleSwitch x:Name="tw_AutoFull"  OnContent="自动全屏" OffContent="关闭自动全屏" Margin="0" Toggled="tw_AutoFull_Toggled"/>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
-                    <Grid x:Name="grid_setting_Danmu" Visibility="Visible">
+                    <Grid x:Name="grid_setting_Danmu" Visibility="Collapsed">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="auto"/>
                             <RowDefinition/>
@@ -497,21 +505,25 @@
                                 </TextBlock>
                                 <Slider x:Name="slider_DanmuSize"  Style="{StaticResource SliderStyle1}" Maximum="50" ValueChanged="slider_DanmuSize_ValueChanged" />
                                 <TextBlock Foreground="Black">
-									<Run Text="弹幕速度" />
+									<Run Text="弹幕速度(越小越快)" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuSpeed}"/>
                                 </TextBlock>
                                 <Slider x:Name="slider_DanmuSpeed"  Style="{StaticResource SliderStyle1}"   Maximum="25" ValueChanged="slider_DanmuSpeed_ValueChanged"/>
-                                <TextBlock Foreground="Black">
+                                <TextBlock Foreground="Black" Visibility="Collapsed">
 									<Run Text="弹幕间距" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuJianju}" />
                                 </TextBlock>
-                                <Slider x:Name="slider_DanmuJianju"  Style="{StaticResource SliderStyle1}" Maximum="500"  ValueChanged="slider_DanmuJianju_ValueChanged"/>
+                                <Slider x:Name="slider_DanmuJianju"  Style="{StaticResource SliderStyle1}" Maximum="500" Visibility="Collapsed"  ValueChanged="slider_DanmuJianju_ValueChanged"/>
                                 <TextBlock Foreground="Black">
 									<Run Text="弹幕透明度" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuTran}"/>
                                 </TextBlock>
                                 <Slider x:Name="slider_DanmuTran"  Style="{StaticResource SliderStyle1}" Maximum="100" ValueChanged="slider_DanmuTran_ValueChanged"/>
-
+                                <TextBlock Foreground="Black">
+									<Run Text="弹幕加载数量(0为无限制)" />
+									<Run Text="{Binding Value, ElementName=slider_Num}"/>
+                                </TextBlock>
+                                <Slider x:Name="slider_Num"  Style="{StaticResource SliderStyle1}" Maximum="100" ValueChanged="slider_Num_ValueChanged"/>
                             </StackPanel>
                         </ScrollViewer>
                     </Grid>
@@ -614,6 +626,8 @@
                                     <MenuFlyoutItem x:Name="menu_Danmu" Tag="2" Text="弹幕设置" Click="menu_Danmu_Click"/>
                                     <MenuFlyoutItem x:Name="menu_DisDanmu" Tag="3" Text="弹幕隐蔽" Click="menu_DisDanmu_Click"/>
                                     <MenuFlyoutItem x:Name="menu_LastPost" Text="上次进度" Click="menu_LastPost_Click"></MenuFlyoutItem>
+                                  
+                                    <MenuFlyoutItem x:Name="menu_UpdateDanmu" Text="更新弹幕" Click="menu_UpdateDanmu_Click"></MenuFlyoutItem>
                                     <MenuFlyoutItem x:Name="menu_About" Text="视频信息" Click="menu_About_Click"/>
                                 </MenuFlyout>
                             </AppBarButton.Flyout>
@@ -644,7 +658,7 @@
                             <ComboBoxItem  Foreground="#FFFF00F3" Tag="16711935" Content="粉色"/>
                         </ComboBox>
                     </StackPanel>
-                    <TextBox x:Name="Send_text_Comment" Grid.Column="1"  BorderThickness="0" PlaceholderText="让弹幕飞一会....." VerticalContentAlignment="Center" Height="48" Style="{StaticResource TextBoxStyle1}" Background="{x:Null}" KeyDown="Send_text_Comment_KeyDown"/>
+                    <TextBox x:Name="Send_text_Comment" Grid.Column="1"  BorderThickness="0" PlaceholderText="让弹幕飞一会....." VerticalContentAlignment="Center" Height="48" Style="{StaticResource TextBoxStyle1}" Background="{x:Null}" KeyDown="Send_text_Comment_KeyDown" LostFocus="Send_text_Comment_LostFocus" GotFocus="Send_text_Comment_GotFocus" />
                     <AppBarButton x:Name="Send_btn_Send" Width="48" Height="48" Grid.Column="2" Icon="Send" Foreground="White" Click="Send_btn_Send_Click"/>
                 </Grid>
                 <Grid x:Name="grid_PlayInfo" Grid.ColumnSpan="3" Grid.Row="3" Background="#B25D5D5D">
@@ -652,9 +666,9 @@
                         <RowDefinition Height="auto"/>
                         <RowDefinition Height="48"/>
                     </Grid.RowDefinitions>
-                    <Slider x:Name="slider2" VerticalAlignment="Center" Margin="5 2" Height="32" Style="{StaticResource SliderStyle2}" Foreground="#99DF85A0" Background="#33000000"/>
-                    <Slider x:Name="slider" Value="0" VerticalAlignment="Center" Maximum="300"  Margin="5 2" Height="32" Style="{StaticResource SliderStyle1}" Foreground="#FFDF82A0" Background="#00000000" ValueChanged="slider_ValueChanged"/>
-                    <Slider x:Name="slider3" VerticalAlignment="Center" Margin="5 2" Height="32" Style="{StaticResource SliderStyle2}" Foreground="#00DF85A0" Background="#00000000" ValueChanged="slider3_ValueChanged" ThumbToolTipValueConverter="{StaticResource MyThumbToolTipValueConverter}" />
+                    <Slider x:Name="slider2" VerticalAlignment="Center" Margin="5 2" Height="32" Style="{StaticResource SliderStyle2}" Foreground="#99DF85A0" Background="#7F000000"/>
+                    <Slider x:Name="slider" Value="0" VerticalAlignment="Center" Maximum="300"  Margin="5 2" Height="32" Style="{StaticResource SliderStyle1}" Foreground="#FFDF82A0" Background="#00FFFFFD" ValueChanged="slider_ValueChanged"/>
+                    <Slider x:Name="slider3" VerticalAlignment="Center" Margin="5 2" Height="32" Style="{StaticResource SliderStyle2}" Foreground="#00C1C1C1" Background="#00000000" ValueChanged="slider3_ValueChanged" ThumbToolTipValueConverter="{StaticResource MyThumbToolTipValueConverter}" />
                     <Grid Grid.Row="1" BorderThickness="0 0.5 0 0" BorderBrush="#33FFFFFF">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="48"/>
@@ -701,15 +715,15 @@
                         <TextBlock x:Name="txt_LastPo"  Margin="10 0" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="White">上次播放到12:12:00处</TextBlock>
                     </Border>
                 </HyperlinkButton>
-                <Grid x:Name="grid_end" Grid.ColumnSpan="3" Visibility="Collapsed" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center">
+                <Grid x:Name="grid_end" Grid.ColumnSpan="3" Visibility="Collapsed" Grid.Row="2" VerticalAlignment="Center" HorizontalAlignment="Center" Background="#7F000000">
                     <StackPanel VerticalAlignment="Center">
                         <Image Source="ms-appx:///Assets/LOGO88.png" Width="88" Height="88" />
                         <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center">
 						<Run Text="视频播放完毕" Foreground="Gray"/>
                         </TextBlock>
                         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                            <Button Margin="5" x:Name="btn_RePlay" Foreground="Gray" Click="btn_RePlay_Click" Content="重新播放"/>
-                            <Button Margin="5" x:Name="btn_ExitPlay" Foreground="Gray" Click="top_btn_Back_Click" Content="退出播放"/>
+                            <Button Margin="5" x:Name="btn_RePlay" Foreground="Gray" Click="btn_RePlay_Click" Content="重新播放" Background="#7F000000"/>
+                            <Button Margin="5" x:Name="btn_ExitPlay" Foreground="Gray" Click="top_btn_Back_Click" Content="退出播放" Background="#7F000000"/>
                         </StackPanel>
                     </StackPanel>
                 </Grid>

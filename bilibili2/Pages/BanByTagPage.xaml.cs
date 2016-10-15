@@ -52,8 +52,9 @@ namespace bilibili2.Pages
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
-            if (e.NavigationMode== NavigationMode.New)
+            if (e.NavigationMode == NavigationMode.New)
             {
+                await Task.Delay(200);
                 getTid = e.Parameter as string[];
                 btn_type1.IsEnabled = false;
                 btn_type2.IsEnabled = true;
@@ -61,35 +62,37 @@ namespace bilibili2.Pages
                 btn_type4.IsEnabled = true;
                 top_txt_Header.Text = getTid[1];
                 pr_Load.Visibility = Visibility.Visible;
+                getPage = 1;
+                ls_Tag.Items.Clear();
                 await GetTagInfo(getPage, getTid[0], 0);
                 pr_Load.Visibility = Visibility.Collapsed;
 
             }
-            
+
         }
 
         private async Task GetTagInfo(int page, string tid, int type)
         {
             try
             {
-                    WebClientClass wc = new WebClientClass();
-                    string results = await wc.GetResults(new Uri(String.Format("http://bangumi.bilibili.com/api/get_season_by_tag?indexType={0}&page={1}&pagesize=20&tag_id={2}", type, page, tid)));
-                    BanSeasonTagModel model = JsonConvert.DeserializeObject<BanSeasonTagModel>(results);
-                    List<BanSeasonTagModel> ls = JsonConvert.DeserializeObject<List<BanSeasonTagModel>>(model.result.ToString());
-                    foreach (BanSeasonTagModel item in ls)
-                    {
-                        ls_Tag.Items.Add(item);
-                    }
-                    getPage++;
-                    if (model.pages < getPage)
-                    {
-                        btn_LoadMore.IsEnabled = false;
-                        btn_LoadMore.Content = "加载完了...";
-                    }
+                WebClientClass wc = new WebClientClass();
+                string results = await wc.GetResults(new Uri(String.Format("http://bangumi.bilibili.com/api/get_season_by_tag?indexType={0}&page={1}&pagesize=20&tag_id={2}", type, page, tid)));
+                BanSeasonTagModel model = JsonConvert.DeserializeObject<BanSeasonTagModel>(results);
+                List<BanSeasonTagModel> ls = JsonConvert.DeserializeObject<List<BanSeasonTagModel>>(model.result.ToString());
+                foreach (BanSeasonTagModel item in ls)
+                {
+                    ls_Tag.Items.Add(item);
+                }
+                getPage++;
+                if (model.pages < getPage)
+                {
+                    btn_LoadMore.IsEnabled = false;
+                    btn_LoadMore.Content = "加载完了...";
+                }
             }
             catch (Exception)
             {
-                messShow.Show("读取失败，请重试",3000);
+                messShow.Show("读取失败，请重试", 3000);
             }
         }
 
@@ -110,7 +113,7 @@ namespace bilibili2.Pages
             btn_type2.IsEnabled = true;
             btn_type3.IsEnabled = true;
             btn_type4.IsEnabled = true;
-           
+
             pr_Load.Visibility = Visibility.Visible;
             await GetTagInfo(getPage, getTid[0], getType);
 
@@ -165,14 +168,27 @@ namespace bilibili2.Pages
             btn_type2.IsEnabled = true;
             btn_type3.IsEnabled = true;
             btn_type4.IsEnabled = false;
-       
+
             pr_Load.Visibility = Visibility.Visible;
             await GetTagInfo(getPage, getTid[0], getType);
             pr_Load.Visibility = Visibility.Collapsed;
         }
 
-        private void btn_LoadMore_Click(object sender, RoutedEventArgs e)
+        private async void btn_LoadMore_Click(object sender, RoutedEventArgs e)
         {
+            if (More)
+            {
+                More = false;
+                btn_LoadMore.IsEnabled = false;
+                btn_LoadMore.Content = "正在加载";
+                await GetTagInfo(getPage, getTid[0], getType); 
+                if (btn_LoadMore.Content.ToString() != "加载完了...")
+                {
+                    btn_LoadMore.IsEnabled = true;
+                    btn_LoadMore.Content = "加载更多";
+                }
+                More = true;
+            }
 
         }
         bool More = true;
@@ -196,6 +212,10 @@ namespace bilibili2.Pages
             }
         }
 
-
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            int d = Convert.ToInt32(this.ActualWidth / 400);
+            bor_Width.Width = this.ActualWidth / d - 22;
+        }
     }
 }

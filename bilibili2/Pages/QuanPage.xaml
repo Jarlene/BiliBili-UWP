@@ -1,0 +1,369 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:bilibili2.Pages"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:bilibili2="using:bilibili2"
+    x:Class="bilibili2.Pages.QuanPage"
+    mc:Ignorable="d"
+     Tag="兴趣圈"
+    SizeChanged="Page_SizeChanged"
+    >
+    <Page.Resources>
+        <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
+    </Page.Resources>
+    <Grid Background="{ThemeResource Bili-Background}">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="48"/>
+            <RowDefinition Height="36"/>
+            <RowDefinition/>
+        </Grid.RowDefinitions>
+        <Grid Background="{StaticResource BG}" Grid.Row="0" Height="48" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="auto"/>
+            </Grid.ColumnDefinitions>
+            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
+            <TextBlock  Text="兴趣圈" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
+            <AppBarButton Foreground="White" ToolTipService.ToolTip="搜索" Grid.Column="2" Width="48" Height="48" Icon="Find" Click="AppBarButton_Click"/>
+        </Grid>
+        <ProgressBar x:Name="pr_Load" VerticalAlignment="Top" Background="{x:Null}" Foreground="White" IsIndeterminate="True"/>
+        <Grid Background="{StaticResource BG}"   Grid.Row="1" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+                <ColumnDefinition/>
+            </Grid.ColumnDefinitions>
+            <Button x:Name="btn_info" Background="#00000000"  FontSize="16"  Foreground="#B2FFFFFF" Tag="0" VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btn_info_Click" Content="首页"/>
+            <Button x:Name="btn_Coment" Grid.Column="1" FontSize="16"  Foreground="#B2FFFFFF" Tag="1"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btn_info_Click" Content="发现"/>
+            <Button x:Name="btn_About" Grid.Column="2" FontSize="16"  Foreground="#B2FFFFFF" Tag="2"  Background="#00000000"  VerticalContentAlignment="Stretch" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Click="btn_info_Click" Content="我的"/>
+        </Grid>
+        <Pivot x:Name="pivot" Grid.Row="2" SelectionChanged="pivot_SelectionChanged" Style="{StaticResource PivotStyle1}">
+            <PivotItem Margin="0">
+                <ScrollViewer x:Name="sv_Home" Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto" ViewChanged="sv_Home_ViewChanged">
+                    <StackPanel>
+                        <Grid>
+                            <Border x:Name="bor_Width" Width="450" VerticalAlignment="Top"></Border>
+                            <HyperlinkButton Margin="10 0" Foreground="{ThemeResource Bili-FontColor}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="ms-appx:///Assets/Icon/ic_quanzi.png" Width="18" Height="18" Margin="0 0 10 0"/>
+                                    <TextBlock Text="我的圈子" VerticalAlignment="Center" FontSize="16"/>
+                                </StackPanel>
+                            </HyperlinkButton>
+                            <HyperlinkButton x:Name="btn_refresh_Atton" Visibility="Collapsed" Margin="10 0" Foreground="{ThemeResource Bili-FontColor}" HorizontalAlignment="Right" Click="btn_refresh_Atton_Click">
+                                <TextBlock  FontSize="14">
+									<Run Text="查看全部"/>
+                                </TextBlock>
+                            </HyperlinkButton>
+                        </Grid>
+                        <Grid Background="{ThemeResource Bili-MenuBack}" HorizontalAlignment="Stretch">
+                            <ScrollViewer HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
+                                <GridView   ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled" x:Name="list_MyQuan" ItemClick="list_MyQuan_ItemClick"  ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" SelectionMode="None" IsItemClickEnabled="True">
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel>
+                                                <Ellipse Width="56" Height="56" Margin="5 0">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding thumb}" />
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <TextBlock HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding name}"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                    <GridView.ItemContainerStyle>
+                                        <Style TargetType="GridViewItem">
+                                            <Setter Property="Margin" Value="5"/>
+                                            <Setter Property="MaxWidth" Value="66"/>
+                                        </Style>
+                                    </GridView.ItemContainerStyle>
+
+                                </GridView>
+                            </ScrollViewer>
+                        </Grid>
+  
+                        <TextBlock Foreground="Gray" HorizontalAlignment="Center" x:Name="txt_NotGz">没有圈子...</TextBlock>
+                        <Grid>
+                            <HyperlinkButton Margin="10 0" Foreground="{ThemeResource Bili-FontColor}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="ms-appx:///Assets/PartIcon/ic_header_dynamic.png" Width="18" Height="18" Margin="0 0 10 0"/>
+                                    <TextBlock Text="动态" VerticalAlignment="Center" FontSize="16"/>
+                                </StackPanel>
+                            </HyperlinkButton>
+
+                        </Grid>
+                        <GridView x:Name="list_DT" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled" IsItemClickEnabled="True" SelectionMode="None" ItemClick="list_DT_ItemClick">
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <!--<Setter Property="HorizontalContentAlignment" Value="Stretch"/>-->
+                                    <Setter Property="Background" Value="{ThemeResource Bili-MenuBack}"></Setter>
+                                    <Setter Property="Margin" Value="5"></Setter>
+                                    <!--<Setter Property="BorderThickness" Value="0 0 0 0.5"/>
+                                    <Setter Property="BorderBrush" Value="#33808080"/>-->
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="{Binding ElementName=bor_Width,Path=Width}" Margin="5">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid Margin="0 5" Grid.ColumnSpan="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Ellipse Width="18" Height="18"  HorizontalAlignment="Left">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding author_avatar}"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <TextBlock Grid.Column="1" FontSize="14" Foreground="Gray"  VerticalAlignment="Center" Margin="5 0" Text="{Binding author_name}"/>
+                                                <StackPanel Grid.Column="2"  Orientation="Horizontal">
+                                                    <Viewbox  Width="14" Height="14">
+                                                        <SymbolIcon Symbol="Message" Foreground="Gray"/>
+                                                    </Viewbox>
+                                                    <TextBlock Grid.Column="1" FontSize="14" Foreground="Gray" VerticalAlignment="Center" Margin="5 0" Text="{Binding reply_count}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding post_title}"/>
+                                            <TextBlock Grid.Row="2" Margin="0 5" Foreground="Gray" FontSize="14" MaxLines="2" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="{Binding post_summary}"/>
+                                            <Image  Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" MaxWidth="56" MaxHeight="56" Stretch="UniformToFill"/>
+                                            <Grid Margin="5" Grid.ColumnSpan="2" Grid.Row="3">
+                                                <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center">
+												<Run Text="「"/>
+												<Run Text="{Binding community_name}"/>
+												<Run Text="」"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="14" HorizontalAlignment="Right" Foreground="Gray" VerticalAlignment="Center" Text="{Binding time}"/>
+
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+
+                                </DataTemplate>
+
+                            </GridView.ItemTemplate>
+
+                        </GridView>
+                        <TextBlock Foreground="Gray" HorizontalAlignment="Center" x:Name="txt_NotDt">没有动态...</TextBlock>
+                        <Button x:Name="btn_LoadMore" Click="btn_LoadMore_Click" HorizontalAlignment="Center" Background="{StaticResource BG}" Foreground="White">加载更多</Button>
+                    </StackPanel>
+                </ScrollViewer>
+
+            </PivotItem>
+            <PivotItem Margin="0">
+                <ScrollViewer x:Name="sv_Find" Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto" ViewChanged="sv_Find_ViewChanged">
+                    <StackPanel>
+                        <Grid>
+                            <HyperlinkButton Margin="10 0" Foreground="{ThemeResource Bili-FontColor}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="{StaticResource BG}" Width="10" Margin="0 0 10 0" Height="24" ></Border>
+
+                                    <TextBlock Text="推荐圈子" VerticalAlignment="Center" FontSize="16"/>
+                                </StackPanel>
+                            </HyperlinkButton>
+                        </Grid>
+                        <ScrollViewer HorizontalScrollBarVisibility="Hidden" HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
+                            <GridView Background="{ThemeResource Bili-MenuBack}" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled" x:Name="list_TJQuan" ItemClick="list_MyQuan_ItemClick" ScrollViewer.VerticalScrollBarVisibility="Disabled" HorizontalAlignment="Left" SelectionMode="None" IsItemClickEnabled="True">
+                                <GridView.ItemTemplate>
+                                    <DataTemplate>
+                                        <StackPanel>
+                                            <Ellipse Width="56" Height="56" Margin="5 0">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding thumb}" />
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <TextBlock HorizontalAlignment="Center" TextTrimming="CharacterEllipsis" Text="{Binding name}"/>
+                                        </StackPanel>
+                                    </DataTemplate>
+                                </GridView.ItemTemplate>
+                                <GridView.ItemContainerStyle>
+                                    <Style TargetType="GridViewItem">
+                                        <Setter Property="Margin" Value="5"/>
+                                        <Setter Property="MaxWidth" Value="66"/>
+                                    </Style>
+                                </GridView.ItemContainerStyle>
+
+                            </GridView>
+                        </ScrollViewer>
+                        <Grid>
+                            <HyperlinkButton Margin="10 0" Foreground="{ThemeResource Bili-FontColor}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Border Background="{StaticResource BG}" Width="10" Margin="0 0 10 0" Height="24" ></Border>
+
+                                    <TextBlock Text="精选帖子" VerticalAlignment="Center" FontSize="16"/>
+                                </StackPanel>
+                            </HyperlinkButton>
+
+                        </Grid>
+                        <GridView x:Name="list_TJ" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled" IsItemClickEnabled="True" SelectionMode="None" ItemClick="list_DT_ItemClick">
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <!--<Setter Property="HorizontalContentAlignment" Value="Stretch"/>-->
+                                    <!--<Setter Property="BorderThickness" Value="0 0 0 0.5"/>
+                                    <Setter Property="BorderBrush" Value="#33808080"/>-->
+                                    <Setter Property="Background" Value="{ThemeResource Bili-MenuBack}"></Setter>
+                                    <Setter Property="Margin" Value="5"></Setter>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Width="{Binding ElementName=bor_Width,Path=Width}" Margin="5">
+                                        <Grid>
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition Height="auto"/>
+                                                <RowDefinition/>
+                                                <RowDefinition Height="auto"/>
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition/>
+                                                <ColumnDefinition Width="auto"/>
+                                            </Grid.ColumnDefinitions>
+                                            <Grid Margin="0 5" Grid.ColumnSpan="2">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"/>
+                                                    <ColumnDefinition/>
+                                                    <ColumnDefinition Width="auto"/>
+                                                </Grid.ColumnDefinitions>
+                                                <Ellipse Width="18" Height="18"  HorizontalAlignment="Left">
+                                                    <Ellipse.Fill>
+                                                        <ImageBrush ImageSource="{Binding author_avatar}"/>
+                                                    </Ellipse.Fill>
+                                                </Ellipse>
+                                                <TextBlock Grid.Column="1" FontSize="14" Foreground="Gray"  VerticalAlignment="Center" Margin="5 0" Text="{Binding author_name}"/>
+                                                <StackPanel Grid.Column="2"  Orientation="Horizontal">
+                                                    <Viewbox  Width="14" Height="14">
+                                                        <SymbolIcon Symbol="Message" Foreground="Gray"/>
+                                                    </Viewbox>
+                                                    <TextBlock Grid.Column="1" FontSize="14" Foreground="Gray" VerticalAlignment="Center" Margin="5 0" Text="{Binding reply_count}"/>
+                                                </StackPanel>
+                                            </Grid>
+                                            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding post_title}"/>
+                                            <TextBlock Grid.Row="2" Margin="0 5" Foreground="Gray" FontSize="14" MaxLines="2" TextTrimming="CharacterEllipsis" TextWrapping="Wrap" Text="{Binding post_summary}"/>
+                                            <Image  Grid.Row="1" Grid.RowSpan="2" Grid.Column="1" MaxWidth="56" MaxHeight="56" Stretch="UniformToFill"/>
+                                            <Grid Margin="5" Grid.ColumnSpan="2" Grid.Row="3">
+                                                <TextBlock FontSize="14" Foreground="Gray" VerticalAlignment="Center">
+												<Run Text="「"/>
+												<Run Text="{Binding community_name}"/>
+												<Run Text="」"/>
+                                                </TextBlock>
+                                                <TextBlock FontSize="14" HorizontalAlignment="Right" Foreground="Gray" VerticalAlignment="Center" Text="{Binding time}"/>
+
+                                            </Grid>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+
+                        </GridView>
+                    </StackPanel>
+                </ScrollViewer>
+            </PivotItem>
+            <PivotItem Margin="0">
+                <ScrollViewer x:Name="sv_Myself" Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto" ViewChanged="sv_Myself_ViewChanged">
+                    <StackPanel>
+                        <Grid x:Name="grid_User" Background="{ThemeResource Bili-MenuBack}" BorderBrush="#7F808080">
+                            <Grid.RowDefinitions>
+                                <RowDefinition/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition/>
+                            </Grid.ColumnDefinitions>
+
+                            <HyperlinkButton x:Name="btn_User" Click="btn_User_Click" Grid.ColumnSpan="3" BorderThickness="0 0 0 0.5" BorderBrush="#7F808080" Foreground="Gray" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch">
+                                <Grid>
+                                    <StackPanel Orientation="Horizontal" Margin="10 0">
+                                        <Ellipse Width="36" Height="36">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding Path=user_avatar}"/>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <TextBlock VerticalAlignment="Center" Margin="5 0" Text="{Binding Path=username}"></TextBlock>
+
+                                    </StackPanel>
+                                    <TextBlock HorizontalAlignment="Right" VerticalAlignment="Center" Margin="10 0">进入主页 ></TextBlock>
+                                </Grid>
+
+                            </HyperlinkButton>
+                            <HyperlinkButton Foreground="Gray" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.Row="1">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock TextAlignment="Center" FontWeight="Bold" Text="{Binding post_count}"></TextBlock>
+                                    <TextBlock TextAlignment="Center">我的帖子</TextBlock>
+                                </StackPanel>
+                            </HyperlinkButton>
+                            <HyperlinkButton Grid.Column="1" Foreground="Gray" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.Row="1">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock TextAlignment="Center" FontWeight="Bold" Text="{Binding Path=reply_count}"></TextBlock>
+                                    <TextBlock TextAlignment="Center">我的回复</TextBlock>
+                                </StackPanel>
+                            </HyperlinkButton>
+                            <HyperlinkButton Grid.Column="2" Foreground="Gray" HorizontalAlignment="Stretch" HorizontalContentAlignment="Stretch" Grid.Row="1">
+                                <StackPanel HorizontalAlignment="Center">
+                                    <TextBlock TextAlignment="Center" FontWeight="Bold" Text="{Binding Path=collect_count}"></TextBlock>
+                                    <TextBlock TextAlignment="Center">我的收藏</TextBlock>
+                                </StackPanel>
+                            </HyperlinkButton>
+                        </Grid>
+                        <HyperlinkButton Margin="10 0" Foreground="{ThemeResource Bili-FontColor}" >
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="ms-appx:///Assets/ic_post_history.png" Width="18" Height="18" Margin="0 0 10 0"/>
+                                <TextBlock Text="浏览历史" VerticalAlignment="Center" FontSize="16"/>
+                            </StackPanel>
+                        </HyperlinkButton>
+                        <ListView x:Name="list_His" ScrollViewer.VerticalScrollMode="Disabled" Background="{ThemeResource Bili-MenuBack}" ScrollViewer.HorizontalScrollMode="Disabled" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_His_ItemClick">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                    <Setter Property="BorderThickness" Value="0 0.5 0 0"></Setter>
+                                    <Setter Property="BorderBrush" Value="#7F808080"></Setter>
+                                    <Setter Property="Background" Value="{ThemeResource Bili-MenuBack}"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Margin="0 5 0 0" TextTrimming="CharacterEllipsis" Text="{Binding Path=post_title}"></TextBlock>
+                                        <Grid Grid.Row="1" Margin="0 5">
+                                            <TextBlock FontSize="14">
+                                            <Run Foreground="Gray">来自</Run>
+                                            <Run Foreground="{StaticResource BG}" Text="{Binding Path=community_name}"></Run>
+                                            </TextBlock>
+                                            <TextBlock FontSize="14" HorizontalAlignment="Right">
+                                            <Run Foreground="Gray" Text="{Binding Path=Visit_time}"></Run>
+                                            </TextBlock>
+                                        </Grid>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+
+                        </ListView>
+                    </StackPanel>
+
+                </ScrollViewer>
+            </PivotItem>
+        </Pivot>
+
+        <bilibili2:MessageShow x:Name="messShow" Grid.RowSpan="3" VerticalAlignment="Bottom" Margin="10"/>
+
+    </Grid>
+</Page>

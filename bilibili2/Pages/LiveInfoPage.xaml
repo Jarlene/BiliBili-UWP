@@ -142,7 +142,8 @@
                 </Setter.Value>
             </Setter>
         </Style>
-      
+       
+
     </Page.Resources>
 
     <Grid  Background="{ThemeResource Bili-Background}">
@@ -159,6 +160,7 @@
                         <Setter Target="column_2.Width" Value="auto"/>
                         <Setter Target="grid_Info.(Grid.Row)" Value="2"/>
                         <Setter Target="grid_Info.(Grid.Column)" Value="0"/>
+                        <Setter Target="auto_text.Visibility" Value="Collapsed"></Setter>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="b">
@@ -174,11 +176,12 @@
                         <Setter Target="grid_Info.(Grid.RowSpan)" Value="2"/>
                         <Setter Target="grid_Info.(Grid.Column)" Value="1"/>
                         <Setter Target="danmu.(Grid.Column)" Value="0"/>
+                        <Setter Target="auto_text.Visibility" Value="Visible"></Setter>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
-      
+
         <Grid  Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition x:Name="row_1"/>
@@ -197,7 +200,7 @@
                                 <StackPanel Margin="10 5">
                                     <TextBlock  FontSize="18" Margin="0 5">弹幕设置</TextBlock>
                                     <TextBlock  FontSize="12" Margin="0 5">(与视频弹幕设置不一致)</TextBlock>
-                                    <TextBlock Foreground="Black" Visibility="Visible">
+                                    <TextBlock  Visibility="Visible">
 									<Run Text="弹幕字体" />
                                     </TextBlock>
                                     <ComboBox x:Name="cb_Font"  Visibility="Visible" SelectionChanged="cb_Font_SelectionChanged">
@@ -208,27 +211,28 @@
                                         <ComboBoxItem>宋体</ComboBoxItem>
                                         <ComboBoxItem>等线</ComboBoxItem>
                                     </ComboBox>
-                                    <TextBlock Foreground="Black">
+                                    <TextBlock >
 									<Run Text="弹幕大小" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuSize}" />
                                     </TextBlock>
                                     <Slider x:Name="slider_DanmuSize"  Style="{StaticResource SliderStyle1}" Maximum="50" ValueChanged="slider_DanmuSize_ValueChanged" />
-                                    <TextBlock Foreground="Black">
-									<Run Text="弹幕速度" />
+                                    <TextBlock >
+									<Run Text="弹幕速度(越小越快)" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuSpeed}"/>
                                     </TextBlock>
                                     <Slider x:Name="slider_DanmuSpeed"  Style="{StaticResource SliderStyle1}"   Maximum="25" ValueChanged="slider_DanmuSpeed_ValueChanged"/>
-                                    <TextBlock Foreground="Black">
+                                    <TextBlock Visibility="Collapsed">
 									<Run Text="弹幕间距" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuJianju}" />
                                     </TextBlock>
-                                    <Slider x:Name="slider_DanmuJianju"  Style="{StaticResource SliderStyle1}" Maximum="500"  ValueChanged="slider_DanmuJianju_ValueChanged"/>
-                                    <TextBlock Foreground="Black">
+                                    <Slider x:Name="slider_DanmuJianju" Visibility="Collapsed"  Style="{StaticResource SliderStyle1}" Maximum="500"  ValueChanged="slider_DanmuJianju_ValueChanged"/>
+                                    <TextBlock >
+                                       
 									<Run Text="弹幕透明度" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuTran}"/>
                                     </TextBlock>
                                     <Slider x:Name="slider_DanmuTran"  Style="{StaticResource SliderStyle1}" Maximum="100" ValueChanged="slider_DanmuTran_ValueChanged"/>
-                                    <TextBlock Foreground="Black">关键字屏蔽(设置中管理)</TextBlock>
+                                    <TextBlock >关键字屏蔽(设置中管理)</TextBlock>
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition/>
@@ -237,16 +241,16 @@
                                         <TextBox x:Name="txt_Dis" BorderThickness="0"/>
                                         <Button x:Name="btn_OK" Grid.Column="1" VerticalAlignment="Stretch" Click="btn_OK_Click" Content="添加"/>
                                     </Grid>
-                                    <TextBlock x:Name="txt_Pingbi" Foreground="Black" TextWrapping="WrapWholeWords"></TextBlock>
+                                    <TextBlock x:Name="txt_Pingbi"  TextWrapping="WrapWholeWords"></TextBlock>
                                 </StackPanel>
                             </ScrollViewer>
 
                         </Grid>
                     </SplitView.Pane>
                     <Grid>
-                        <MediaElement x:Name="mediaElement" Tapped="mediaElement_Tapped" BufferingProgressChanged="mediaElement_BufferingProgressChanged" CurrentStateChanged="mediaElement_CurrentStateChanged"></MediaElement>
+                        <MediaElement x:Name="mediaElement" Volume="{Binding ElementName=slider_V,Path=Value,Mode=TwoWay}" Tapped="mediaElement_Tapped" BufferingProgressChanged="mediaElement_BufferingProgressChanged" CurrentStateChanged="mediaElement_CurrentStateChanged"></MediaElement>
                         <danmu:MyDanmaku x:Name="danmu" Grid.Column="0" Grid.Row="0" ></danmu:MyDanmaku>
-                        <StackPanel x:Name="progress" Visibility="Collapsed"  Width="120" Height="100"  VerticalAlignment="Center" HorizontalAlignment="Center" >
+                        <StackPanel  x:Name="progress" Visibility="Collapsed"  Width="120" Height="100"  VerticalAlignment="Center" HorizontalAlignment="Center" >
                             <danmu:LoadControl  Width="72" Height="72" VerticalAlignment="Center"/>
                             <TextBlock x:Name="pro_Num" Text="正在缓冲中..." HorizontalAlignment="Center" Margin="5" Foreground="Gray"/>
                         </StackPanel>
@@ -260,6 +264,7 @@
                                 <AppBarButton x:Name="btn_Play" Icon="Play" Width="48" Foreground="White" ToolTipService.ToolTip="播放" Click="btn_Play_Click"></AppBarButton>
                                 <AppBarButton x:Name="btn_Pause" Icon="Pause" Visibility="Collapsed" Width="48" Foreground="White" ToolTipService.ToolTip="暂停" Click="btn_Pause_Click"></AppBarButton>
                             </StackPanel>
+                            <AutoSuggestBox x:Name="auto_text" QuerySubmitted="auto_text_QuerySubmitted" Grid.Column="1" VerticalAlignment="Center" PlaceholderText="说点什么吧..." Style="{StaticResource AutoSuggestBoxStyle1}" QueryIcon="Send"></AutoSuggestBox>
                             <StackPanel Orientation="Horizontal" Grid.Column="2">
                                 <AppBarButton x:Name="btn_GetSliver" Width="48" Foreground="White" ToolTipService.ToolTip="领瓜子" Margin="10 0" Click="btn_GetSliver_Click">
                                     <AppBarButton.Icon>
@@ -268,9 +273,26 @@
                                 </AppBarButton>
 
                                 <AppBarButton x:Name="btn_OpenCloseDanmu" Icon="LeaveChat" Width="48" Foreground="White" ToolTipService.ToolTip="弹幕开关" Click="btn_OpenCloseDanmu_Click"></AppBarButton>
+                                <AppBarButton Width="48"  Height="48" Icon="Volume" Foreground="White" ToolTipService.ToolTip="音量调节">
+                                    <AppBarButton.Flyout>
+                                        <Flyout>
+                                            <Slider x:Name="slider_V" Value="1" Orientation="Horizontal"  VerticalAlignment="Center" Width="200"   Maximum="1" Minimum="0"  SmallChange="0.1" StepFrequency="0.1" ValueChanged="slider_V_ValueChanged"/>
+                                        </Flyout>
+                                    </AppBarButton.Flyout>
+                                </AppBarButton>
+                              
                                 <AppBarButton x:Name="btn_Setting" Icon="Setting" Width="48" Foreground="White" ToolTipService.ToolTip="设置" Click="btn_Setting_Click"></AppBarButton>
+                                <AppBarButton x:Name="btn_Resh" Click="btn_Resh_Click" Icon="Refresh" HorizontalAlignment="Right" Width="48" ToolTipService.ToolTip="刷新"  Height="48" Foreground="White"/>
                                 <AppBarButton x:Name="btn_Full" Icon="FullScreen" Width="48" Foreground="White" ToolTipService.ToolTip="全屏" Click="btn_Full_Click"></AppBarButton>
                                 <AppBarButton x:Name="btn_ExitFull" Icon="BackToWindow" Visibility="Collapsed" Width="48" Foreground="White" ToolTipService.ToolTip="退出全屏" Click="btn_ExitFull_Click"></AppBarButton>
+                                <AppBarButton x:Name="btn_Hide" Width="48" Visibility="Collapsed" Foreground="White" ToolTipService.ToolTip="设置">
+                                    <AppBarButton.Icon>
+                                        <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE290;" />
+                                    </AppBarButton.Icon>
+                                </AppBarButton>
+                                <AppBarButton  x:Name="btn_Show" Width="48" Visibility="Collapsed" Foreground="White" ToolTipService.ToolTip="设置">
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE297;" />
+                                </AppBarButton>
                             </StackPanel>
                         </Grid>
                     </Grid>
@@ -302,7 +324,7 @@
                             <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE13D;" FontSize="14" Margin="10 0 5 0"/>
                             <TextBlock  FontSize="14"  Text="{Binding online}"></TextBlock>
                         </StackPanel>
-                        
+
                     </Grid>
                 </HyperlinkButton>
                 <HyperlinkButton x:Name="btn_AttUp" Grid.Column="1" Foreground="White" Margin="5 0" Click="btn_AttUp_Click">
@@ -339,8 +361,8 @@
                                 <RowDefinition/>
                                 <RowDefinition Height="48"/>
                             </Grid.RowDefinitions>
-                            
-                                <Grid  x:Name="grid_UserInfo" BorderThickness="0 0 0 1"  BorderBrush="#33808080">
+
+                            <Grid  x:Name="grid_UserInfo" BorderThickness="0 0 0 1"  BorderBrush="#33808080">
                                 <HyperlinkButton x:Name="btn_User">
                                     <Grid HorizontalAlignment="Left" Margin="0 5">
                                         <Grid.ColumnDefinitions>
@@ -371,15 +393,15 @@
                                     </Grid>
                                 </HyperlinkButton>
                                 <HyperlinkButton x:Name="btn_Sign"  HorizontalAlignment="Right" Foreground="White" Margin="5 0" Click="btn_Sign_Click">
-                                        <Border CornerRadius="5" Background="{StaticResource BG}"  >
-                                            <TextBlock x:Name="txt_Sign" Margin="10 5" FontSize="14">
+                                    <Border CornerRadius="5" Background="{StaticResource BG}"  >
+                                        <TextBlock x:Name="txt_Sign" Margin="10 5" FontSize="14">
 									<Run Text="签到"/>
-                                            </TextBlock>
-                                        </Border>
-                                    </HyperlinkButton>
-                                </Grid>
+                                        </TextBlock>
+                                    </Border>
+                                </HyperlinkButton>
+                            </Grid>
 
-                      
+
                             <ScrollViewer x:Name="sc" Grid.Row="1" VerticalScrollBarVisibility="Auto" >
                                 <StackPanel x:Name="stack_Comment">
 
@@ -392,7 +414,7 @@
                                     <ColumnDefinition/>
                                     <ColumnDefinition Width="auto"/>
                                 </Grid.ColumnDefinitions>
-                                <AppBarButton x:Name="btn_OpenSendGift" Width="48" Height="48" Background="{StaticResource BG}"  Foreground="White">
+                                <AppBarButton x:Name="btn_OpenSendGift" Visibility="Collapsed" Width="48" Height="48" Background="{StaticResource BG}"  Foreground="White">
                                     <AppBarButton.Icon>
                                         <BitmapIcon UriSource="ms-appx:///Assets/Icon/礼物.png" Height="16"  />
                                     </AppBarButton.Icon>
@@ -484,7 +506,7 @@
                                         </Flyout>
                                     </AppBarButton.Flyout>
                                 </AppBarButton>
-                                <TextBox x:Name="txt_Comment" Grid.Column="2" BorderThickness="0" PlaceholderText="说点什么吧"></TextBox>
+                                <TextBox x:Name="txt_Comment" Grid.Column="2" BorderThickness="0" PlaceholderText="说点什么吧" ></TextBox>
                                 <AppBarButton x:Name="btn_SendComment" Width="48" Height="48" Grid.Column="3" Icon="Send" Background="{StaticResource BG}" Foreground="White" Click="btn_SendComment_Click"/>
                             </Grid>
                         </Grid>
@@ -549,6 +571,7 @@
             </Grid>
         </Grid>
         <Grid x:Name="grid_Full" Visibility="Collapsed" Background="{ThemeResource Bili-Background}">
+            <Grid ></Grid>
             <Grid x:Name="media_top_Control" VerticalAlignment="Top" Height="48"  Background="#7F808080">
                 <TextBlock Text="{Binding ElementName=txt_title,Path=Text}" FontSize="16" VerticalAlignment="Center" Margin="48 0" HorizontalAlignment="Left" Foreground="White"></TextBlock>
                 <TextBlock  x:Name="txt_Timer" FontSize="18" VerticalAlignment="Center" Margin="10 0" HorizontalAlignment="Right" Foreground="White"></TextBlock>
@@ -575,14 +598,15 @@
                 <RadioButton x:Name="rb_Sliver">银瓜子</RadioButton>
             </StackPanel>
             <TextBox x:Name="txt_Num" Margin="10 5" PlaceholderText="数量"></TextBox>
-            
+
             <Grid>
                 <Button Margin="10 5"  HorizontalAlignment="Left" Click="Button_Click_1">取消</Button>
                 <Button Margin="10 5"  HorizontalAlignment="Right" Click="Button_Click">确定</Button>
             </Grid>
-            
+
         </StackPanel>
         <ProgressBar x:Name="pr_Load" VerticalAlignment="Top" Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
         <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="Gray"/>
+      
     </Grid>
 </Page>

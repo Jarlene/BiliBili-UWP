@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Windows.Storage;
 using Windows.Web.Http;
 using Windows.Web.Http.Filters;
 
@@ -36,25 +37,20 @@ namespace bilibili2.Class
         /// 用户信息
         /// </summary>
         /// <returns></returns>
-        public async Task<GetLoginInfoModel> GetUserInfo()
+        public async Task<UserInfoModel> GetMyUserInfo()
         {
             if (IsLogin())
             {
                 try
                 {
-                    using (HttpClient hc = new HttpClient())
-                    {
-                        HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.com/userinfo?mid=" + Uid + "&rd=" + new Random().Next(1, 1000)));
-                        hr.EnsureSuccessStatusCode();
-                        string results = await hr.Content.ReadAsStringAsync();
-                        GetLoginInfoModel model = new GetLoginInfoModel();
-                        model = JsonConvert.DeserializeObject<GetLoginInfoModel>(results);
-                        AttentionList = JsonConvert.DeserializeObject<List<string>>(model.attentions.ToString());
-                        JObject json = JObject.Parse(model.level_info.ToString());
-                        model.current_level = (int)json["current_level"];
-                        //model.current_level = "LV" + json["current_level"].ToString();
-                        return model;
-                    }
+                    wc = new WebClientClass();
+                    string url = string.Format("http://account.bilibili.com/api/myinfo?access_key={0}&appkey={1}&platform=wp&type=json", ApiHelper.access_key, ApiHelper._appKey);
+                    url += "&sign=" + ApiHelper.GetSign(url);
+                    string results = await wc.GetResults(new Uri(url));
+
+                    UserInfoModel model = JsonConvert.DeserializeObject<UserInfoModel>(results);
+                    AttentionList = model.attentions;
+                    return model;
                 }
                 catch (Exception)
                 {
@@ -66,17 +62,37 @@ namespace bilibili2.Class
                 return null;
             }
         }
-        public async Task<GetLoginInfoModel> GetUserInfo(string uid)
+        public async Task<GetLoginInfoModel> GetUserInfo()
         {
             try
             {
-                WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://api.bilibili.com/userinfo?mid=" + uid + "&rd=" + new Random().Next(1, 1000)));
-                GetLoginInfoModel model = new GetLoginInfoModel();
-                model = JsonConvert.DeserializeObject<GetLoginInfoModel>(results);
-                JObject json = JObject.Parse(model.level_info.ToString());
-                model.current_level = (int)json["current_level"];
-                //model.current_level = "LV" + json["current_level"].ToString();
+                wc = new WebClientClass();
+                string url = string.Format("http://api.bilibili.com/userinfo?access_key={0}&appkey={1}&platform=wp&type=json?mid={2}", ApiHelper.access_key, ApiHelper._appKey, Uid);
+                url += "&sign=" + ApiHelper.GetSign(url);
+                string results = await wc.GetResults(new Uri(url));
+
+                GetLoginInfoModel model = JsonConvert.DeserializeObject<GetLoginInfoModel>(results);
+                AttentionList = model.attentions;
+                return model;
+            }
+            catch (Exception)
+            {
+                return null;
+            }
+
+        }
+        public async Task<GetLoginInfoModel> GetUserInfo(string uid)
+        {
+
+            try
+            {
+                wc = new WebClientClass();
+                string url = string.Format("http://api.bilibili.com/userinfo?access_key={0}&appkey={1}&platform=wp&type=json?mid={2}", ApiHelper.access_key, ApiHelper._appKey, uid);
+                url += "&sign=" + ApiHelper.GetSign(url);
+                string results = await wc.GetResults(new Uri(url));
+
+                GetLoginInfoModel model = JsonConvert.DeserializeObject<GetLoginInfoModel>(results);
+                //AttentionList = model.attentions;
                 return model;
             }
             catch (Exception)
@@ -84,6 +100,51 @@ namespace bilibili2.Class
                 return null;
             }
         }
+        //public async Task<GetLoginInfoModel> GetUserInfo(string uid)
+        //{
+        //    try
+        //    {
+        //        using (HttpClient hc = new HttpClient())
+        //        {
+        //            HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.com/userinfo?mid=" + uid + "&rd=" + new Random().Next(1, 1000)));
+        //            hr.EnsureSuccessStatusCode();
+        //            string results = await hr.Content.ReadAsStringAsync();
+        //            GetLoginInfoModel model = new GetLoginInfoModel();
+        //            model = JsonConvert.DeserializeObject<GetLoginInfoModel>(results);
+        //            AttentionList = JsonConvert.DeserializeObject<List<string>>(model.attentions.ToString());
+        //            JObject json = JObject.Parse(model.level_info.ToString());
+        //            model.current_level = (int)json["current_level"];
+        //            model.current_level = "LV" + json["current_level"].ToString();
+        //            return model;
+        //        }
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new GetLoginInfoModel();
+        //    }
+
+
+        //    try
+        //    {
+        //        WebClientClass wc = new WebClientClass();
+        //        string url = "http://space.bilibili.com/ajax/member/GetInfo?mid=" + uid + "&ts=" + ApiHelper.GetTimeSpen;
+
+        //        string results = await wc.PostResults(new Uri("http://space.bilibili.com/ajax/member/GetInfo"), "mid=" + uid);
+
+        //        GetLoginInfoModel model = new GetLoginInfoModel();
+        //        model = JsonConvert.DeserializeObject<GetLoginInfoModel>(results);
+        //        var info = model.data;
+        //        JObject json = JObject.Parse(info.level_info.ToString());
+        //        info.current_level = (int)json["current_level"];
+        //        model.current_level = "LV" + json["current_level"].ToString();
+        //        return info;
+        //    }
+        //    catch (Exception)
+        //    {
+        //        return new GetLoginInfoModel();
+        //        return null;
+        //    }
+        //}
         /// <summary>
         /// 追番
         /// </summary>
@@ -151,6 +212,7 @@ namespace bilibili2.Class
                 return null;
             }
         }
+        WebClientClass wc;
         /// <summary>
         /// 关注动态
         /// </summary>
@@ -161,33 +223,38 @@ namespace bilibili2.Class
             {
                 try
                 {
-                    using (HttpClient hc = new HttpClient())
+
+                    wc = new WebClientClass();
+                    string url = string.Format("http://api.bilibili.com/x/feed/pull?access_key={0}&actionKey=appkey&appkey={1}&platform=wp&pn={2}&ps=30&ts={3}&type=0", ApiHelper.access_key, ApiHelper._appKey, PageNum, ApiHelper.GetTimeSpen);
+                    url += "&sign=" + ApiHelper.GetSign(url);
+                    string results = await wc.GetResults(new Uri(url));
+                    //一层
+                    GetAttentionUpdate model1 = JsonConvert.DeserializeObject<GetAttentionUpdate>(results);
+                    if (model1.code == 0)
                     {
-                        HttpResponseMessage hr = await hc.GetAsync(new Uri("http://api.bilibili.com/x/feed/pull?jsonp=jsonp&ps=20&type=1&pn=" + PageNum));
-                        hr.EnsureSuccessStatusCode();
-                        string results = await hr.Content.ReadAsStringAsync();
-                        //一层
-                        GetAttentionUpdate model1 = JsonConvert.DeserializeObject<GetAttentionUpdate>(results);
-                        if (model1.code == 0)
+                        GetAttentionUpdate model2 = JsonConvert.DeserializeObject<GetAttentionUpdate>(model1.data.ToString());
+                        try
                         {
-                            //二层
-                            GetAttentionUpdate model2 = JsonConvert.DeserializeObject<GetAttentionUpdate>(model1.data.ToString());
-                            //三层
-                            List<GetAttentionUpdate> ls = JsonConvert.DeserializeObject<List<GetAttentionUpdate>>(model2.feeds.ToString());
-                            //四层
-                            List<GetAttentionUpdate> lsModel = new List<GetAttentionUpdate>();
-                            foreach (GetAttentionUpdate item in ls)
+                            if (PageNum == 1 && model2.feeds.Count != 0)
                             {
-                                GetAttentionUpdate m = JsonConvert.DeserializeObject<GetAttentionUpdate>(item.addition.ToString());
-                                m.page = model2.page;
-                                lsModel.Add(m);
+                                ApplicationDataContainer container = ApplicationData.Current.LocalSettings;
+                                string s1 = "";
+                                foreach (var item in model2.feeds)
+                                {
+                                    s1 += item.addition.aid + ",";
+                                }
+                                s1 = s1.Remove(s1.Length - 1);
+                                container.Values["TsDt"] = s1;
                             }
-                            return lsModel;
                         }
-                        else
+                        catch (Exception)
                         {
-                            return null;
                         }
+                        return model2.feeds;
+                    }
+                    else
+                    {
+                        return null;
                     }
 
                 }
@@ -248,7 +315,9 @@ namespace bilibili2.Class
             {
                 try
                 {
-                    string results = await new WebClientClass().GetResults(new Uri("http://api.bilibili.com/x/history?jsonp=jsonp&ps=20&pn=" + PageNum+"&rnd="+new Random().Next(1000,9999)));
+                    string url = string.Format("http://api.bilibili.com/x/v2/history?_device=android&access_key={0}&appkey={1}&build=422000&mobi_app=android&platform=android&pn=1&ps=200", ApiHelper.access_key, ApiHelper._appKey_Android);
+                    url += "&sign=" + ApiHelper.GetSign_Android(url);
+                    string results = await new WebClientClass().GetResults(new Uri(url));
                     //一层
                     GetHistoryModel model = JsonConvert.DeserializeObject<GetHistoryModel>(results);
                     if (model.data == null)
@@ -282,11 +351,11 @@ namespace bilibili2.Class
             List<GetAttentionLive> list = new List<GetAttentionLive>();
             try
             {
-                string url = string.Format("http://live.bilibili.com/AppFeed/index?_device=wp&_ulv=10000&access_key={0}&appkey=422fd9d7289a1dd9&build=411005&page=1&pagesize=20&platform=android",ApiHelper.access_key);
-                url += "&sign="+ApiHelper.GetSign(url);
-                string result =await  new WebClientClass().GetResults(new Uri(url));
+                string url = string.Format("http://live.bilibili.com/AppFeed/index?_device=wp&_ulv=10000&access_key={0}&appkey=422fd9d7289a1dd9&build=411005&page=1&pagesize=20&platform=android", ApiHelper.access_key);
+                url += "&sign=" + ApiHelper.GetSign(url);
+                string result = await new WebClientClass().GetResults(new Uri(url));
                 GetAttentionLive mode = JsonConvert.DeserializeObject<GetAttentionLive>(result);
-                if (mode.code==0)
+                if (mode.code == 0)
                 {
                     GetAttentionLive model = JsonConvert.DeserializeObject<GetAttentionLive>(mode.data.ToString());
                     list = JsonConvert.DeserializeObject<List<GetAttentionLive>>(model.list.ToString());
@@ -340,27 +409,27 @@ namespace bilibili2.Class
                 try
                 {
 
-                        string results = await new WebClientClass().GetResults(new Uri("http://space.bilibili.com/ajax/fav/getList?mid=" + Uid + "&pagesize=20&fid=" + fid + "&pid=" + PageNum));
-                        //一层
-                        GetFavouriteBoxsVideoModel model = JsonConvert.DeserializeObject<GetFavouriteBoxsVideoModel>(results);
-                        //二层
-                        if (model.status)
+                    string results = await new WebClientClass().GetResults(new Uri("http://space.bilibili.com/ajax/fav/getList?mid=" + Uid + "&pagesize=20&fid=" + fid + "&pid=" + PageNum));
+                    //一层
+                    GetFavouriteBoxsVideoModel model = JsonConvert.DeserializeObject<GetFavouriteBoxsVideoModel>(results);
+                    //二层
+                    if (model.status)
+                    {
+                        GetFavouriteBoxsVideoModel model2 = JsonConvert.DeserializeObject<GetFavouriteBoxsVideoModel>(model.data.ToString());
+                        //三层
+                        List<GetFavouriteBoxsVideoModel> lsModel = JsonConvert.DeserializeObject<List<GetFavouriteBoxsVideoModel>>(model2.vlist.ToString());
+                        List<GetFavouriteBoxsVideoModel> RelsModel = new List<GetFavouriteBoxsVideoModel>();
+                        foreach (GetFavouriteBoxsVideoModel item in lsModel)
                         {
-                            GetFavouriteBoxsVideoModel model2 = JsonConvert.DeserializeObject<GetFavouriteBoxsVideoModel>(model.data.ToString());
-                            //三层
-                            List<GetFavouriteBoxsVideoModel> lsModel = JsonConvert.DeserializeObject<List<GetFavouriteBoxsVideoModel>>(model2.vlist.ToString());
-                            List<GetFavouriteBoxsVideoModel> RelsModel = new List<GetFavouriteBoxsVideoModel>();
-                            foreach (GetFavouriteBoxsVideoModel item in lsModel)
-                            {
-                                item.pages = model2.pages;
-                                RelsModel.Add(item);
-                            }
-                            return RelsModel;
+                            item.pages = model2.pages;
+                            RelsModel.Add(item);
                         }
-                        else
-                        {
-                            return null;
-                        }
+                        return RelsModel;
+                    }
+                    else
+                    {
+                        return null;
+                    }
                 }
                 catch (Exception)
                 {

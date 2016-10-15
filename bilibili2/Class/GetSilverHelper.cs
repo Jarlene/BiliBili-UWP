@@ -28,9 +28,12 @@ namespace bilibili2.Class
             timer.Tick += send_heart;
         }
 
-        public void StartHeart()
+        public async void StartHeart()
         {
             timer.Start();
+            //http://live.bilibili.com/feed/heartBeat/heartBeat
+            WebClientClass wc = new WebClientClass();
+            string a= await wc.GetResults(new Uri("http://live.bilibili.com/FreeSilver/getCurrentTask?r="+new Random().Next(0,99999)));
         }
         public void EndHeart()
         {
@@ -72,6 +75,7 @@ namespace bilibili2.Class
             {
                 using (HttpClient hc = new HttpClient())
                 {
+                    
                     HttpResponseMessage hr = await hc.GetAsync(new Uri("http://live.bilibili.com/freeSilver/getAward?captcha=" + vcode));
                     hr.EnsureSuccessStatusCode();
                     var result =await hr.Content.ReadAsStringAsync();
@@ -105,6 +109,7 @@ namespace bilibili2.Class
             {
                 using (HttpClient hc=new HttpClient())
                 {
+                    
                     HttpResponseMessage hr =await hc.GetAsync(new Uri("http://live.bilibili.com/freeSilver/heart?r="+new Random().Next(1,9999)));
                     hr.EnsureSuccessStatusCode();
                     var result =await hr.Content.ReadAsStringAsync();

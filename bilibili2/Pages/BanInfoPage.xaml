@@ -7,14 +7,85 @@
     xmlns:bilibili2="using:bilibili2"
     x:Class="bilibili2.Pages.BanInfoPage"
     mc:Ignorable="d"
+    xmlns:wr="using:AppArrange.WrapPanel"
     Tag="番剧信息"
     >
     <Page.Resources>
         <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDF85A0" />
+        <Flyout x:Key="fy" x:Name="fy">
+            <StackPanel Width="200">
+                <TextBlock>要承包的金额</TextBlock>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="32" Height="32"  Source="ms-appx:///Assets/coins.png"></Image>
+                    <RadioButton x:Name="rb_5"  GroupName="bbi" Margin="5 0" Checked="rb_5_Checked">5 B币</RadioButton>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="32" Height="32"  Source="ms-appx:///Assets/bp10.png"></Image>
+                    <RadioButton  x:Name="rb_10" GroupName="bbi" Margin="5 0" Checked="rb_10_Checked">10 B币</RadioButton>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="32" Height="32"  Source="ms-appx:///Assets/bp50.png"></Image>
+                    <RadioButton  x:Name="rb_50" GroupName="bbi" Margin="5 0" Checked="rb_50_Checked">50 B币</RadioButton>
+                </StackPanel>
+                <StackPanel Orientation="Horizontal">
+                    <Image Width="32" Height="32"  Source="ms-appx:///Assets/bp450.png"></Image>
+                    <RadioButton  x:Name="rb_450" GroupName="bbi" Margin="5 0" Checked="rb_450_Checked">450 B币</RadioButton>
+                </StackPanel>
+                <Grid >
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="80"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <RadioButton GroupName="bbi" x:Name="rb_ZDY" Checked="rb_ZDY_Checked">自定义</RadioButton>
+                    <TextBox x:Name="txt_Money" Grid.Column="1" PlaceholderText="输入整数金额" IsEnabled="{Binding ElementName=rb_ZDY,Path=IsChecked}" BorderThickness="0.5"></TextBox>
+                </Grid>
+
+                <Grid>
+                    <TextBlock VerticalAlignment="Center">
+                        <Run>共消耗￥</Run>
+                        <Run x:Name="txt_rmb" Text="{Binding ElementName=txt_Money,Path=Text}"></Run>
+                    </TextBlock>
+                    <Button x:Name="btn_OKCB" Margin="0 5" HorizontalAlignment="Right" Click="btn_OKCB_Click">确定承包</Button>
+                </Grid>
+                <TextBlock FontSize="14" Foreground="Red" TextWrapping="Wrap">承包涉及RMB交易，由Bilibili官方收取，与本人无关</TextBlock>
+            </StackPanel>
+        </Flyout>
     </Page.Resources>
     <Grid  Background="{ThemeResource Bili-Background}">
+        <VisualStateManager.VisualStateGroups>
+            <VisualStateGroup x:Name="big">
+                <VisualState x:Name="wide1000">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="801"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="com_bar.(Grid.Row)" Value="0"/>
+                        <Setter Target="com_bar.HorizontalAlignment" Value="Right"/>
+                        <Setter Target="Down_ComBar.(Grid.Row)" Value="0"/>
+                        <Setter Target="Down_ComBar.HorizontalAlignment" Value="Right"/>-->
+                        <Setter Target="grid_HotComment.Visibility" Value="Visible"></Setter>
+                        <Setter Target="width.Width" Value="*"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+                <VisualState x:Name="narrow">
+                    <VisualState.StateTriggers>
+                        <AdaptiveTrigger MinWindowWidth="0"/>
+                    </VisualState.StateTriggers>
+                    <VisualState.Setters>
+                        <!--<Setter Target="com_bar.(Grid.Row)" Value="3"/>
+                        <Setter Target="com_bar.HorizontalAlignment" Value="Stretch"/>
+                        <Setter Target="Down_ComBar.(Grid.Row)" Value="3"/>
+                        <Setter Target="Down_ComBar.HorizontalAlignment" Value="Stretch"/>-->
+                        <Setter Target="grid_HotComment.Visibility" Value="Collapsed"></Setter>
+                        <Setter Target="width.Width" Value="auto"></Setter>
+                    </VisualState.Setters>
+                </VisualState>
+            </VisualStateGroup>
+        </VisualStateManager.VisualStateGroups>
+
         <Grid.RowDefinitions>
             <RowDefinition Height="48"/>
+            <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
         <Grid Background="{StaticResource BG}" Grid.Row="0" Height="48" >
@@ -26,173 +97,439 @@
             <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
             <TextBlock  Text="番剧详情" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
-        <Grid Grid.Row="1">
-            <Grid.RowDefinitions>
-                <RowDefinition/>
-                <RowDefinition Height="auto"/>
-            </Grid.RowDefinitions>
-            <ProgressBar x:Name="pr_load" VerticalAlignment="Top" IsIndeterminate="True" Background="{x:Null}"/>
-            <ScrollViewer HorizontalScrollBarVisibility="Disabled" VerticalScrollBarVisibility="Auto">
-                <Grid x:Name="grid_Info">
+       
+        <Pivot x:Name="pivot" Style="{StaticResource PivotStyle2}" BorderBrush="{StaticResource BG}" SelectionChanged="pivot_SelectionChanged" Grid.Row="2">
+            <PivotItem Margin="0">
+                <PivotItem.Header>
+                    <TextBlock x:Name="txt_her_0" FontSize="16" Foreground="White">
+                            <Run Text="基本信息"/>
+                    </TextBlock>
+                </PivotItem.Header>
+                <Grid>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height=" auto"/>
-                        <RowDefinition Height=" auto"/>
+                        <RowDefinition/>
                         <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition />
                     </Grid.RowDefinitions>
-                    <Grid Margin="10">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="auto"/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-                        <Image Source="{Binding cover}" VerticalAlignment="Top" Height="150" Margin="0,0,10,0" Grid.RowSpan="4"/>
-                        <Grid  Grid.Column="1"  Grid.Row="1" >
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                                <RowDefinition/>
-                            </Grid.RowDefinitions>
-                            <TextBlock x:Name="txt_Name" Text="{Binding title}" Grid.Row="0"  VerticalAlignment="Top" TextWrapping="Wrap" FontSize="18"/>
-                            <TextBlock Text="{Binding status}" Grid.Column="1" Grid.Row="1" FontSize="14" VerticalAlignment="Center" Foreground="#FF555555"/>
-                            <StackPanel Orientation="Horizontal" Height="16" Grid.Row="2" VerticalAlignment="Center" Margin="0,5">
-                                <TextBlock Text="地区：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989"/>
-                                <TextBlock Text="{Binding area}" FontSize="14" VerticalAlignment="Center" Foreground="#FF555555"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Row="3" Height="16" VerticalAlignment="Center" Margin="0,5">
-                                <TextBlock Text="时间：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989"/>
-                                <TextBlock Text="{Binding upTime}" FontSize="14" VerticalAlignment="Center" Foreground="#FF555555"/>
-                            </StackPanel>
-                            <StackPanel Orientation="Horizontal" Grid.Row="4" Height="16" VerticalAlignment="Center" Margin="0,5">
-                                <TextBlock Text="播放：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989"/>
-                                <TextBlock Text="{Binding PlayCount}" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="#FF555555" Margin="0 0 10 0"/>
-                                <TextBlock Text="追番：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989" />
-                                <TextBlock Text="{Binding favoritesCount}" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="#FF555555"/>
-                            </StackPanel>
+                    <ScrollViewer Style="{StaticResource  ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto">
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition/>
+                                <ColumnDefinition x:Name="width" Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid x:Name="grid_Info">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height=" auto"/>
+                                    <RowDefinition Height=" auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <Grid Margin="10">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="{Binding cover}" VerticalAlignment="Top" Height="150" Margin="0,0,10,0" Grid.RowSpan="4"/>
+                                    <Grid  Grid.Column="1"  Grid.Row="1" >
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock x:Name="txt_Name" Text="{Binding title}" Grid.Row="0"  VerticalAlignment="Top" TextWrapping="Wrap" FontSize="18"/>
+                                        <TextBlock Text="{Binding status}" Grid.Column="1" Grid.Row="1" FontSize="14" VerticalAlignment="Center" Foreground="#FF555555"/>
+                                        <StackPanel Orientation="Horizontal" Height="16" Grid.Row="2" VerticalAlignment="Center" Margin="0,5">
+                                            <TextBlock Text="地区：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989"/>
+                                            <TextBlock Text="{Binding area}" FontSize="14" VerticalAlignment="Center" Foreground="#FF555555"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Grid.Row="3" Height="16" VerticalAlignment="Center" Margin="0,5">
+                                            <TextBlock Text="时间：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989"/>
+                                            <TextBlock Text="{Binding upTime}" FontSize="14" VerticalAlignment="Center" Foreground="#FF555555"/>
+                                        </StackPanel>
+                                        <StackPanel Orientation="Horizontal" Grid.Row="4" Height="16" VerticalAlignment="Center" Margin="0,5">
+                                            <TextBlock Text="播放：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989"/>
+                                            <TextBlock Text="{Binding PlayCount}" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="#FF555555" Margin="0 0 10 0"/>
+                                            <TextBlock Text="追番：" FontSize="14" VerticalAlignment="Center" Foreground="#FF898989" />
+                                            <TextBlock Text="{Binding favoritesCount}" FontSize="14" TextWrapping="Wrap" VerticalAlignment="Center" Foreground="#FF555555"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Grid>
+                                <Grid Grid.Row="1">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
+                                            <TextBlock Text="剧集" FontSize="18" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </HyperlinkButton>
+                                    <Border x:Name="bor_Width"  VerticalAlignment="Top"/>
+                                    <GridView x:Name="list_E"  Grid.Row="1" Margin="10 5" SelectionMode="None" IsItemClickEnabled="True" ItemClick="grid_E_ItemClick">
+                                        <GridView.ItemContainerStyle>
+                                            <Style TargetType="GridViewItem">
+                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                                <Setter Property="Background" Value="{StaticResource BG}" />
+                                            </Style>
+                                        </GridView.ItemContainerStyle>
+                                        <GridView.ItemTemplate>
+                                            <DataTemplate>
+                                                <TextBlock Text="{Binding index}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="{Binding color}"/>
+                                            </DataTemplate>
+                                        </GridView.ItemTemplate>
+
+                                    </GridView>
+                                </Grid>
+                                <Grid Grid.Row="2">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
+                                            <TextBlock Text="介绍" FontSize="18" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </HyperlinkButton>
+                                    <StackPanel Grid.Row="1" Margin="10 5">
+                                        <TextBlock x:Name="txt_Desc" MaxLines="3" Text="{Binding evaluate}" TextWrapping="Wrap" Grid.Row="1"  Foreground="Gray" IsTextSelectionEnabled="True"/>
+                                        <HyperlinkButton x:Name="btn_More" Foreground="{ThemeResource Bili-FontColor}" HorizontalAlignment="Right" Click="btn_More_Click" Content="展开"/>
+                                    </StackPanel>
+
+                                </Grid>
+                                <Grid Grid.Row="3" x:Name="Grid_About">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
+                                            <TextBlock Text="系列" FontSize="18" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </HyperlinkButton>
+                                    <wr:WrapPanel x:Name="WrapPanel_About"  Margin="10 5" Grid.Row="1"/>
+                                </Grid>
+                                <Grid Grid.Row="4" >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
+                                            <TextBlock Text="TAG" FontSize="18" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </HyperlinkButton>
+                                    <wr:WrapPanel x:Name="Grid_tag"  Margin="10 5" Grid.Row="1"/>
+                                </Grid>
+                                <Grid Grid.Row="5" >
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
+                                            <TextBlock Text="CV" FontSize="18" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </HyperlinkButton>
+                                    <StackPanel Margin="10 5" Grid.Row="1">
+                                        <TextBlock x:Name="txt_CV"  MaxLines="3"  TextWrapping="Wrap" Grid.Row="1"  Foreground="Gray" IsTextSelectionEnabled="True"/>
+                                        <HyperlinkButton x:Name="btn_More_" Foreground="{ThemeResource Bili-FontColor}" HorizontalAlignment="Right" Click="btn_More__Click" Content="展开"/>
+                                    </StackPanel>
+
+                                </Grid>
+                                <Grid Grid.Row="6">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="auto"/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
+                                        <StackPanel Orientation="Horizontal">
+                                            <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
+                                            <TextBlock Text="STAFF" FontSize="18" VerticalAlignment="Center" />
+                                        </StackPanel>
+                                    </HyperlinkButton>
+                                    <TextBlock Text="{Binding staff}" IsTextSelectionEnabled="True" TextWrapping="Wrap" Grid.Row="1" Margin="10 5" Foreground="Gray"/>
+                                </Grid>
+                            </Grid>
+                            <Grid Grid.Column="1" x:Name="grid_HotComment">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="auto"/>
+                                    <RowDefinition />
+                                </Grid.RowDefinitions>
+                                <StackPanel Orientation="Horizontal" Margin="0 10">
+                                    <Border Background="{StaticResource BG}"   Width="10"  Height="24"  Margin="0 0 5 0"/>
+                                    <TextBlock Text="最新话评论" FontSize="18" VerticalAlignment="Center" />
+                                </StackPanel>
+                                <ListView x:Name="ListView_Comment_Hot" Grid.Row="1" ScrollViewer.VerticalScrollMode="Disabled" IsItemClickEnabled="True"   VerticalAlignment="Top" SelectionMode="None" ItemClick="ListView_Comment_Hot_ItemClick">
+                                    <ListView.ItemContainerStyle>
+                                        <Style TargetType="ListViewItem">
+                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                            <Setter Property="BorderThickness" Value="0 0 0.5 0"></Setter>
+                                            <Setter Property="BorderBrush" Value="#7F808080"></Setter>
+                                        </Style>
+                                    </ListView.ItemContainerStyle>
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid  BorderBrush="#33000000" Margin="0,5">
+                                                <Grid.RowDefinitions>
+                                                    <RowDefinition></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                    <RowDefinition></RowDefinition>
+                                                </Grid.RowDefinitions>
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                                                    <ColumnDefinition ></ColumnDefinition>
+                                                </Grid.ColumnDefinitions>
+                                                <HyperlinkButton Grid.RowSpan="2" HorizontalAlignment="Left">
+                                                    <StackPanel>
+                                                        <Ellipse Width="32" Height="32" Stroke="#7FC1C1C1" HorizontalAlignment="Left">
+                                                            <Ellipse.Fill>
+                                                                <ImageBrush ImageSource="{Binding avatar}"/>
+                                                            </Ellipse.Fill>
+                                                        </Ellipse>
+                                                        <Image Source="{Binding LV}" Width="24" Margin="0 2"></Image>
+                                                    </StackPanel>
+                                                </HyperlinkButton>
+                                                <TextBlock Margin="5,0" Text="{Binding uname}" Grid.Column="1" VerticalAlignment="Bottom"></TextBlock>
+                                                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
+                                                    <StackPanel Orientation="Horizontal"  Margin="5,0">
+                                                        <TextBlock Text="#" Foreground="#FFB6B6B6" ></TextBlock>
+                                                        <TextBlock Text="{Binding floor}"  Foreground="#FFB6B6B6" ></TextBlock>
+                                                        <TextBlock Text="{Binding Plat}"  Foreground="#FFB6B6B6" Margin="5,0"></TextBlock>
+                                                    </StackPanel>
+                                                    <TextBlock Text="{Binding time}" Foreground="#FFB6B6B6"></TextBlock>
+                                                </StackPanel>
+                                                <TextBlock Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2" Margin="0,5" Text="{Binding message}" TextWrapping="Wrap"></TextBlock>
+                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="3">
+                                                    <!--<SymbolIcon Symbol="Message" Foreground="#FF666666" />-->
+                                                    <HyperlinkButton  HorizontalAlignment="Left" >
+                                                        <TextBlock Text="回复" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
+                                                    </HyperlinkButton>
+                                                    <TextBlock Text="{Binding rcount}" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
+                                                    <!--<SymbolIcon Symbol="Like" Foreground="#FF666666" />-->
+                                                    <HyperlinkButton x:Name="btn_Zan">
+                                                        <TextBlock Text="赞同" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
+                                                    </HyperlinkButton>
+                                                    <TextBlock Text="{Binding like}" VerticalAlignment="Center" FontSize="12" Margin="5,0"></TextBlock>
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </Grid>
+
+
+                        </Grid>
+                    </ScrollViewer>
+                    <CommandBar x:Name="com_bar" Grid.ColumnSpan="2" Grid.Row="1" Background="{StaticResource BG}" Foreground="White" VerticalAlignment="Bottom">
+                        <CommandBar.SecondaryCommands>
+                            <AppBarButton x:Name="btn_Refresh" Icon="Refresh" Label="刷新" Click="btn_Refresh_Click"/>
+                            <AppBarButton x:Name="Share" Icon="ReShare" Label="复制分享" Click="Share_Click"/>
+                            <AppBarButton x:Name="btn_Share" Icon="ReShare" Label="分享到..." Click="btn_Share_Click"/>
+                            <AppBarButton x:Name="btn_DownManage" Icon="Go" Label="查看下载队列" Click="btn_DownManage_Click"/>
+                            <AppBarToggleButton x:Name="cb_IsPlay" Icon="Play" Label="直接播放" IsChecked="True"/>
+                        </CommandBar.SecondaryCommands>
+                        <AppBarButton x:Name="btn_Play" Visibility="Visible" Icon="Play" Label="播放第1话" Foreground="White" Click="btn_Play_Click"/>
+                        <AppBarButton x:Name="btn_CB" Visibility="Collapsed" Icon="Bold" Label="承包" Foreground="White"/>
+                        <AppBarButton x:Name="btn_Conent" Visibility="Collapsed" Icon="Message" Label="评论" Foreground="White"/>
+                        <AppBarButton x:Name="btn_Down" Icon="Download" Label="下载" Foreground="White" Click="btn_Down_Click"/>
+
+                        <AppBarButton x:Name="btn_concern" Label="订阅" Foreground="White" Click="btn_concern_Click">
+                            <AppBarButton.Icon>
+                                <FontIcon x:Name="font_icon" Glyph="&#xE006;"/>
+                            </AppBarButton.Icon>
+                        </AppBarButton>
+                    </CommandBar>
+                    <CommandBar x:Name="com_bar_Down" Visibility="Collapsed" Grid.Row="1" Background="{StaticResource BG}" Foreground="White" VerticalAlignment="Bottom">
+                        <CommandBar.Content>
+                            <ComboBox x:Name="cb_Qu" SelectedIndex="1" Margin="10,10">
+                                <ComboBoxItem Content="清晰"/>
+                                <ComboBoxItem Content="高清"/>
+                                <ComboBoxItem Content="原画"/>
+                            </ComboBox>
+                        </CommandBar.Content>
+                        <AppBarButton x:Name="btn_ALL" Icon="Bullets" Label="全部" Foreground="White" Click="btn_ALL_Click"></AppBarButton>
+                        <AppBarButton x:Name="btn_OK" Icon="Accept" Label="开始" Foreground="White" Click="btn_OK_Click"/>
+                        <AppBarButton x:Name="btn_Cancel" Label="取消"  Foreground="White" Icon="Cancel" Click="btn_Cancel_Click"/>
+                    </CommandBar>
+                </Grid>
+            
+            </PivotItem>
+            <PivotItem Margin="0">
+                <PivotItem.Header>
+                    <TextBlock x:Name="txt_her_1" FontSize="16" Foreground="White">
+                            <Run Text="热门评论"/>
+                    </TextBlock>
+                </PivotItem.Header>
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <ComboBox x:Name="cb_H" BorderThickness="1" HorizontalAlignment="Center" Margin="0 5" SelectionChanged="cb_H_SelectionChanged">
+                        <ComboBox.ItemTemplate>
+                            <DataTemplate>
+                                <TextBlock>
+                                    <Run>第</Run>
+                                    <Run Text="{Binding index}"></Run>
+                                    <Run>话</Run>
+                                </TextBlock>
+                                
+                            </DataTemplate>
+                        </ComboBox.ItemTemplate>
+                    </ComboBox>
+                    
+                    <ListView x:Name="ListView_Comment" Style="{StaticResource ListViewStyle1}" Grid.Row="1" IsItemClickEnabled="True"   VerticalAlignment="Top" SelectionMode="None" ItemClick="ListView_Comment_ItemClick">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                <Setter Property="BorderThickness" Value="0 0 0.5 0"></Setter>
+                                <Setter Property="BorderBrush" Value="#7F808080"></Setter>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid  BorderBrush="#33000000" Margin="0,5">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                        <RowDefinition></RowDefinition>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"></ColumnDefinition>
+                                        <ColumnDefinition ></ColumnDefinition>
+                                    </Grid.ColumnDefinitions>
+                                    <HyperlinkButton Grid.RowSpan="2" HorizontalAlignment="Left">
+                                        <StackPanel>
+                                            <Ellipse Width="32" Height="32" Stroke="#7FC1C1C1" HorizontalAlignment="Left">
+                                                <Ellipse.Fill>
+                                                    <ImageBrush ImageSource="{Binding avatar}"/>
+                                                </Ellipse.Fill>
+                                            </Ellipse>
+                                            <Image Source="{Binding LV}" Width="24" Margin="0 2"></Image>
+                                        </StackPanel>
+                                    </HyperlinkButton>
+                                    <TextBlock Margin="5,0" Text="{Binding uname}" Grid.Column="1" VerticalAlignment="Bottom"></TextBlock>
+                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
+                                        <StackPanel Orientation="Horizontal"  Margin="5,0">
+                                            <TextBlock Text="#" Foreground="#FFB6B6B6" ></TextBlock>
+                                            <TextBlock Text="{Binding floor}"  Foreground="#FFB6B6B6" ></TextBlock>
+                                            <TextBlock Text="{Binding Plat}"  Foreground="#FFB6B6B6" Margin="5,0"></TextBlock>
+                                        </StackPanel>
+                                        <TextBlock Text="{Binding time}" Foreground="#FFB6B6B6"></TextBlock>
+                                    </StackPanel>
+                                    <TextBlock Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2" Margin="0,5" Text="{Binding message}" TextWrapping="Wrap"></TextBlock>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="3">
+                                        <!--<SymbolIcon Symbol="Message" Foreground="#FF666666" />-->
+                                        <HyperlinkButton  HorizontalAlignment="Left" >
+                                            <TextBlock Text="回复" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
+                                        </HyperlinkButton>
+                                        <TextBlock Text="{Binding rcount}" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
+                                        <!--<SymbolIcon Symbol="Like" Foreground="#FF666666" />-->
+                                        <HyperlinkButton x:Name="btn_Zan">
+                                            <TextBlock Text="赞同" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
+                                        </HyperlinkButton>
+                                        <TextBlock Text="{Binding like}" VerticalAlignment="Center" FontSize="12" Margin="5,0"></TextBlock>
+                                    </StackPanel>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
+                    </ListView>
+                </Grid>
+            </PivotItem>
+            <PivotItem Margin="0">
+                <PivotItem.Header>
+                    <TextBlock x:Name="txt_her_3" FontSize="16" Foreground="White">
+                            <Run Text="承包番剧"/>
+                    </TextBlock>
+                </PivotItem.Header>
+                <Grid>
+                    <Grid x:Name="grid_Cb">
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="auto"/>
+                            <RowDefinition/>
+                            <RowDefinition Height="auto"/>
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <ComboBox x:Name="cb_Rank" BorderThickness="1" SelectedIndex="0" HorizontalAlignment="Center" Margin="0 5" SelectionChanged="cb_Rank_SelectionChanged">
+                                <ComboBoxItem>七日榜</ComboBoxItem>
+                                <ComboBoxItem>总榜</ComboBoxItem>
+                            </ComboBox>
+                        </Grid>
+                        <ListView x:Name="list_Rank" Style="{StaticResource ListViewStyle1}" Grid.Row="1" SelectionChanged="list_Rank_SelectionChanged" SelectionMode="None" IsItemClickEnabled="True" ItemClick="list_Rank_ItemClick">
+                            <ListView.ItemContainerStyle>
+                                <Style TargetType="ListViewItem">
+                                    <Setter Property="Margin" Value="5"></Setter>
+                                    <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"></Setter>
+                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
+                                </Style>
+                            </ListView.ItemContainerStyle>
+                            <ListView.ItemTemplate>
+                                <DataTemplate>
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition Width="auto"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <TextBlock Grid.RowSpan="2" VerticalAlignment="Center" FontSize="20" Width="24" Text="{Binding rank}" Margin="0 0 5 0"></TextBlock>
+                                        <Ellipse Grid.Column="1" Grid.RowSpan="2" Width="48" Height="48" Margin="0 5">
+                                            <Ellipse.Fill>
+                                                <ImageBrush ImageSource="{Binding face}"></ImageBrush>
+                                            </Ellipse.Fill>
+                                        </Ellipse>
+                                        <TextBlock VerticalAlignment="Bottom" Grid.Column="2" Margin="5 0" Text="{Binding uname}"></TextBlock>
+                                        <TextBlock VerticalAlignment="Top" TextTrimming="CharacterEllipsis" Foreground="Gray" FontSize="14" Grid.Column="2" Grid.Row="1" Margin="5 0" Text="{Binding message}"></TextBlock>
+                                    </Grid>
+                                </DataTemplate>
+                            </ListView.ItemTemplate>
+                           
+                        </ListView>
+                        <Grid Grid.Row="2" Height="48" BorderThickness="0 0.5 0 0" BorderBrush="#7F808080">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="auto"/>
+                                <ColumnDefinition/>
+                                <ColumnDefinition Width="auto"/>
+                            </Grid.ColumnDefinitions>
+                            
+                            <Image Margin="5 0" Source="ms-appx:///Assets/coins.png" Width="32" Height="32"></Image>
+                            <TextBlock Grid.Column="1" VerticalAlignment="Center" Foreground="Gray">
+                                <Run>已有</Run>
+                                <Run Text="{Binding total_bp_count}"></Run>
+                                <Run>人承包了这部番剧</Run>
+                            </TextBlock>
+                            <HyperlinkButton x:Name="btn_CBFJ" Click="btn_CB_Click" FlyoutBase.AttachedFlyout="{StaticResource fy}" Grid.Column="2" Margin="5 0" Foreground="White" Background="#00000000">
+                                <HyperlinkButton.Content>
+                                    <Border Background="{StaticResource BG}" CornerRadius="5">
+                                        <TextBlock Margin="10 5">我要承包</TextBlock>
+                                    </Border>
+                                </HyperlinkButton.Content>
+                            </HyperlinkButton>
+                         
                         </Grid>
                     </Grid>
-                    <Grid Grid.Row="1">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
-                            <StackPanel Orientation="Horizontal">
-                                <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
-                                <TextBlock Text="剧集" FontSize="18" VerticalAlignment="Center" />
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <Border x:Name="bor_Width"  VerticalAlignment="Top"/>
-                        <GridView x:Name="list_E"  Grid.Row="1" Margin="10 5" SelectionMode="None" IsItemClickEnabled="True" ItemClick="grid_E_ItemClick">
-                            <GridView.ItemContainerStyle>
-                                <Style TargetType="GridViewItem">
-                                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                                    <Setter Property="Background" Value="{StaticResource BG}" />
-                                </Style>
-                            </GridView.ItemContainerStyle>
-                            <GridView.ItemTemplate>
-                                <DataTemplate>
-                                    <TextBlock Text="{Binding index}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="White"/>
-                                </DataTemplate>
-                            </GridView.ItemTemplate>
-
-                        </GridView>
-                    </Grid>
-                    <Grid Grid.Row="2">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
-                            <StackPanel Orientation="Horizontal">
-                                <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
-                                <TextBlock Text="介绍" FontSize="18" VerticalAlignment="Center" />
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <StackPanel Grid.Row="1" Margin="10 5">
-                            <TextBlock x:Name="txt_Desc" MaxLines="3" Text="{Binding evaluate}" TextWrapping="Wrap" Grid.Row="1"  Foreground="Gray" IsTextSelectionEnabled="True"/>
-                            <HyperlinkButton x:Name="btn_More" Foreground="{ThemeResource Bili-FontColor}" HorizontalAlignment="Right" Click="btn_More_Click" Content="展开"/>
-                        </StackPanel>
-
-                    </Grid>
-                    <Grid Grid.Row="3" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
-                            <StackPanel Orientation="Horizontal">
-                                <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
-                                <TextBlock Text="TAG" FontSize="18" VerticalAlignment="Center" />
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <StackPanel x:Name="Grid_tag" Orientation="Horizontal" Margin="10 5" Grid.Row="1"/>
-                    </Grid>
-                    <Grid Grid.Row="4" >
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
-                            <StackPanel Orientation="Horizontal">
-                                <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
-                                <TextBlock Text="CV" FontSize="18" VerticalAlignment="Center" />
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <StackPanel Margin="10 5" Grid.Row="1">
-                            <TextBlock x:Name="txt_CV"  MaxLines="3"  TextWrapping="Wrap" Grid.Row="1"  Foreground="Gray" IsTextSelectionEnabled="True"/>
-                            <HyperlinkButton x:Name="btn_More_" Foreground="{ThemeResource Bili-FontColor}" HorizontalAlignment="Right" Click="btn_More__Click" Content="展开"/>
-                        </StackPanel>
-
-                    </Grid>
-                    <Grid Grid.Row="5">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="auto"/>
-                            <RowDefinition/>
-                        </Grid.RowDefinitions>
-                        <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
-                            <StackPanel Orientation="Horizontal">
-                                <Border Background="{StaticResource BG}" Width="10"  Height="24"  Margin="10,0"/>
-                                <TextBlock Text="STAFF" FontSize="18" VerticalAlignment="Center" />
-                            </StackPanel>
-                        </HyperlinkButton>
-                        <TextBlock Text="{Binding staff}" IsTextSelectionEnabled="True" TextWrapping="Wrap" Grid.Row="1" Margin="10 5" Foreground="Gray"/>
-                    </Grid>
+                    <TextBlock x:Name="txt_NotCb" VerticalAlignment="Center" HorizontalAlignment="Center" Foreground="Gray">此番未开通承包</TextBlock>
                 </Grid>
-            </ScrollViewer>
-            <CommandBar x:Name="com_bar" Grid.Row="1" Background="{StaticResource BG}" Foreground="White" VerticalAlignment="Bottom">
-                <CommandBar.SecondaryCommands>
-                    <AppBarButton x:Name="btn_Refresh" Icon="Refresh" Label="刷新" Click="btn_Refresh_Click"/>
-                    <AppBarButton x:Name="Share" Icon="ReShare" Label="复制分享" Click="Share_Click"/>
-                    <AppBarButton x:Name="btn_Share" Icon="ReShare" Label="分享到..." Click="btn_Share_Click"/>
-                    <AppBarToggleButton x:Name="cb_IsPlay" Icon="Play" Label="直接播放" IsChecked="True"/>
-                </CommandBar.SecondaryCommands>
-                <AppBarButton x:Name="btn_CB" Visibility="Collapsed" Icon="Bold" Label="承包" Foreground="White"/>
-                <AppBarButton x:Name="btn_Conent" Visibility="Collapsed" Icon="Message" Label="评论" Foreground="White"/>
-                <AppBarButton x:Name="btn_Down" Icon="Download" Label="下载" Foreground="White" Click="btn_Down_Click"/>
-                <AppBarButton x:Name="btn_concern" Label="订阅" Foreground="White" Click="btn_concern_Click">
-                    <AppBarButton.Icon>
-                        <FontIcon x:Name="font_icon" Glyph="&#xE006;"/>
-                    </AppBarButton.Icon>
-                </AppBarButton>
-            </CommandBar>
-            <CommandBar x:Name="com_bar_Down" Visibility="Collapsed" Grid.Row="1" Background="{StaticResource BG}" Foreground="White" VerticalAlignment="Bottom">
-                <CommandBar.Content>
-                    <ComboBox x:Name="cb_Qu" SelectedIndex="1" Margin="10,10">
-                        <ComboBoxItem Content="清晰"/>
-                        <ComboBoxItem Content="高清"/>
-                        <ComboBoxItem Content="原画"/>
-                    </ComboBox>
-                </CommandBar.Content>
-                <AppBarButton x:Name="btn_OK" Icon="Accept" Label="开始" Foreground="White" Click="btn_OK_Click"/>
-                <AppBarButton x:Name="btn_Cancel" Label="取消"  Foreground="White" Icon="Cancel" Click="btn_Cancel_Click"/>
-            </CommandBar>
-            <bilibili2:MessageShow x:Name="messShow" Height="auto" Grid.RowSpan="3"  VerticalAlignment="Top"  HorizontalAlignment="Center" Background="#7F000000" Margin="0,10"/>
-          
-            
-        </Grid>
+              
+               
+            </PivotItem>
+        </Pivot>
+        
+        <bilibili2:MessageShow x:Name="messShow" Height="auto" Grid.RowSpan="3"  VerticalAlignment="Bottom"  HorizontalAlignment="Center" Background="#7F000000" Margin="10"/>
+        <ProgressRing x:Name="pr_load" VerticalAlignment="Center" Height="56" Width="56" Grid.RowSpan="3"  IsActive="True" />
     </Grid>
 </Page>

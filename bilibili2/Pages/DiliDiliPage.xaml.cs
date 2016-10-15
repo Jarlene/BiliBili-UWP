@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Xaml;
@@ -42,13 +43,19 @@ namespace bilibili2.Pages
                 BackEvent();
             }
         }
-        protected override void OnNavigatedTo(NavigationEventArgs e)
+        protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
-            cb_Year.SelectedIndex = 0;
-            cb_Month.SelectedIndex=1;
-            ControlLoaded = true;
-            GetListInfo("201604");
+            messShow.Show("完整嘀哩嘀哩功能，请到商店下载'那啥追番'",3000);
+            if (e.NavigationMode== NavigationMode.New)
+            {
+                await Task.Delay(200);
+                cb_Year.SelectedIndex = 0;
+                cb_Month.SelectedIndex = 3;
+                ControlLoaded = true;
+                GetListInfo("201610");
+            }
+           
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -67,20 +74,24 @@ namespace bilibili2.Pages
                 wc = new WebClientClass();
                 string url = string.Format("http://www.dilidili.com/anime/{0}/", date);
                 string results = await wc.GetResultsUTF8Encode(new Uri(url));
-                MatchCollection mc = Regex.Matches(results, @"<div class=""item"">.*?<div class=""content"">.*?<div class=""title"">.*?<a href=""(.*?)"" target=""_blank"">(.*?)</a>.*?<span class=""data""><b>年代：</b>(.*?)</span>.*?</div>.*?<p><b>地区：</b>(.*?)</p>.*?<p><b>类型：</b>(.*?)</p>.*?<p><b>看点：</b>(.*?)</p>.*?<p><b>简介：</b>(.*?)</p>.*?</div>.*?<div class=""cover"">.*?<a href=""(.*?)"" target=""_blank"">.*?<img src=""(.*?)"">.*?</a>.*?</div>", RegexOptions.Singleline);
+                MatchCollection mc = Regex.Matches(results, @"<dl>.*?<dt><a hrel=""(.*?)""><img src=""(.*?)""/></a></dt>.*?<dd>.*?<h3><a href=""(.*?)"">(.*?)</a></h3>.*?<p><div class=""d_label""><b>地区：</b>(.*?)</div><div class=""d_label""><b>年代：</b>(.*?)</div></p>.*?<p><div class=""d_label""><b>标签：</b>(.*?)</div><div class=""d_label""><b>播放：</b>(.*?)</div></p>.*?<p><b>看点：</b>(.*?)</p>.*?<p><b>简介：</b>(.*?)</p>.*?<p><b style=""color:#F00"">状态:</b>(.*?)</p>.*?</dd>.*?</dl>", RegexOptions.Singleline);
+                if (mc.Count == 0)
+                {
+                    mc = Regex.Matches(results, @"<dl>.*?<dt><a href=""(.*?)""><img src=""(.*?)""/></a></dt>.*?<dd>.*?<h3><a href=""(.*?)"">(.*?)</a></h3>.*?<p><div class=""d_label""><b>地区：</b>(.*?)</div><div class=""d_label""><b>年代：</b>(.*?)</div></p>.*?<p><div class=""d_label""><b>标签：</b>(.*?)</div><div class=""d_label""><b>播放：</b>(.*?)</div></p>.*?<p><b>看点：</b>(.*?)</p>.*?<p><b>简介：</b>(.*?)</p>.*?<p><b style=""color:#F00"">状态:</b>(.*?)</p>.*?</dd>.*?</dl>", RegexOptions.Singleline);
+                }
                 List<DiliModel> listModel = new List<DiliModel>();
                 foreach (Match item in mc)
                 {
                     listModel.Add(new DiliModel()
                     {
                         url = item.Groups[1].Value,
-                        title = item.Groups[2].Value,
-                        date = item.Groups[3].Value,
-                        area = item.Groups[4].Value,
-                        tag = item.Groups[5].Value,
-                        shortDesc = item.Groups[6].Value,
-                        desc = item.Groups[7].Value,
-                        img = item.Groups[9].Value
+                        title = item.Groups[4].Value,
+                        date = item.Groups[6].Value,
+                        area = item.Groups[5].Value,
+                        tag = item.Groups[7].Value,
+                        shortDesc = item.Groups[9].Value,
+                        desc = item.Groups[10].Value,
+                        img = item.Groups[2].Value
                     });
                 }
                 list_Info.ItemsSource = listModel;
@@ -134,6 +145,12 @@ namespace bilibili2.Pages
         private void ListView_ItemClick(object sender, ItemClickEventArgs e)
         {
             this.Frame.Navigate(typeof(DiliInfo), e.ClickedItem as DiliModel);
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            int d = Convert.ToInt32(this.ActualWidth / 400);
+            bor_Width.Width = this.ActualWidth / d - 22;
         }
     }
 

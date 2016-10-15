@@ -25,8 +25,8 @@
             <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
             <TextBlock  Text="全部追番" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
-   
-        <ScrollViewer x:Name="sc" Grid.Row="1" ViewChanged="sc_ViewChanged">
+
+        <ScrollViewer x:Name="sc" Grid.Row="1" ViewChanged="sc_ViewChanged" Style="{StaticResource ScrollViewerStyle1}">
             <ListView x:Name="list" SelectionMode="None" ItemClick="list_ItemClick" IsItemClickEnabled="True" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">

@@ -1,9 +1,11 @@
 ﻿using bilibili2.Class;
+using Newtonsoft.Json.Linq;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -41,6 +43,7 @@ namespace bilibili2.Pages
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
             if (e.NavigationMode == NavigationMode.New)
             {
+                await Task.Delay(200);
                 List<GetUserFovBox> favList = await getLogin.GetUserFovBox();
                 cb_favbox.ItemsSource = favList;
                 if (favList.Count==0||favList==null)
@@ -106,7 +109,11 @@ namespace bilibili2.Pages
 
         private void User_load_more_Click(object sender, RoutedEventArgs e)
         {
-            GetFavouriteBoxVideo();
+           
+            if (!loading)
+            {
+                GetFavouriteBoxVideo();
+            }
         }
 
         private void User_ListView_FavouriteVideo_ItemClick(object sender, ItemClickEventArgs e)
@@ -149,6 +156,50 @@ namespace bilibili2.Pages
                 GetFavouriteBoxVideo();
             }
           
+        }
+
+        private void sw_Select_Checked(object sender, RoutedEventArgs e)
+        {
+
+                User_ListView_FavouriteVideo.IsItemClickEnabled = false;
+                User_ListView_FavouriteVideo.SelectionMode = ListViewSelectionMode.Multiple;
+
+
+        }
+        WebClientClass wc;
+        private async void btn_Delete_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                wc = new WebClientClass();
+                foreach (GetFavouriteBoxsVideoModel item in User_ListView_FavouriteVideo.SelectedItems)
+                {
+                    string results = await wc.PostResults(new Uri("http://space.bilibili.com/ajax/fav/mdel"), string.Format("fid={0}&aids={1}", fid,item.aid));
+                    JObject jo = JObject.Parse(results);
+                    if ((bool)jo["status"])
+                    {
+                        User_ListView_FavouriteVideo.Items.Remove(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                await new MessageDialog("删除失败\r\n"+ex.Message).ShowAsync();
+            }
+           
+
+        }
+
+        private void sw_Select_Unchecked(object sender, RoutedEventArgs e)
+        {
+            User_ListView_FavouriteVideo.IsItemClickEnabled = true;
+            User_ListView_FavouriteVideo.SelectionMode = ListViewSelectionMode.None;
+        }
+
+        private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            int d = Convert.ToInt32(this.ActualWidth / 400);
+            bor_Width.Width = this.ActualWidth / d - 22;
         }
     }
 }

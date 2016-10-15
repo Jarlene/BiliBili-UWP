@@ -8,6 +8,7 @@
     x:Class="bilibili2.Pages.DiliDiliPage"
     mc:Ignorable="d" 
     Tag="dili"
+    SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
         <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFDC638F" />
@@ -46,16 +47,20 @@
                 </ComboBox>
             </StackPanel>
         </Grid>
-        <ListView x:Name="list_Info" Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True" ItemClick="ListView_ItemClick">
-            <ListView.ItemContainerStyle>
-                <Style TargetType="ListViewItem">
-                    <Setter  Property="BorderBrush" Value="#7F808080"/>
-                    <Setter  Property="BorderThickness" Value="0,0,0,0.5"/>
+        <Border x:Name="bor_Width" Width="450" VerticalAlignment="Top"></Border>
+        <GridView x:Name="list_Info" Grid.Row="1" SelectionMode="None" IsItemClickEnabled="True" ItemClick="ListView_ItemClick" Style="{StaticResource GridViewStyle1}">
+            <GridView.ItemContainerStyle>
+                <Style TargetType="GridViewItem">
+                    <!--<Setter  Property="BorderBrush" Value="#7F808080"/>
+                    <Setter  Property="BorderThickness" Value="0,0,0,0.5"/>-->
+                    <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"></Setter>
+                    <Setter Property="Margin" Value="5"></Setter>
                 </Style>
-            </ListView.ItemContainerStyle>
-            <ListView.ItemTemplate>
+            </GridView.ItemContainerStyle>
+            <GridView.ItemTemplate>
                 <DataTemplate>
-                    <Grid Margin="0,5">
+                    <Border Width="{Binding ElementName=bor_Width,Path=Width}" Margin="5">
+                        <Grid >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="70"/>
                             <ColumnDefinition/>
@@ -78,9 +83,10 @@
                             <TextBlock Text="{Binding date}" FontSize="14"  Foreground="Gray" Margin="5,0"/>
                         </StackPanel>
                     </Grid>
+                        </Border>
                 </DataTemplate>
-            </ListView.ItemTemplate>
-        </ListView>
+            </GridView.ItemTemplate>
+        </GridView>
         <ProgressBar x:Name="pr_load" VerticalAlignment="Top" Background="{x:Null}" Foreground="White" IsIndeterminate="True"/>
 
         <bilibili2:MessageShow x:Name="messShow"  Grid.RowSpan="2" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20"/>

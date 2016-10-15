@@ -94,6 +94,7 @@ namespace bilibili2.Pages
                 JObject json = JObject.Parse(result);
                 if ((string)json["data"] == "成功更新你的资料")
                 {
+                   
                     this.Frame.GoBack();
                 }
                 else

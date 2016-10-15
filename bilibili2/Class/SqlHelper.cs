@@ -17,7 +17,7 @@ namespace bilibili2.Class
         private static string SQL_QUERY_VALUE = "SELECT * FROM PositionTable WHERE Cid = ?;";
         private static string SQL_INSERT = "INSERT INTO PositionTable VALUES(?,?);";
         private static string SQL_UPDATE = "UPDATE PositionTable SET Position = ? WHERE Cid = ?";
-        private static string SQL_DELETE = "DELETE FROM PositionTable WHERE Key = ?";
+       // private static string SQL_DELETE = "DELETE FROM PositionTable WHERE Key = ?";
         #endregion
 
         SQLiteConnection con;

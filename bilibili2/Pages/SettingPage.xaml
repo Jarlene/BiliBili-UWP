@@ -90,7 +90,7 @@
 								<Run Text="常规"/>
                             </TextBlock>
                         </PivotItem.Header>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto">
                             <StackPanel Margin="10 0">
                                 <TextBlock FontSize="16" >
 									<Run Text="外观主题"/>
@@ -144,10 +144,71 @@
                                             </TextBlock>
                                         </StackPanel>
                                     </ComboBoxItem>
+                                    <ComboBoxItem>
+                                        <StackPanel Orientation="Horizontal">
+                                            <Ellipse Width="16" Height="16" Fill="#FF9D91CA" Margin="0,0,5,0"/>
+                                            <TextBlock Foreground="#FF9D91CA">
+												<Run Text="EMT紫"/>
+                                            </TextBlock>
+                                        </StackPanel>
+                                    </ComboBoxItem>
                                 </ComboBox>
+                                <HyperlinkButton x:Name="txt_bgbq" Visibility="Collapsed" FontSize="14" Foreground="Gray" Padding="0">*该主题背景图来自P站，作者为gatari</HyperlinkButton>
+                                
                                 <ToggleSwitch x:Name="tw_Drak" OffContent="日间模式" OnContent="夜间模式" HorizontalAlignment="Left" Toggled="tw_Drak_Toggled"/>
-                                <ToggleSwitch  x:Name="tw_HideStatusBar" OffContent="横屏不自动隐藏状态条" OnContent="横屏自动隐藏状态条" HorizontalAlignment="Left" Toggled="tw_HideStatusBar_Toggled" />
-                                <ToggleSwitch x:Name="tw_CT"  OffContent="不更新动态磁贴" OnContent="动态磁贴显示关注动态(需登录)" HorizontalAlignment="Left" Toggled="tw_CT_Toggled" />
+                                <TextBlock Margin="0 5">固定彩色磁贴到开始菜单</TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <ComboBox x:Name="cb_CTColor" SelectedIndex="0" BorderThickness="0">
+                                        <ComboBoxItem >
+                                            <Ellipse Width="16" Height="16" Fill="#FFDF85A0" />
+                                        </ComboBoxItem>
+                                        <ComboBoxItem >
+                                            <Ellipse Width="16" Height="16" Fill="#FFF70D0D" />
+                                        </ComboBoxItem>
+                                        <ComboBoxItem>
+
+                                            <Ellipse Width="16" Height="16" Fill="#FFF9EF23" />
+                                        </ComboBoxItem>
+                                        <ComboBoxItem >
+                                            <Ellipse Width="16" Height="16" Fill="#FF71F923" />
+                                        </ComboBoxItem>
+                                        <ComboBoxItem >
+                                            <Ellipse Width="16" Height="16" Fill="#FF18BDFB" />
+                                        </ComboBoxItem>
+                                        <ComboBoxItem>
+                                            <Ellipse Width="16" Height="16" Fill="#FFB92CBF" />
+                                        </ComboBoxItem>
+                                    </ComboBox>
+                                    <Button Margin="5 0" x:Name="cb_CT" Click="cb_CT_Click">确定</Button>
+                                </StackPanel>
+
+                                <TextBlock FontSize="16" >
+									<Run Text="各分区视频默认排序"/>
+                                </TextBlock>
+                                <ComboBox x:Name="cb_orderBy"  Margin="0 5" SelectionChanged="cb_orderBy_SelectionChanged">
+                                    <ComboBoxItem Content="按最新"/>
+                                    <ComboBoxItem Content="按弹幕"/>
+                                    <ComboBoxItem Content="按播放"/>
+                                    <ComboBoxItem Content="按评论"/>
+                                    <ComboBoxItem Content="按收藏"/>
+                                </ComboBox>
+                                <ToggleSwitch  x:Name="tw_HideStatusBar" Header="横屏自动隐藏状态条" OnContent="开" OffContent="关" HorizontalAlignment="Left" Toggled="tw_HideStatusBar_Toggled" />
+                               
+                                <ToggleSwitch x:Name="tw_LoadPage" Header="加载启动壁纸(仅WIFI环境)"  OnContent="开" OffContent="关"   HorizontalAlignment="Left" Toggled="tw_LoadPage_Toggled" />
+                                <TextBlock FontSize="14" Foreground="Gray" TextWrapping="Wrap">*会停留三秒,节假日会有一些启动壁纸，但有时也会出现B站的广告</TextBlock>
+                                <ToggleSwitch x:Name="tw_TT" Header="用户中心使用网页版头图" OnContent="开" OffContent="关"   HorizontalAlignment="Left" Toggled="tw_TT_Toggled" />
+                                <ToggleSwitch x:Name="tw_JZ" Header="去掉首页的“赞助作者”" OnContent="开" OffContent="关"   HorizontalAlignment="Left" Toggled="tw_JZ_Toggled" />
+                                
+                                <ToggleSwitch x:Name="tw_CloseMenu" Header="默认关闭汉堡菜单(仅PC)" OnContent="开" OffContent="关"   HorizontalAlignment="Left"  Toggled="tw_CloseMenu_Toggled"/>
+
+                               
+                                <!--<TextBlock Margin="0 10 0 5">页面动画设置</TextBlock>
+                                <ComboBox>
+                                    <ComboBoxItem>左右展开收缩</ComboBoxItem>
+                                    <ComboBoxItem>上下展开收缩</ComboBoxItem>
+                                    <ComboBoxItem>渐隐渐现</ComboBoxItem>
+                                    <ComboBoxItem>渐隐渐现</ComboBoxItem>
+                                </ComboBox>-->
                             </StackPanel>
                         </ScrollViewer>
                     </PivotItem>
@@ -158,28 +219,30 @@
                             </TextBlock>
                         </PivotItem.Header>
 
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer  Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto">
                             <StackPanel Margin="10 0">
+                                
+                                
                                 <TextBlock FontSize="16" >
-									<Run Text="默认清晰度"/>
+									<Run Text="默认清晰度(部分视频无原画)"/>
                                 </TextBlock>
                                 <ComboBox x:Name="cb_Quality" Margin="0 5" SelectionChanged="cb_Quality_SelectionChanged">
                                     <ComboBoxItem Content="清晰"/>
                                     <ComboBoxItem Content="高清"/>
                                     <ComboBoxItem Content="原画"/>
                                 </ComboBox>
+                                
                                 <TextBlock FontSize="16" >
 									<Run Text="默认格式"/>
                                 </TextBlock>
-                                <ComboBox x:Name="cb_Format" Margin="0,5" SelectedIndex="0" IsEnabled="False">
+                                <ComboBox x:Name="cb_Format" Margin="0,5"  SelectionChanged="cb_Format_SelectionChanged">
                                     <ComboBoxItem Content="MP4"/>
                                     <ComboBoxItem Content="FLV"/>
                                 </ComboBox>
-                                <TextBlock Foreground="Gray">
-									<Run Text="*很快就能更改格式啦"/>
-                                </TextBlock>
-                                <ToggleSwitch x:Name="tw_AutoFull" OffContent="播放时不自动全屏" OnContent="播放时自动全屏" HorizontalAlignment="Left" Toggled="tw_AutoFull_Toggled"/>
-                                <ToggleSwitch x:Name="tw_PlayLocal" OffContent="优先播放在线视频" OnContent="优先播放本地视频" HorizontalAlignment="Left" Toggled="tw_PlayLocal_Toggled"/>
+                                <ToggleSwitch x:Name="tw_forceAudioDecode" Header="强制软解音频(仅FLV)" OffContent="关" OnContent="开" HorizontalAlignment="Left" Toggled="tw_forceAudioDecode_Toggled"/>
+                                <ToggleSwitch x:Name="tw_forceVideoDecode" Header="强制软解视频(仅FLV)" OffContent="关" OnContent="开" HorizontalAlignment="Left" Toggled="tw_forceVideoDecode_Toggled"/>
+                                <ToggleSwitch x:Name="tw_AutoFull" OffContent="关" Header="播放时自动全屏" OnContent="开" HorizontalAlignment="Left" Toggled="tw_AutoFull_Toggled"/>
+                                <ToggleSwitch x:Name="tw_PlayLocal" Header="优先播放本地视频" OffContent="关" OnContent="开" HorizontalAlignment="Left" Toggled="tw_PlayLocal_Toggled"/>
                                 <!--<TextBlock Foreground="Gray">
 									<Run Text="*当本地离线存在视频时播放本地视频"/>
                                 </TextBlock>-->
@@ -203,6 +266,7 @@
                                     <Button x:Name="btn_OpenGuanjianzi" Click="btn_OpenGuanjianzi_Click" Content="关键字管理"/>
                                     <Button Margin="5" x:Name="btn_OpenYonghu" Click="btn_OpenYonghu_Click" Content="用户管理"/>
                                 </StackPanel>
+                                <ToggleSwitch x:Name="tw_DMBorder" Header="弹幕边框" OnContent="开" OffContent="关"   HorizontalAlignment="Left" Toggled="tw_DMBorder_Toggled" />
                                 <TextBlock FontSize="16" >
 									<Run Text="弹幕字体"/>
                                 </TextBlock>
@@ -220,20 +284,25 @@
                                 </TextBlock>
                                 <Slider x:Name="slider_DanmuSize" Width="250" HorizontalAlignment="Left" Maximum="50" ValueChanged="slider_DanmuSize_ValueChanged" />
                                 <TextBlock  FontSize="16" >
-									<Run Text="弹幕速度" />
+									<Run Text="弹幕速度(越小越快)" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuSpeed}"/>
                                 </TextBlock>
                                 <Slider x:Name="slider_DanmuSpeed"  Width="250" HorizontalAlignment="Left"   Maximum="25" ValueChanged="slider_DanmuSpeed_ValueChanged"/>
-                                <TextBlock  FontSize="16" >
+                                <TextBlock  FontSize="16" Visibility="Collapsed">
 									<Run Text="弹幕间距" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuJianju}" />
                                 </TextBlock>
-                                <Slider x:Name="slider_DanmuJianju"  Width="250" HorizontalAlignment="Left"  Maximum="500"  ValueChanged="slider_DanmuJianju_ValueChanged"/>
+                                <Slider x:Name="slider_DanmuJianju" Visibility="Collapsed" Width="250" HorizontalAlignment="Left"  Maximum="500"  ValueChanged="slider_DanmuJianju_ValueChanged"/>
                                 <TextBlock FontSize="16" >
 									<Run Text="弹幕透明度" />
 									<Run Text="{Binding Value, ElementName=slider_DanmuTran}"/>
                                 </TextBlock>
                                 <Slider x:Name="slider_DanmuTran"  Width="250" HorizontalAlignment="Left"  Maximum="100" ValueChanged="slider_DanmuTran_ValueChanged"/>
+                                <TextBlock FontSize="16" >
+									<Run Text="弹幕加载数量(0为不限制)" />
+									<Run Text="{Binding Value, ElementName=slider_Num}"/>
+                                </TextBlock>
+                                <Slider x:Name="slider_Num"  Width="250" HorizontalAlignment="Left"  Maximum="100" ValueChanged="slider_Num_ValueChanged"/>
                             </StackPanel>
                         </ScrollViewer>
 
@@ -241,13 +310,58 @@
                     <PivotItem Margin="0">
                         <PivotItem.Header>
                             <TextBlock FontSize="18">
+								<Run Text="黑科技"/>
+                            </TextBlock>
+                        </PivotItem.Header>
+                        <ScrollViewer Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="10 0">
+                                <ToggleSwitch x:Name="tw_MNGA" Visibility="Visible" Header="伪装香港用户(看港澳专供番，速度一般)" OnContent="看完记得关掉哦" OffContent="关"   HorizontalAlignment="Left"  Toggled="tw_MNGA_Toggled"/>
+                                <ToggleSwitch x:Name="tw_MNTW" Visibility="Visible" Header="伪装台湾用户(看台湾专供番，速度较慢)" OnContent="看完记得关掉哦" OffContent="关"   HorizontalAlignment="Left"  Toggled="tw_MNTW_Toggled"/>
+                                <ToggleSwitch x:Name="tw_MNDL" Visibility="Visible" Header="伪装大陆用户(海外用户专享)" OnContent="非海外用户大概会减速吧" OffContent="关"   HorizontalAlignment="Left"  Toggled="tw_MNDL_Toggled"/>
+                            </StackPanel>
+                        </ScrollViewer>
+                    </PivotItem>
+                    <PivotItem Margin="0">
+                        <PivotItem.Header>
+                            <TextBlock FontSize="18">
+								<Run Text="通知"/>
+                            </TextBlock>
+                        </PivotItem.Header>
+                        <ScrollViewer Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto">
+                            <StackPanel Margin="10 0">
+                                <ToggleSwitch x:Name="tw_CT" Header="动态磁贴显示动态(需要登录)" OnContent="开" OffContent="关"   HorizontalAlignment="Left" Toggled="tw_CT_Toggled" />
+                                <ToggleSwitch x:Name="tw_TS_Video" Header="推送动态更新通知(需要登录)" OnContent="开" OffContent="关"   HorizontalAlignment="Left" Toggled="tw_TS_Video_Toggled" />
+                                <ToggleSwitch x:Name="tw_TS_Bangumi" Header="推送番剧更新通知(需要登录)" OnContent="开" OffContent="关"   HorizontalAlignment="Left" Toggled="tw_TS_Bangumi_Toggled" />
+                            </StackPanel>
+                        </ScrollViewer>
+                    </PivotItem>
+                  
+                    <PivotItem Margin="0">
+                        <PivotItem.Header>
+                            <TextBlock FontSize="18">
 								<Run Text="下载"/>
                             </TextBlock>
                         </PivotItem.Header>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer  Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto">
                             <StackPanel Margin="10 0">
-                                <ToggleSwitch x:Name="sw_UseWifi"  OffContent="禁止使用数据下载" OnContent="允许使用数据下载" HorizontalAlignment="Left" VerticalAlignment="Top" Toggled="sw_UseWifi_Toggled"/>
-                                <ToggleSwitch x:Name="sw_Light"  OffContent="不保持屏幕常亮" OnContent="保持屏幕常亮" HorizontalAlignment="Left" VerticalAlignment="Top" Toggled="sw_Light_Toggled"/>
+                                <TextBlock FontSize="16" >
+									<Run Text="下载默认清晰度(部分视频无原画)"/>
+                                </TextBlock>
+                                <ComboBox x:Name="cb_DownQuality" Margin="0 5" SelectionChanged="cb_DownQuality_SelectionChanged">
+                                    <ComboBoxItem Content="清晰"/>
+                                    <ComboBoxItem Content="高清"/>
+                                    <ComboBoxItem Content="原画"/>
+                                </ComboBox>
+                                <TextBlock FontSize="16" >
+									<Run Text="下载方式"/>
+                                </TextBlock>
+                                <ComboBox x:Name="cb_DownMode" Margin="0 5" SelectionChanged="cb_DownMode_SelectionChanged">
+                                    <ComboBoxItem Content="逐条下载"/>
+                                    <ComboBoxItem Content="同时下载"/>
+                                </ComboBox>
+                                
+                                <ToggleSwitch x:Name="sw_UseWifi" Header="允许使用数据下载" OffContent="关" OnContent="开" HorizontalAlignment="Left" VerticalAlignment="Top" Toggled="sw_UseWifi_Toggled"/>
+                                <ToggleSwitch x:Name="sw_Light" Header="保持屏幕常亮" OffContent="关" OnContent="开" HorizontalAlignment="Left" VerticalAlignment="Top" Toggled="sw_Light_Toggled"/>
                                 <TextBlock FontSize="16" >
 									<Run Text="默认位置"/>
                                 </TextBlock>
@@ -263,34 +377,48 @@
 								<Run Text="关于"/>
                             </TextBlock>
                         </PivotItem.Header>
-                        <ScrollViewer VerticalScrollBarVisibility="Auto">
+                        <ScrollViewer  Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto">
                             <StackPanel Margin="10 0">
-                                <TextBlock FontSize="18" >
-									<Run Text="版本"/>
-                                </TextBlock>
-                                <TextBlock Foreground="Gray" x:Name="txt_Ver" FontSize="18" Margin="0 5" IsTextSelectionEnabled="True"/>
-                                <TextBlock FontSize="18" >
-									<Run Text="作者"/>
-                                </TextBlock>
-                                <TextBlock Foreground="Gray" Margin="0 5" IsTextSelectionEnabled="True">
-									<Run Text="逍遥橙子(Xiaoyaocz)"/>
-                                </TextBlock>
+                                <Grid Margin="0 10">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="auto"/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Image Source="ms-appx:///Assets/nsLogoS.png" Width="72" Height="72" HorizontalAlignment="Left" Grid.RowSpan="3"></Image>
+                                    <TextBlock Text="哔哩哔哩动画 第三方UWP"  Margin="5 0" Grid.Column="1"  FontSize="18"  IsTextSelectionEnabled="True"/>
+                                    <TextBlock  x:Name="txt_Ver"  Margin="5 0" Grid.Row="1" Text="Ver 2.3.0" Grid.Column="1"  FontSize="18"  IsTextSelectionEnabled="True"/>
+                                    <TextBlock   Margin="5 0" Grid.Column="1" Grid.Row="2"  IsTextSelectionEnabled="True">
+									<Run Text="@逍遥橙子(Xiaoyaocz)"/>
+                                    </TextBlock>
+                                    
+                                </Grid>
+                              
+                               
                                 <TextBlock FontSize="18" >
 									<Run Text="帮助及反馈"/>
                                 </TextBlock>
-                                <HyperlinkButton x:Name="btn_feedback" Click="btn_feedback_Click" Content="反馈"/>
                                 <HyperlinkButton NavigateUri="http://7xj00j.com1.z0.glb.clouddn.com/help.html" Content="常见问题"/>
+                                <HyperlinkButton NavigateUri="mailto:771102271@qq.com" Content="点击给我发邮件"/>
+                                <TextBlock Foreground="Gray" Visibility="Collapsed" IsTextSelectionEnabled="True" TextWrapping="Wrap">
+									<Run Text="有问题请发邮件到:771102271@qq.com"/>
+                                </TextBlock>
                                 <TextBlock Foreground="Gray" Margin="0 5" IsTextSelectionEnabled="True">
 									<Run Text="交流群:530991215"/>
                                 </TextBlock>
+                                <HyperlinkButton x:Name="btn_feedback" Visibility="Collapsed" Click="btn_feedback_Click" Content="反馈"/>
                                 <TextBlock FontSize="18" >
 									<Run Text="说明及联系"/>
                                 </TextBlock>
                                 <TextBlock Foreground="Gray"  IsTextSelectionEnabled="True" TextWrapping="Wrap" Margin="0 5 0 0">
-									<Run Text="本程序仅供学习交流使用，如侵犯任何合法权益请及时联系本人"/>
+									<Run Text="本程序开源，不用于商业用途，仅做学习交流"/>
                                 </TextBlock>
-                                <TextBlock Foreground="Gray" IsTextSelectionEnabled="True">
-									<Run Text="本程序开源，遵循MIT协议"/>
+                                <TextBlock Foreground="Gray"  IsTextSelectionEnabled="True" TextWrapping="Wrap" Margin="0 5 0 0">
+									<Run Text="如果侵犯您的合法权益，请及时联系本人以第一时间删除"/>
                                 </TextBlock>
                                 <TextBlock Foreground="Gray"  Margin="0 0 0 5" IsTextSelectionEnabled="True">
 									<Run Text="Email:771102271@qq.com"/>
@@ -306,6 +434,14 @@
 									<Run Text="支付宝：2500655055@qq.com,**程"/>
                                 </TextBlock>
                                 <TextBlock FontSize="18" >
+									<Run Text="其他应用"/>
+                                </TextBlock>
+                                <StackPanel Orientation="Horizontal">
+                                    <HyperlinkButton NavigateUri="ms-windows-store://pdp/?productid=9NBLGGH4WFB3" Content="那啥追番"/>
+                                    <HyperlinkButton NavigateUri="ms-windows-store://pdp/?productid=9NBLGGH4XCFC" Content="动漫之家" Margin="10 0"/>
+                                </StackPanel>
+                              
+                                <TextBlock FontSize="18" >
 									<Run Text="感谢"/>
                                 </TextBlock>
                                 <TextBlock Foreground="Gray" Margin="0 5">
@@ -314,8 +450,8 @@
                                 <WrapPanel:WrapPanel  Visibility="Visible">
                                     <HyperlinkButton NavigateUri="http://toosame.com/m/" Margin="5 0">旋风小伙(微页开发者)</HyperlinkButton>
                                     <HyperlinkButton Margin="5 0">Dearest匿爱</HyperlinkButton>
-                                    <HyperlinkButton  Margin="5 0">狮子座</HyperlinkButton>
-                                    <HyperlinkButton  Margin="5 0">夜仲泪雪</HyperlinkButton>
+                                    <HyperlinkButton  Margin="5 0" NavigateUri="https://github.com/zuozishi">狮子座(酷狗音乐第三方UWP开发者)</HyperlinkButton>
+                                    <HyperlinkButton  Margin="5 0" NavigateUri="http://weibo.com/u/1943922885">Loyie King(Key4WiFi开发者)</HyperlinkButton>
                                     <HyperlinkButton NavigateUri="https://github.com/CodeForCSharp" Margin="5 0">CodeForCSharp</HyperlinkButton>
                                 </WrapPanel:WrapPanel>
                                 <TextBlock FontSize="18" >

@@ -8,13 +8,16 @@
     x:Class="bilibili2.Pages.BanByTagPage"
     mc:Ignorable="d"
     Tag="番剧Tag"
+    SizeChanged="Page_SizeChanged"
     >
     <Page.Resources>
-        <Style x:Key="ListViewItemStyle" TargetType="ListViewItem">
-            <Setter Property="BorderBrush" Value="#33444444"/>
-            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+        <Style x:Key="ListViewItemStyle" TargetType="GridViewItem">
+            <!--<Setter Property="BorderBrush" Value="#33444444"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>-->
+            <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"></Setter>
+            <Setter Property="Margin" Value="5"></Setter>
         </Style>
-        <SolidColorBrush x:Name="bg" x:Key="BG" />
+        <SolidColorBrush x:Name="bg" x:Key="BG" Color="#FFFF9595" />
         </Page.Resources>
     <Grid Background="{ThemeResource Bili-Background}">
         <Grid.RowDefinitions>
@@ -40,40 +43,43 @@
                 </AppBarButton.Flyout>
             </AppBarButton>
         </Grid>
+        <Border x:Name="bor_Width" Width="450" VerticalAlignment="Top"></Border>
         <Grid Grid.Row="1">
             <Grid.RowDefinitions>
                 <RowDefinition />
                 <RowDefinition Height="auto"/>
             </Grid.RowDefinitions>
-            <ScrollViewer x:Name="sv" ViewChanged="sv_ViewChanged" VerticalScrollBarVisibility="Auto">
+            <ScrollViewer x:Name="sv" Style="{StaticResource ScrollViewerStyle1}" ViewChanged="sv_ViewChanged" VerticalScrollBarVisibility="Auto">
                 <StackPanel>
-                    <ListView x:Name="ls_Tag" ItemContainerStyle="{StaticResource ListViewItemStyle}" SelectionMode="None" IsItemClickEnabled="True" Grid.Row="0" ItemClick="ls_Tag_ItemClick">
-                        <ListView.ItemTemplate>
+                    <GridView x:Name="ls_Tag" ItemContainerStyle="{StaticResource ListViewItemStyle}" SelectionMode="None" IsItemClickEnabled="True" Grid.Row="0" ItemClick="ls_Tag_ItemClick" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.HorizontalScrollMode="Disabled">
+                        <GridView.ItemTemplate>
                             <DataTemplate>
-                                <Grid Margin="0,5" Height="70">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="70"/>
-                                        <ColumnDefinition/>
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                        <RowDefinition/>
-                                    </Grid.RowDefinitions>
-                                    <Image Source="{Binding squareCover}" Width="70" Height="70" Grid.RowSpan="4" VerticalAlignment="Top"/>
-                                    <TextBlock Text="{Binding title}" TextTrimming="CharacterEllipsis" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Margin="5,0"/>
-                                    <TextBlock Text="{Binding brief}" TextTrimming="CharacterEllipsis"  MaxLines="1" Grid.Column="1" Grid.Row="1"  FontSize="14" Margin="5,0" Foreground="Gray"/>
-                                    <TextBlock Text="{Binding Is_finish}" Grid.Column="1" Grid.Row="2" FontSize="14" Margin="5,0" Foreground="Gray"/>
-                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" >
-                                        <TextBlock Text="{Binding Favorites}" FontSize="14"  Foreground="Gray" Margin="5,0"/>
-                                        <TextBlock Text="{Binding Time}" FontSize="14"  Foreground="Gray" Margin="5,0"/>
-                                    </StackPanel>
-                                </Grid>
+                                <Border Width="{Binding ElementName=bor_Width,Path=Width}" Margin="5">
+                                    <Grid  Height="70">
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="70"/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                            <RowDefinition/>
+                                        </Grid.RowDefinitions>
+                                        <Image Source="{Binding squareCover}" Width="70" Height="70" Grid.RowSpan="4" VerticalAlignment="Top"/>
+                                        <TextBlock Text="{Binding title}" TextTrimming="CharacterEllipsis" Grid.Column="1" FontSize="16" VerticalAlignment="Center" Margin="5,0"/>
+                                        <TextBlock Text="{Binding brief}" TextTrimming="CharacterEllipsis"  MaxLines="1" Grid.Column="1" Grid.Row="1"  FontSize="14" Margin="5,0" Foreground="Gray"/>
+                                        <TextBlock Text="{Binding Is_finish}" Grid.Column="1" Grid.Row="2" FontSize="14" Margin="5,0" Foreground="Gray"/>
+                                        <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="3" >
+                                            <TextBlock Text="{Binding Favorites}" FontSize="14"  Foreground="Gray" Margin="5,0"/>
+                                            <TextBlock Text="{Binding Time}" FontSize="14"  Foreground="Gray" Margin="5,0"/>
+                                        </StackPanel>
+                                    </Grid>
+                                </Border>
                             </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                    <HyperlinkButton x:Name="btn_LoadMore" HorizontalAlignment="Center" Click="btn_LoadMore_Click" Content="加载更多"/>
+                        </GridView.ItemTemplate>
+                    </GridView>
+                    <Button x:Name="btn_LoadMore" Background="{StaticResource BG}" HorizontalAlignment="Center" Click="btn_LoadMore_Click" Content="加载更多" Foreground="White"/>
                 </StackPanel>
             </ScrollViewer>
         </Grid>

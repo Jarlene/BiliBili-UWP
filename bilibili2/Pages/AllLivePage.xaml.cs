@@ -5,8 +5,10 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
+using Windows.UI.Text;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
@@ -119,7 +121,7 @@ namespace bilibili2.Pages
             {
                 pr_Load.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://live.bilibili.com/otaku?page=1&ajax=1"));
+                string results = await wc.GetResults(new Uri("http://live.bilibili.com/area/liveList?area=otaku&order=online&page=1"));
                 InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
                 //JObject json = JObject.Parse(results);
                 List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
@@ -144,7 +146,8 @@ namespace bilibili2.Pages
             {
                 pr_Load.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://live.bilibili.com/ent-life?page=1&ajax=1"));
+                //http://live.bilibili.com/area/liveList?area=ent-life&order=online&page=1
+                string results = await wc.GetResults(new Uri("http://live.bilibili.com/area/liveList?area=ent-life&order=online&page=1"));
                 InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
                 //JObject json = JObject.Parse(results);
                 List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
@@ -169,7 +172,8 @@ namespace bilibili2.Pages
             {
                 pr_Load.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://live.bilibili.com/single?page=1&ajax=1"));
+                // http://live.bilibili.com/area/liveList?area=single&order=online&page=1
+                string results = await wc.GetResults(new Uri("http://live.bilibili.com/area/liveList?area=single&order=online&page=1"));
                 InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
                 //JObject json = JObject.Parse(results);
                 List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
@@ -194,7 +198,8 @@ namespace bilibili2.Pages
             {
                 pr_Load.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://live.bilibili.com/online?page=1&ajax=1"));
+                //http://live.bilibili.com/area/liveList?area=online&order=online&page=1
+                string results = await wc.GetResults(new Uri("http://live.bilibili.com/area/liveList?area=online&order=online&page=1"));
                 InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
                 //JObject json = JObject.Parse(results);
                 List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
@@ -219,7 +224,8 @@ namespace bilibili2.Pages
             {
                 pr_Load.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://live.bilibili.com/e-sports?page=1&ajax=1"));
+                // http://live.bilibili.com/area/liveList?area=/e-sports&order=online&page=1
+                string results = await wc.GetResults(new Uri(" http://live.bilibili.com/area/liveList?area=e-sports&order=online&page=1"));
                 InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
                 //JObject json = JObject.Parse(results);
                 List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
@@ -244,7 +250,8 @@ namespace bilibili2.Pages
             {
                 pr_Load.Visibility = Visibility.Visible;
                 WebClientClass wc = new WebClientClass();
-                string results = await wc.GetResults(new Uri("http://live.bilibili.com/movie?page=1&ajax=1"));
+                // http://live.bilibili.com/area/liveList?area=/movie&order=online&page=1
+                string results = await wc.GetResults(new Uri("http://live.bilibili.com/area/liveList?area=movie&order=online&page=1"));
                 InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
                 //JObject json = JObject.Parse(results);
                 List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
@@ -262,7 +269,60 @@ namespace bilibili2.Pages
             }
 
         }
+        bool Sj = false;
+        public async void GetSj()
+        {
+            try
+            {
+                pr_Load.Visibility = Visibility.Visible;
+                WebClientClass wc = new WebClientClass();
+                // http://live.bilibili.com/area/liveList?area=/movie&order=online&page=1
+                string results = await wc.GetResults(new Uri("http://live.bilibili.com/area/liveList?area=mobile&order=online&page=1"));
+                InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
+                //JObject json = JObject.Parse(results);
+                List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
+                foreach (InfoModel item in model)
+                {
+                    live_Sj.Items.Add(item);
+                }
+                Sj = true;
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                pr_Load.Visibility = Visibility.Collapsed;
+            }
 
+        }
+        bool Sy = false;
+        public async void GetSy()
+        {
+            try
+            {
+                pr_Load.Visibility = Visibility.Visible;
+                WebClientClass wc = new WebClientClass();
+                // http://live.bilibili.com/area/liveList?area=/movie&order=online&page=1
+                string results = await wc.GetResults(new Uri("http://live.bilibili.com/area/liveList?area=mobile-game&order=online&page=1"));
+                InfoModel data = JsonConvert.DeserializeObject<InfoModel>(results);
+                //JObject json = JObject.Parse(results);
+                List<InfoModel> model = JsonConvert.DeserializeObject<List<InfoModel>>(data.data.ToString());
+                foreach (InfoModel item in model)
+                {
+                    live_Sy.Items.Add(item);
+                }
+                Sy = true;
+            }
+            catch (Exception)
+            {
+            }
+            finally
+            {
+                pr_Load.Visibility = Visibility.Collapsed;
+            }
+
+        }
         private void live_HOT_ItemClick(object sender, ItemClickEventArgs e)
         {
             this.Frame.Navigate(typeof(LiveInfoPage), ((InfoModel)e.ClickedItem).room_id);
@@ -287,51 +347,82 @@ namespace bilibili2.Pages
 
         }
 
-        private void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void pivot_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            txt_hea_0.FontWeight = FontWeights.Normal;
+            txt_hea_1.FontWeight = FontWeights.Normal;
+            txt_hea_2.FontWeight = FontWeights.Normal;
+            txt_hea_3.FontWeight = FontWeights.Normal;
+            txt_hea_4.FontWeight = FontWeights.Normal;
+            txt_hea_5.FontWeight = FontWeights.Normal;
+            txt_hea_6.FontWeight = FontWeights.Normal;
+            txt_hea_7.FontWeight = FontWeights.Normal;
+            txt_hea_8.FontWeight = FontWeights.Normal;
             switch (pivot.SelectedIndex)
             {
                 case 0:
+                    txt_hea_0.FontWeight = FontWeights.Bold;
                     if (!Hot)
                     {
+                        await Task.Delay(200);
                         GetZBInfo();
-                       
                     }
                     break;
                 case 1:
+                    txt_hea_1.FontWeight = FontWeights.Bold;
                     if (!Yz)
                     {
                         GetYz();
                     }
                     break;
                 case 2:
+                    txt_hea_2.FontWeight = FontWeights.Bold;
                     if (!Sh)
                     {
                         GetSh();
                     }
                     break;
                 case 3:
+                    txt_hea_3.FontWeight = FontWeights.Bold;
                     if (!Dj)
                     {
                         GetDj();
                     }
                     break;
                 case 4:
+                    txt_hea_4.FontWeight = FontWeights.Bold;
                     if (!Wl)
                     {
                         GetWl();
                     }
                     break;
                 case 5:
+                    txt_hea_5.FontWeight = FontWeights.Bold;
                     if (!dzjz)
                     {
                         GetDzj();
                     }
                     break;
                 case 6:
+                    txt_hea_6.FontWeight = FontWeights.Bold;
                     if (!Dy)
                     {
                         GetDy();
+                    }
+                    break;
+
+                case 7:
+                    txt_hea_7.FontWeight = FontWeights.Bold;
+                    if (!Sj)
+                    {
+                        GetSj();
+                    }
+                    break;
+                case 8:
+                    txt_hea_8.FontWeight = FontWeights.Bold;
+                    if (!Sy)
+                    {
+                        GetSy();
                     }
                     break;
                 default:
@@ -378,6 +469,14 @@ namespace bilibili2.Pages
                     live_Dy.Items.Clear();
                     GetDy();
                     break;
+                case 7:
+                    live_Sj.Items.Clear();
+                    GetSj();
+                    break;
+                case 8:
+                    live_Sy.Items.Clear();
+                    GetSy();
+                    break;
                 default:
                     break;
             }
@@ -416,6 +515,14 @@ namespace bilibili2.Pages
                     live_Dy.Items.Clear();
                     GetDy();
                     break;
+                case 7:
+                    live_Sj.Items.Clear();
+                    GetSj();
+                    break;
+                case 8:
+                    live_Sy.Items.Clear();
+                    GetSy();
+                    break;
                 default:
                     break;
             }
@@ -426,5 +533,12 @@ namespace bilibili2.Pages
             this.Frame.Navigate(typeof(LiveInfoPage), ((InfoModel)e.ClickedItem).roomid);
         }
 
+        private void hot_LoadMore_Click(object sender, RoutedEventArgs e)
+        {
+            if (CanLoad)
+            {
+                GetZBInfo();
+            }
+        }
     }
 }
