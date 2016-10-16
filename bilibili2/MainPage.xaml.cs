@@ -78,16 +78,16 @@ namespace bilibili2
                     _jyUserFeedbackSdkManager.UploadPicture(ApiHelper.JyAppkey, ApiHelper.JySecret, file);
                 }
             };
-            //if (DeriveHelper.GetDeriveType()== DeriveTypes.PC)
-            //{
-            //    var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-            //    coreTitleBar.ExtendViewIntoTitleBar = true;
-            //    Window.Current.SetTitleBar(_title_bar);
-            //}
-            //else
-            //{
-            //    _title_bar.Visibility = Visibility.Collapsed;
-            //}
+            if (DeriveHelper.GetDeriveType() == DeriveTypes.PC)
+            {
+                var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+                coreTitleBar.ExtendViewIntoTitleBar = true;
+                Window.Current.SetTitleBar(TrueTitleBar);
+            }
+            else
+            {
+                TitleBar.Visibility = Visibility.Collapsed;
+            }
             ChangeTitbarColor();
         }
 
@@ -265,14 +265,14 @@ namespace bilibili2
                 timer.Interval = new TimeSpan(0, 0, 5);
                 timer.Start();
                 timer.Tick += Timer_Tick;
-                string Info = @"";
+                //string Info = @"";
 
-                //string Info = @"新版更新";
-                if (!settings.SettingContains(settings.GetVersion()))
-                {
+                ////string Info = @"新版更新";
+                //if (!settings.SettingContains(settings.GetVersion()))
+                //{
 
-                    mess_Info.Show(string.Format("{0}更新内容", settings.GetVersion()), Info, false);
-                }
+                //    mess_Info.Show(string.Format("{0}更新内容", settings.GetVersion()), Info, false);
+                //}
             }
             GetSetting();
             ChangeTheme();
@@ -1376,6 +1376,8 @@ namespace bilibili2
             titleBar.ButtonHoverBackgroundColor = ((SolidColorBrush)menu_DarkBack.Background).Color;
             titleBar.ButtonBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             titleBar.ButtonForegroundColor = Color.FromArgb(255, 254, 254, 254);
+            titleBar.ButtonPressedBackgroundColor = Colors.WhiteSmoke;
+            titleBar.ButtonPressedForegroundColor = Color.FromArgb(255, 254, 254, 254);
             titleBar.InactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             titleBar.ButtonInactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             infoFrame.Tag = (SolidColorBrush)top_grid.Background;
