@@ -366,26 +366,6 @@
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-        <Grid x:Name="TitleBar" Grid.Row="0" Height="32" Background="{ThemeResource Bili-ForeColor}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="130"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="Transparent">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition/>
-                    <ColumnDefinition/>
-                </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Right" Source="ms-appx:///Assets/LOGOTITLE.png" Height="24" Width="24"/>
-                <TextBlock Grid.Column="1" x:Name="caption" Text="Bilibili" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="0"/>
-            </Grid>
-            <Button Grid.Column="0" x:Name="btn_back" Style="{ThemeResource TitleBarBackButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
-            <Button Grid.Column="1" x:Name="btn_refresh" Style="{ThemeResource TitleBarRefreshButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
-            <Button Grid.Column="2" x:Name="btn_search" Style="{ThemeResource TitleBarSearchButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
-        </Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="big">
                 <VisualState x:Name="wide1000">
@@ -419,6 +399,26 @@
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Image x:Name="bg_img" Visibility="Collapsed" Source="ms-appx:///Assets/艾米莉亞_婚紗.png" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.RowSpan="3" Width="250"></Image>
+        <Grid x:Name="TitleBar" Grid.Row="0" Height="32" Background="{ThemeResource Bili-ForeColor}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="130"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Image Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Right" Source="ms-appx:///Assets/LOGOTITLE.png" Height="24" Width="24"/>
+                <TextBlock Grid.Column="1" x:Name="caption" Text="Bilibili" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="0"/>
+            </Grid>
+            <Button Grid.Column="0" x:Name="btn_back" Style="{ThemeResource TitleBarBackButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
+            <Button Grid.Column="1" x:Name="btn_refresh" Style="{ThemeResource TitleBarRefreshButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
+            <Button Grid.Column="2" x:Name="btn_search" Style="{ThemeResource TitleBarSearchButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
+        </Grid>
         <SplitView x:Name="sp_View" Grid.Row="1" OpenPaneLength="200"   PaneBackground="{ThemeResource Bili-MenuBack}"  DisplayMode="Overlay" PaneClosed="sp_View_PaneClosed" >
             <SplitView.Pane>
                 <Grid >
