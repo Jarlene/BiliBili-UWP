@@ -117,6 +117,7 @@
     <Content Include="Assets\Icon\ic_following_bangumi.png" />
     <Content Include="Assets\ic_splash_default.png" />
     <Content Include="Assets\ic_video_pay_movie_22.png" />
+    <Content Include="Assets\LOGOTITLE.png" />
     <Content Include="Assets\nsLogoS.png" />
     <Content Include="Assets\PartIcon\BAD.png" />
     <Content Include="Assets\PartIcon\ic_category_t160.png" />

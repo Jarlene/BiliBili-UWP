@@ -375,7 +375,11 @@
                 <ColumnDefinition Width="130"/>
             </Grid.ColumnDefinitions>
             <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="Transparent">
-                <TextBlock x:Name="caption" Text="Bilibili" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" x:Name="caption" Text="Bilibili" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"/>
             </Grid>
             <Button Grid.Column="0" x:Name="btn_back" Style="{ThemeResource TitleBarBackButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
             <Button Grid.Column="1" x:Name="btn_refresh" Style="{ThemeResource TitleBarRefreshButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
