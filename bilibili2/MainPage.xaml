@@ -390,8 +390,6 @@
                         <Setter Target="top_txt_Header.Margin" Value="5 0"/>
                         <Setter Target="btn_OpenMenu.Visibility" Value="Visible"/>
                         <Setter Target="top_User.Margin" Value="5 32 5 0"/>
-                        <Setter Target="btn_GoFind.Visibility" Value="Collapsed"/>
-                        <Setter Target="top_txt_find.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="narrow">
@@ -404,8 +402,6 @@
                         <Setter Target="top_txt_Header.Margin" Value="48 0"/>
                         <Setter Target="btn_OpenMenu.Visibility" Value="Visible"/>
                         <Setter Target="top_User.Margin" Value="5 32 5 0"/>
-                        <Setter Target="btn_GoFind.Visibility" Value="Visible"/>
-                        <Setter Target="top_txt_find.Visibility" Value="Collapsed"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
@@ -422,6 +418,7 @@
             <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="Transparent">
                 <Image Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Source="ms-appx:///Assets/LOGOTITLE.png" Height="24"/>
             </Grid>
+            <AutoSuggestBox Grid.Column="2" Grid.ColumnSpan="2" x:Name="top_txt_find"   PlaceholderText="输入关键字或AV号" Visibility="Collapsed" Height="32"  Width="180" QueryIcon="Find" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="5,0"  Style="{StaticResource AutoSuggestBoxStyle1}"  TextChanged="top_txt_find_TextChanged" QuerySubmitted="top_txt_find_QuerySubmitted" SuggestionChosen="top_txt_find_SuggestionChosen"/>
             <Button Grid.Column="0" x:Name="btn_back" Style="{ThemeResource TitleBarBackButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}" Foreground="White"/>
             <Button Grid.Column="1" x:Name="btn_refresh" Style="{ThemeResource TitleBarRefreshButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}" Foreground="White"/>
             <Button Grid.Column="2" x:Name="btn_search" Style="{ThemeResource TitleBarSearchButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}" Foreground="White"/>
@@ -541,8 +538,7 @@
                     <TextBlock Text="首页" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
 
                     <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Right" >
-                        <AppBarButton x:Name="btn_GoFind" Icon="Contact" Width="48" Height="48" Foreground="White" Click="btn_GoFind_Click"/>
-                        <AutoSuggestBox x:Name="top_txt_find"   PlaceholderText="输入关键字或AV号" Visibility="Collapsed" Height="32"  Width="180" QueryIcon="Find" Grid.Column="2" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Margin="5,0"  Style="{StaticResource AutoSuggestBoxStyle1}"  TextChanged="top_txt_find_TextChanged" QuerySubmitted="top_txt_find_QuerySubmitted" SuggestionChosen="top_txt_find_SuggestionChosen"/>
+                        <AppBarButton x:Name="btn_User" Icon="Contact" Width="48" Height="48" Foreground="White" Click="btn_GoFind_Click"/>
                         <AppBarButton Icon="Download" Visibility="Collapsed" Width="48" Height="48" Foreground="White"></AppBarButton>
 
                     </StackPanel>

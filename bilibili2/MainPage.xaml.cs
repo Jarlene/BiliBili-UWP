@@ -778,21 +778,7 @@ namespace bilibili2
 
 
         }
-        //打开搜索框
-        private void btn_GoFind_Click(object sender, RoutedEventArgs e)
-        {
-            if (top_txt_find.Visibility == Visibility.Collapsed)
-            {
-                btn_GoFind.Visibility = Visibility.Collapsed;
-                top_txt_find.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                btn_GoFind.Visibility = Visibility.Visible;
-                top_txt_find.Visibility = Visibility.Collapsed;
-            }
 
-        }
         //打开分区
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
