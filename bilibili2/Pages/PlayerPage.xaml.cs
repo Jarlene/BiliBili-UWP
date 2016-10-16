@@ -192,7 +192,7 @@ namespace bilibili2.Pages
         {
             cb_setting_defu.IsChecked = true;
             grid_end.Visibility = Visibility.Collapsed;
-            SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
+            //SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             await Task.Delay(200);
             sql.CreateTable();
             if (datetimer == null)
