@@ -36,6 +36,10 @@
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
+                                            </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
                                                                    Storyboard.TargetProperty="Fill">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="WhiteSmoke" />
@@ -51,7 +55,7 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <Rectangle Name="back" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}"/>
-                            <SymbolIcon Symbol="Back" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
+                            <SymbolIcon Name="Icon" Symbol="Back" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
                                 <SymbolIcon.RenderTransform>
                                     <CompositeTransform ScaleX="0.666" ScaleY="0.666"/>
                                 </SymbolIcon.RenderTransform>
@@ -80,6 +84,10 @@
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
+                                            </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
                                                                    Storyboard.TargetProperty="Fill">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="WhiteSmoke" />
@@ -95,7 +103,7 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <Rectangle Name="back" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}"/>
-                            <SymbolIcon Symbol="Refresh" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
+                            <SymbolIcon Name="Icon" Symbol="Refresh" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
                                 <SymbolIcon.RenderTransform>
                                     <CompositeTransform ScaleX="0.666" ScaleY="0.666"/>
                                 </SymbolIcon.RenderTransform>
@@ -124,6 +132,10 @@
                                     </VisualState>
                                     <VisualState x:Name="Pressed">
                                         <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
+                                                                   Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
+                                            </ObjectAnimationUsingKeyFrames>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
                                                                    Storyboard.TargetProperty="Fill">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="WhiteSmoke" />
@@ -139,7 +151,7 @@
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
                             <Rectangle Name="back" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}"/>
-                            <SymbolIcon Symbol="Find" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
+                            <SymbolIcon Name="Icon" Symbol="Find" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
                                 <SymbolIcon.RenderTransform>
                                     <CompositeTransform ScaleX="0.666" ScaleY="0.666"/>
                                 </SymbolIcon.RenderTransform>
