@@ -1372,12 +1372,9 @@ namespace bilibili2
             //电脑标题栏颜色
             var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
             titleBar.BackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            titleBar.ForegroundColor = Color.FromArgb(255, 254, 254, 254);//Colors.White纯白用不了。。。
             titleBar.ButtonHoverBackgroundColor = ((SolidColorBrush)menu_DarkBack.Background).Color;
             titleBar.ButtonBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            titleBar.ButtonForegroundColor = Color.FromArgb(255, 254, 254, 254);
             titleBar.ButtonPressedBackgroundColor = Colors.WhiteSmoke;
-            titleBar.ButtonPressedForegroundColor = Color.FromArgb(255, 254, 254, 254);
             titleBar.InactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             titleBar.ButtonInactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             infoFrame.Tag = (SolidColorBrush)top_grid.Background;
