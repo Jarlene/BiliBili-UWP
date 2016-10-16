@@ -1738,6 +1738,8 @@ namespace bilibili2
             }
             else
             {
+                top_txt_find.Visibility = Visibility.Collapsed;
+                btn_search.Visibility = Visibility.Visible;
                 infoFrame.Navigate(typeof(SearchPage), top_txt_find.Text);
             }
         }
@@ -2070,6 +2072,17 @@ namespace bilibili2
 
                 Moreing = true;
             }
+        }
+
+        private void btn_User_Click(object sender, RoutedEventArgs e)
+        {
+            
+        }
+
+        private void btn_search_Click(object sender, RoutedEventArgs e)
+        {
+            btn_search.Visibility = Visibility.Collapsed;
+            top_txt_find.Visibility = Visibility.Visible;
         }
     }
 
