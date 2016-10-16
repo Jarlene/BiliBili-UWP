@@ -362,10 +362,22 @@
     </Page.Resources>
     <Grid  Background="{ThemeResource Bili-Background}">
         <Grid.RowDefinitions>
+            <RowDefinition Height="32"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
-       
+        <Grid x:Name="TitleBar" Grid.Row="0" Height="32" Background="{ThemeResource Bili-ForeColor}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="48"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="130"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="Transparent">
+                <TextBlock x:Name="caption" Text="Bilibili" VerticalAlignment="Center" HorizontalAlignment="Center" FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="10,0"/>
+            </Grid>
+        </Grid>
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="big">
                 <VisualState x:Name="wide1000">
