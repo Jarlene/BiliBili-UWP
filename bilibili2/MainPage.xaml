@@ -412,7 +412,7 @@
                     <ColumnDefinition/>
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
-                <Image Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Right" Source="ms-appx:///Assets/LOGOTITLE.png" Height="24" Width="24"/>
+                <Image Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Right" Source="ms-appx:///Assets/LOGOTITLE.png" Height="24"/>
                 <TextBlock Grid.Column="1" x:Name="caption" Text="Bilibili" VerticalAlignment="Center" HorizontalAlignment="Left" FontSize="12" FontFamily="Segoe UI" FontWeight="Normal" Margin="0"/>
             </Grid>
             <Button Grid.Column="0" x:Name="btn_back" Style="{ThemeResource TitleBarBackButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}"/>
