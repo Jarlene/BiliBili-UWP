@@ -2085,6 +2085,15 @@ namespace bilibili2
             top_txt_find.Visibility = Visibility.Visible;
             top_txt_find.Focus(FocusState.Programmatic);
         }
+
+        private void btn_back_Click(object sender, RoutedEventArgs e)
+        {
+            if (infoFrame.Content != null)
+                if (infoFrame.CanGoBack)
+                    infoFrame.GoBack();
+                else
+                    MainPage_BackEvent();
+        }
     }
 
     public class FeedItemDataTemplateSelector : DataTemplateSelector
