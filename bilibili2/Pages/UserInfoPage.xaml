@@ -26,7 +26,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <!--AppBarButton x:Name="btn_Back" Click="btn_Back_Click"  Width="48" Height="48" Icon="Back" Foreground="White"/-->
-            <TextBlock Grid.Column="1" Text="用户信息" VerticalAlignment="Center" Margin="5 0" FontSize="16" Foreground="White"/>
+            <TextBlock Grid.Column="0" Grid.ColumnSpan="2" Text="用户信息" VerticalAlignment="Center" Margin="5 0" FontSize="16" Foreground="White"/>
             <StackPanel Grid.Column="2" Orientation="Horizontal" Margin="5 0" VerticalAlignment="Top" HorizontalAlignment="Right">
                 <AppBarButton x:Name="btn_Attention" Width="48" Visibility="Collapsed" Height="48" ToolTipService.ToolTip="关注" Click="btn_Attention_Click">
                     <AppBarButton.Icon>

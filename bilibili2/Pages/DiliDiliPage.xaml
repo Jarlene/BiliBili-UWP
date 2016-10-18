@@ -26,7 +26,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <!--AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/-->
-            <TextBlock  Text="嘀哩嘀哩" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
+            <TextBlock  Text="嘀哩嘀哩" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
             <StackPanel Grid.Column="2" VerticalAlignment="Center" Margin="10 0" Orientation="Horizontal">
                 <ComboBox x:Name="cb_Year" SelectionChanged="cb_Year_SelectionChanged">
                     <ComboBoxItem Tag="2016" Content="2016年"/>
