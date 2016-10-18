@@ -48,17 +48,17 @@ namespace bilibili2.Pages
         }
        
 
-        private void btn_back_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame.CanGoBack)
-            {
-                this.Frame.GoBack();
-            }
-            else
-            {
-                BackEvent();
-            }
-        }
+        //private void btn_back_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.Frame.CanGoBack)
+        //    {
+        //        this.Frame.GoBack();
+        //    }
+        //    else
+        //    {
+        //        BackEvent();
+        //    }
+        //}
         int taday = 0;
         public void SetWeekInfo()
         {

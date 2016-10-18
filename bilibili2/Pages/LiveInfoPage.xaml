@@ -606,7 +606,7 @@
 
         </StackPanel>
         <ProgressBar x:Name="pr_Load" VerticalAlignment="Top" Background="{x:Null}" IsIndeterminate="True"></ProgressBar>
-        <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="Gray"/>
+        <!-- AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="Gray"/-->
       
     </Grid>
 </Page>

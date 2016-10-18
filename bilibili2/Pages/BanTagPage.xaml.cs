@@ -35,17 +35,17 @@ namespace bilibili2.Pages
              NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        private void btn_back_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame.CanGoBack)
-            {
-                this.Frame.GoBack();
-            }
-            else
-            {
-                BackEvent();
-            }
-        }
+        //private void btn_back_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.Frame.CanGoBack)
+        //    {
+        //        this.Frame.GoBack();
+        //    }
+        //    else
+        //    {
+        //        BackEvent();
+        //    }
+        //}
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;

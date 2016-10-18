@@ -23,7 +23,7 @@
             </Grid.ColumnDefinitions>
             <AppBarButton x:Name="webview_btn_Refresh" Grid.Column="1" HorizontalAlignment="Right"  Width="48" Height="48" Icon="Refresh"  Foreground="White" Click="webview_btn_Refresh_Click"></AppBarButton>
             <TextBlock Text="浏览网页" FontSize="16" x:Name="text" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
-            <AppBarButton x:Name="webview_btn_Close"  Grid.Column="0" Width="48" Icon="Back" Foreground="White" Click="webview_btn_Close_Click" VerticalAlignment="Stretch"/>
+            <!--AppBarButton x:Name="webview_btn_Close"  Grid.Column="0" Width="48" Icon="Back" Foreground="White" Click="webview_btn_Close_Click" VerticalAlignment="Stretch"/-->
             
          
             

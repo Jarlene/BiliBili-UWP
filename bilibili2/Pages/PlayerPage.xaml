@@ -594,7 +594,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="auto"/>
                     </Grid.ColumnDefinitions>
-                    <AppBarButton x:Name="top_btn_Back" Width="48" Height="48" Icon="Back" Foreground="White" ToolTipService.ToolTip="退出播放" Click="top_btn_Back_Click"/>
+                    <!--AppBarButton x:Name="top_btn_Back" Width="48" Height="48" Icon="Back" Foreground="White" ToolTipService.ToolTip="退出播放" Click="top_btn_Back_Click"/-->
                     <ScrollViewer Grid.Column="1" HorizontalScrollMode="Enabled" HorizontalScrollBarVisibility="Hidden" VerticalScrollBarVisibility="Disabled" VerticalScrollMode="Disabled">
                         <TextBlock x:Name="top_Title" Text="视频标题" VerticalAlignment="Center" Margin="5 0"  HorizontalAlignment="Left" Foreground="White"/>
                     </ScrollViewer>

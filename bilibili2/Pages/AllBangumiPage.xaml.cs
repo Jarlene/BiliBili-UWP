@@ -34,18 +34,18 @@ namespace bilibili2.Pages
             this.NavigationCacheMode = NavigationCacheMode.Required;
         }
 
-        private void btn_back_Click(object sender, RoutedEventArgs e)
-        {
-            if (this.Frame.CanGoBack)
-            {
-                this.Frame.GoBack();
+        //private void btn_back_Click(object sender, RoutedEventArgs e)
+        //{
+        //    if (this.Frame.CanGoBack)
+        //    {
+        //        this.Frame.GoBack();
 
-            }
-            else
-            {
-                BackEvent();
-            }
-        }
+        //    }
+        //    else
+        //    {
+        //        BackEvent();
+        //    }
+        //}
        
         private void GetFilter()
         {
