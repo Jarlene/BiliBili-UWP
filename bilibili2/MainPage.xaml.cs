@@ -2086,6 +2086,11 @@ namespace bilibili2
             top_txt_find.Focus(FocusState.Programmatic);
         }
 
+        /// <summary>
+        /// 响应后退按钮
+        /// </summary>
+        /// <param name="sender">按钮本身</param>
+        /// <param name="e">方法参数</param>
         private void btn_back_Click(object sender, RoutedEventArgs e)
         {
             if (infoFrame.Content != null)

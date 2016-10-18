@@ -85,8 +85,8 @@ namespace bilibili2
             else
             {
                 await GetLoad();
-                #region
-                switch (new Random().Next(1, 39))
+                #region 标语
+                switch (new Random().Next(1, 40))
                 {
                     case 1:
                         txt_Load.Text = "爱国、敬业、诚信、友善";
@@ -201,6 +201,9 @@ namespace bilibili2
                         break;
                     case 38:
                         txt_Load.Text = "应用埋了个福利，能找到吗？";
+                        break;
+                    case 39:
+                        txt_Load.Text = "什么时候更新？我只能说无可奉告";
                         break;
                     default:
                         break;
