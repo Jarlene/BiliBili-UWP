@@ -1738,10 +1738,10 @@ namespace bilibili2
             }
             else
             {
-                top_txt_find.Visibility = Visibility.Collapsed;
-                btn_search.Visibility = Visibility.Visible;
                 infoFrame.Navigate(typeof(SearchPage), top_txt_find.Text);
             }
+            top_txt_find.Visibility = Visibility.Collapsed;
+            btn_search.Visibility = Visibility.Visible;
         }
 
         private void top_txt_find_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -2083,6 +2083,7 @@ namespace bilibili2
         {
             btn_search.Visibility = Visibility.Collapsed;
             top_txt_find.Visibility = Visibility.Visible;
+            top_txt_find.Focus(FocusState.Programmatic);
         }
     }
 
