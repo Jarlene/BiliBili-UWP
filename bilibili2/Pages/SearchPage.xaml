@@ -27,7 +27,7 @@
                     <ColumnDefinition Width="auto"/>
                 </Grid.ColumnDefinitions>
                 <!--AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/-->
-                <TextBlock x:Name="text_Title" Visibility="Collapsed" Text="搜索" Margin="5 0" HorizontalAlignment="Left" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"  FontSize="16" Foreground="White"/>
+                <TextBlock x:Name="text_Title" Visibility="Collapsed" Text="搜索" Margin="16 0" HorizontalAlignment="Left" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center"  FontSize="16" Foreground="White"/>
                 <AutoSuggestBox x:Name="autoSug_Box" BorderBrush="#00808080" BorderThickness="1" Margin="5 0" Grid.Column="1" PlaceholderText="输入关键字" QueryIcon="Find" VerticalAlignment="Center" QuerySubmitted="autoSug_Box_QuerySubmitted" TextChanged="autoSug_Box_TextChanged" SuggestionChosen="autoSug_Box_SuggestionChosen" Style="{StaticResource AutoSuggestBoxStyle1}"></AutoSuggestBox>
                 <StackPanel Orientation="Horizontal" x:Name="btn_Filter" Margin="5 0" Grid.Column="2">
 

@@ -24,7 +24,7 @@
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
             <!--AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/-->
-            <TextBlock  Text="{Binding title}" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
+            <TextBlock  Text="{Binding title}" Margin="16 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
         <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <Grid x:Name="BanSeason_Grid">
