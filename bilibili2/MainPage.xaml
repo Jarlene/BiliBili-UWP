@@ -427,7 +427,7 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="130"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="Transparent">
+            <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="{ThemeResource Bili-ForeColor}">
                 <Image Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Source="ms-appx:///Assets/LOGOTITLE.png" Height="24"/>
             </Grid>
             <AutoSuggestBox Grid.Column="2" Grid.ColumnSpan="2" x:Name="top_txt_find"   PlaceholderText="输入关键字或AV号" Visibility="Collapsed" Height="32"  Width="180" QueryIcon="Find" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="0"  Style="{StaticResource AutoSuggestBoxStyle1}" BorderThickness="1" BorderBrush="#00808080" TextChanged="top_txt_find_TextChanged" QuerySubmitted="top_txt_find_QuerySubmitted" SuggestionChosen="top_txt_find_SuggestionChosen"/>
