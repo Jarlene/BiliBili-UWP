@@ -1358,6 +1358,8 @@ namespace bilibili2
             //电脑标题栏颜色
             var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
             titleBar.BackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
+            titleBar.ButtonForegroundColor = Colors.White;
+            titleBar.ButtonInactiveForegroundColor = Colors.White;
             titleBar.ButtonHoverBackgroundColor = ((SolidColorBrush)menu_DarkBack.Background).Color;
             titleBar.ButtonBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             titleBar.ButtonPressedBackgroundColor = Colors.WhiteSmoke;
@@ -2075,9 +2077,7 @@ namespace bilibili2
         }
 
         private void btn_User_Click(object sender, RoutedEventArgs e)
-        {
-            
-        }
+            => btn_UserInfo_Click(sender, e);
 
         private void btn_search_Click(object sender, RoutedEventArgs e)
         {

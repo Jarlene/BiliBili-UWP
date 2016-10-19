@@ -1200,7 +1200,7 @@
 
         <local:MessageShow x:Name="messShow" Grid.RowSpan="4" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         <Grid x:Name="Feedback_Grid"></Grid>
-        <Controls:MyMessageDialog x:Name="mess_Info" Grid.RowSpan="2"  RightClick="mess_Info_RightClick"/>
-        <Controls:MyMessageDialog x:Name="mess_Update" Grid.RowSpan="2"/>
+        <Controls:MyMessageDialog x:Name="mess_Info" Grid.Row="1" Grid.RowSpan="2"  RightClick="mess_Info_RightClick"/>
+        <Controls:MyMessageDialog x:Name="mess_Update" Grid.Row="1" Grid.RowSpan="2"/>
     </Grid>
 </Page>
