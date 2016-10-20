@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Package xmlns="http://schemas.microsoft.com/appx/manifest/foundation/windows10" xmlns:mp="http://schemas.microsoft.com/appx/2014/phone/manifest" xmlns:uap="http://schemas.microsoft.com/appx/manifest/uap/windows10" IgnorableNamespaces="uap mp">
-  <Identity Name="5421.BiliBiliUWP" Publisher="CN=43A199A3-3813-4434-830F-536BE5EFB42E" Version="2.7.2.0" />
+  <Identity Name="5421.BiliBiliUWP" Publisher="CN=43A199A3-3813-4434-830F-536BE5EFB42E" Version="2.7.1.0" />
   <mp:PhoneIdentity PhoneProductId="58710062-37ab-4196-836d-1030d9d73897" PhonePublisherId="00000000-0000-0000-0000-000000000000" />
   <Properties>
     <DisplayName>BiliBili UWP</DisplayName>
@@ -24,11 +24,16 @@
         <uap:SplashScreen Image="Assets\SplashScreen.png" BackgroundColor="#DF85A0" />
       </uap:VisualElements>
       <Extensions>
-        <Extension Category="windows.backgroundTasks" EntryPoint="BackTask.BackgroundAudioTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="BackTask.BackgroundTask">
           <BackgroundTasks>
-            <Task Type="audio" />
+            <Task Type="timer" />
           </BackgroundTasks>
         </Extension>
+        <uap:Extension Category="windows.protocol" EntryPoint="bilibili2.App">
+          <uap:Protocol Name="bilibili">
+            <uap:DisplayName>BiliBili UWP</uap:DisplayName>
+          </uap:Protocol>
+        </uap:Extension>
         <uap:Extension Category="windows.fileTypeAssociation" EntryPoint="bilibili2.App">
           <uap:FileTypeAssociation Name="23333">
             <uap:DisplayName>BiliBili UWP</uap:DisplayName>
@@ -38,14 +43,9 @@
             </uap:SupportedFileTypes>
           </uap:FileTypeAssociation>
         </uap:Extension>
-        <uap:Extension Category="windows.protocol" EntryPoint="bilibili2.App">
-          <uap:Protocol Name="bilibili">
-            <uap:DisplayName>BiliBili UWP</uap:DisplayName>
-          </uap:Protocol>
-        </uap:Extension>
-        <Extension Category="windows.backgroundTasks" EntryPoint="BackTask.BackgroundTask">
+        <Extension Category="windows.backgroundTasks" EntryPoint="BackTask.BackgroundAudioTask">
           <BackgroundTasks>
-            <Task Type="timer" />
+            <Task Type="audio" />
           </BackgroundTasks>
         </Extension>
       </Extensions>
