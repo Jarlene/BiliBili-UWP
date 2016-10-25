@@ -2099,6 +2099,11 @@ namespace bilibili2
                 else
                     MainPage_BackEvent();
         }
+
+        private void btn_refresh_Click(object sender, RoutedEventArgs e)
+        {
+            infoFrame.Navigate(infoFrame.Content.GetType());
+        }
     }
 
     public class FeedItemDataTemplateSelector : DataTemplateSelector
