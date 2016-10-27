@@ -299,7 +299,7 @@ namespace bilibili2
         {
             get
             {
-                DateTime dtStart = new DateTime(1970, 1, 1);
+                DateTime dtStart = new DateTime(1970, 1, 1, 8, 0, 0);
                 long lTime = long.Parse(pubdate + "0000000");
                 //long lTime = long.Parse(textBox1.Text);
                 TimeSpan toNow = new TimeSpan(lTime);
