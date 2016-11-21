@@ -34,17 +34,17 @@ namespace bilibili2.Pages
             NavigationCacheMode = NavigationCacheMode.Enabled;
         }
 
-        //private void btn_back_Click(object sender, RoutedEventArgs e)
-        //{
-        //    if (this.Frame.CanGoBack)
-        //    {
-        //        this.Frame.GoBack();
-        //    }
-        //    else
-        //    {
-        //        BackEvent();
-        //    }
-        //}
+        private void btn_back_Click(object sender, RoutedEventArgs e)
+        {
+            if (this.Frame.CanGoBack)
+            {
+                this.Frame.GoBack();
+            }
+            else
+            {
+                BackEvent();
+            }
+        }
 
         private string[] getTid = new string[2];
         private int getPage = 1;

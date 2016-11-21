@@ -751,7 +751,7 @@ namespace bilibili2
                     break;
             }
             string displayName = "BiliBili UWP";
-            string tileActivationArguments = appbarTileId + " was pinned at=" + DateTime.Now.ToLocalTime().ToString();
+            string tileActivationArguments = "CSCT";
             Uri square150x150Logo = new Uri("ms-appx:///Assets/Square150x150Logo.scale-200.png");
             TileSize newTileDesiredSize = TileSize.Square150x150;
 

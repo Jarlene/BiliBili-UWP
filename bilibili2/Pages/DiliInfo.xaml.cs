@@ -70,7 +70,7 @@ namespace bilibili2.Pages
                 {
                     listModel.Add(new DModel()
                     {
-                        url = item.Groups[1].Value,
+                       url = item.Groups[1].Value,
                        num=item.Groups[2].Value,
                        desc=item.Groups[3].Value
                     });

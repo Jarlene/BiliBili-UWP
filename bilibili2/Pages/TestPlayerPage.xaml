@@ -486,6 +486,6 @@
                 <MediaTransportControls  Style="{StaticResource  MediaTransportControlsStyle1}"></MediaTransportControls>
             </MediaElement.TransportControls>
         </MediaElement>
-        <!--AppBarButton x:Name="btn_GoBack" Icon="Back" Width="48" Height="48" Click="btn_GoBack_Click" Foreground="Gray"/-->
+        <AppBarButton x:Name="btn_GoBack" Icon="Back" Width="48" Height="48" Click="btn_GoBack_Click" Foreground="Gray"></AppBarButton>
     </Grid>
 </Page>

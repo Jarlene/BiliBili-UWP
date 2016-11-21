@@ -72,14 +72,15 @@ namespace bilibili2
                 aid = "";
                 top_txt_Header.Text = "AV" + e.Parameter as string;
                 pivot.SelectedIndex = 0;
-                pageNum = 1;
                 loadComment = false;
                 //loadAbout = false;
                 grid_tag.Children.Clear();
-                ListView_Comment_New.Items.Clear();
+                //ListView_Comment_New.Items.Clear();
                 UpdateUI();
                 aid = e.Parameter as string;
                 GetVideoInfo(aid);
+               
+                comment.InitializeComment(1,1,aid);
                 GetFavBox();
             }
 
@@ -103,7 +104,6 @@ namespace bilibili2
                 Video_Grid_Info.DataContext = null;
                 Video_UP.DataContext = null;
                 Video_data.DataContext = null;
-                ListView_Comment_Hot.Items.Clear();
                 BackEvent();
             }
 
@@ -137,16 +137,14 @@ namespace bilibili2
                     btn_info.Foreground = new SolidColorBrush(Colors.White);
                     btn_info.FontWeight = FontWeights.Bold;
                     com_bar.Visibility = Visibility.Visible;
-                    btn_Sort.Visibility = Visibility.Collapsed;
                     break;
                 case 1:
                     btn_Coment.Foreground = new SolidColorBrush(Colors.White);
                     btn_Coment.FontWeight = FontWeights.Bold;
                     com_bar.Visibility = Visibility.Collapsed;
-                    btn_Sort.Visibility = Visibility.Visible;
                     if (!loadComment)
                     {
-                        GetVideoComment_New(aid, orderBy);
+                        //GetVideoComment_New(aid, orderBy);
                         loadComment = true;
                     }
                     break;
@@ -154,10 +152,9 @@ namespace bilibili2
                     btn_CD.Foreground = new SolidColorBrush(Colors.White);
                     btn_CD.FontWeight = FontWeights.Bold;
                     com_bar.Visibility = Visibility.Collapsed;
-                    btn_Sort.Visibility = Visibility.Collapsed;
                     if (!loadComment)
                     {
-                        GetVideoComment_New(aid, orderBy);
+                        //GetVideoComment_New(aid, orderBy);
                         loadComment = true;
                     }
                     break;
@@ -165,7 +162,6 @@ namespace bilibili2
                     btn_About.Foreground = new SolidColorBrush(Colors.White);
                     btn_About.FontWeight = FontWeights.Bold;
                     com_bar.Visibility = Visibility.Collapsed;
-                    btn_Sort.Visibility = Visibility.Collapsed;
                     //if (!loadAbout)
                     //{
                     //   // GetRecommend();
@@ -412,7 +408,7 @@ namespace bilibili2
 
                 // List<VideoModel> ban = JsonConvert.DeserializeObject<List<VideoModel>>(InfoModel.pages.ToString());
 
-                GetVideoComment_Hot();
+                comment_hot.InitializeCommentHot(aid);
                 if (InfoModel.relates != null)
                 {
                     List<RecommendModel> re = JsonConvert.DeserializeObject<List<RecommendModel>>(InfoModel.relates.ToString());
@@ -539,7 +535,7 @@ namespace bilibili2
                 }
 
                 Video_List.ItemsSource = ban;
-                GetVideoComment_Hot();
+                comment_hot.InitializeCommentHot(aid);
             }
             catch (Exception)
             {
@@ -567,174 +563,10 @@ namespace bilibili2
 
         }
 
-        int orderBy = 2;
-        private int pageNum = 1;
-        private async void GetVideoComment_New(string aid, int order)
-        {
-            try
-            {
-                CanLoad = false;
-                pr_Load.Visibility = Visibility.Visible;
-                txt_More.Foreground = new SolidColorBrush(Colors.Gray);
-                txt_More.Text = "正在加载...";
-                WebClientClass wc = new WebClientClass();
-                Random r = new Random();
-                string results = await wc.GetResults(new Uri("http://api.bilibili.com/x/reply?jsonp=jsonp&type=1&sort=" + order + "&oid=" + aid + "&pn=" + pageNum + "&nohot=1&ps=20&r=" + r.Next(1000, 99999)));
-                CommentModel model = JsonConvert.DeserializeObject<CommentModel>(results);
-                CommentModel model3 = JsonConvert.DeserializeObject<CommentModel>(model.data.ToString());
-                //Video_Grid_Info.DataContext = model;
-                List<CommentModel> ban = JsonConvert.DeserializeObject<List<CommentModel>>(model3.replies.ToString());
-                foreach (CommentModel item in ban)
-                {
-                    CommentModel model1 = new CommentModel();
-                    model1 = JsonConvert.DeserializeObject<CommentModel>(item.member.ToString());
-                    CommentModel model2 = new CommentModel();
-                    model2 = JsonConvert.DeserializeObject<CommentModel>(item.content.ToString());
-                    CommentModel modelLV = JsonConvert.DeserializeObject<CommentModel>(model1.level_info.ToString());
-                    CommentModel resultsModel = new CommentModel()
-                    {
-                        avatar = model1.avatar,
-                        message = model2.message,
-                        plat = model2.plat,
-                        floor = item.floor,
-                        uname = model1.uname,
-                        mid = model1.mid,
-                        ctime = item.ctime,
-                        like = item.like,
-                        rcount = item.rcount,
-                        rpid = item.rpid,
-                        current_level = modelLV.current_level
-                    };
-                    ListView_Comment_New.Items.Add(resultsModel);
-                }
-                pageNum++;
-                if (ban.Count == 0)
-                {
-                    txt_More.Foreground = new SolidColorBrush(Colors.Gray);
-                    txt_More.Text = "没有更多了...";
-                }
-                if (txt_More.Text != "没有更多了...")
-                {
-                    txt_More.Foreground = new SolidColorBrush(Colors.Black);
-                    txt_More.Text = "加载更多";
-                }
-            }
-            catch (Exception ex)
-            {
-                if (ex.HResult == -2147012867)
-                {
-                    messShow.Show("检查你的网络连接！", 3000);
-                }
-                else
-                {
-                    messShow.Show("读取评论失败!\r\n" + ex.Message, 3000);
-                }
-            }
-            finally
-            {
-                CanLoad = true;
-                pr_Load.Visibility = Visibility.Collapsed;
-            }
-        }
 
-        private async void GetVideoComment_Hot()
-        {
-            try
-            {
-                pr_Load.Visibility = Visibility.Visible;
-                ListView_Comment_Hot.Items.Clear();
-                WebClientClass wc = new WebClientClass();
-                Random r = new Random();
-                string results = await wc.GetResults(new Uri("http://api.bilibili.com/x/reply?jsonp=jsonp&type=1&sort=" + 2 + "&oid=" + aid + "&pn=" + 1 + "&nohot=1&ps=5&r=" + r.Next(1000, 99999)));
-                CommentModel model = JsonConvert.DeserializeObject<CommentModel>(results);
-                CommentModel model3 = JsonConvert.DeserializeObject<CommentModel>(model.data.ToString());
-                //Video_Grid_Info.DataContext = model;
-                List<CommentModel> ban = JsonConvert.DeserializeObject<List<CommentModel>>(model3.replies.ToString());
-                foreach (CommentModel item in ban)
-                {
-                    CommentModel model1 = JsonConvert.DeserializeObject<CommentModel>(item.member.ToString());
-                    CommentModel model2 = JsonConvert.DeserializeObject<CommentModel>(item.content.ToString());
-                    CommentModel modelLV = JsonConvert.DeserializeObject<CommentModel>(model1.level_info.ToString());
-                    CommentModel resultsModel = new CommentModel()
-                    {
-                        avatar = model1.avatar,
-                        message = model2.message,
-                        plat = model2.plat,
-                        floor = item.floor,
-                        uname = model1.uname,
-                        mid = model1.mid,
-                        ctime = item.ctime,
-                        like = item.like,
-                        rcount = item.rcount,
-                        rpid = item.rpid,
-                        current_level = modelLV.current_level
-                    };
-                    ListView_Comment_Hot.Items.Add(resultsModel);
-                }
-            }
-            catch (Exception ex)
-            {
-                messShow.Show("读取热门评论失败!\r\n" + ex.Message, 3000);
+      
 
-            }
-            finally
-            {
-                pr_Load.Visibility = Visibility.Collapsed;
-            }
-        }
 
-        private void menu_Time_Click(object sender, RoutedEventArgs e)
-        {
-            menu_Comment.IsChecked = false;
-            menu_Good.IsChecked = false;
-            //menu_Time.IsEnabled = false;
-            menu_Time.IsEnabled = false;
-            menu_Comment.IsEnabled = true;
-            menu_Good.IsEnabled = true;
-            orderBy = 0;
-            pageNum = 1;
-            ListView_Comment_New.Items.Clear();
-            GetVideoComment_New(aid, orderBy);
-        }
-
-        private void menu_Good_Click(object sender, RoutedEventArgs e)
-        {
-            menu_Time.IsChecked = false;
-            menu_Comment.IsChecked = false;
-            //menu_Time.IsEnabled = true;
-            menu_Time.IsEnabled = true;
-            menu_Comment.IsEnabled = true;
-            menu_Good.IsEnabled = false;
-            orderBy = 2;
-            pageNum = 1;
-            ListView_Comment_New.Items.Clear();
-            GetVideoComment_New(aid, orderBy);
-        }
-
-        private void menu_Comment_Click(object sender, RoutedEventArgs e)
-        {
-            menu_Time.IsChecked = false;
-            menu_Good.IsChecked = false;
-            //menu_Time.IsEnabled = true;
-            menu_Time.IsEnabled = true;
-            menu_Comment.IsEnabled = false;
-            menu_Good.IsEnabled = true;
-            orderBy = 1;
-            pageNum = 1;
-            ListView_Comment_New.Items.Clear();
-            GetVideoComment_New(aid, orderBy);
-        }
-        bool CanLoad = true;
-        private void ScrollViewer_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
-            if (sc.VerticalOffset == sc.ScrollableHeight)
-            {
-                if (CanLoad)
-                {
-                    GetVideoComment_New(aid, orderBy);
-                }
-            }
-        }
 
         //private async void GetRecommend()
         //{
@@ -764,7 +596,6 @@ namespace bilibili2
             Video_Grid_Info.DataContext = null;
             Video_UP.DataContext = null;
             Video_data.DataContext = null;
-            ListView_Comment_Hot.Items.Clear();
         }
 
         private void Video_List_ItemClick(object sender, ItemClickEventArgs e)
@@ -958,155 +789,8 @@ namespace bilibili2
             }
         }
 
-        private void Button_Click_1(object sender, RoutedEventArgs e)
-        {
-            txt_Com_1.Text += ((Button)sender).Content.ToString();
-        }
+       
 
-        private void Button_Click_2(object sender, RoutedEventArgs e)
-        {
-            txt_Com.Text += ((Button)sender).Content.ToString();
-        }
-        int ps = 1;
-        string rootsid = "";
-        private async void ListView_Comment_New_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            if (this.ActualWidth > 500)
-            {
-                sp_Comment.IsPaneOpen = true;
-                ListView_Flyout.Items.Clear();
-                ps = 1;
-                rootsid = ((CommentModel)e.ClickedItem).rpid;
-                await GetComments(aid, ((CommentModel)e.ClickedItem).rpid);
-            }
-            else
-            {
-                object[] o = new object[] { (CommentModel)e.ClickedItem, aid };
-                this.Frame.Navigate(typeof(CommentPage), o);
-            }
-        }
-        private async Task GetComments(string aid, string rootid)
-        {
-            try
-            {
-                Comment_loading.Visibility = Visibility.Visible;
-                btn_Load_More.Content = "加载中....";
-                btn_Load_More.IsEnabled = false;
-                WebClientClass wc = new WebClientClass();
-                Random r = new Random();
-                string url = "http://api.bilibili.com/x/reply/reply?oid=" + aid + "&pn=1&ps=20&root=" + rootid + "&type=1&access_key=" + ApiHelper.access_key + "&appkey=" + ApiHelper._appKey;
-                url += "&sign=" + ApiHelper.GetSign(url);
-                string results = await wc.GetResults(new Uri(url));
-
-                CommentModel model = JsonConvert.DeserializeObject<CommentModel>(results);
-                CommentModel model3 = JsonConvert.DeserializeObject<CommentModel>(model.data.ToString());
-                List<CommentModel> ban = JsonConvert.DeserializeObject<List<CommentModel>>(model3.replies.ToString());
-                ListView_Flyout.Items.Clear();
-                foreach (CommentModel item in ban)
-                {
-                    CommentModel model1 = new CommentModel();
-                    model1 = JsonConvert.DeserializeObject<CommentModel>(item.member.ToString());
-                    CommentModel model2 = new CommentModel();
-                    model2 = JsonConvert.DeserializeObject<CommentModel>(item.content.ToString());
-                    CommentModel modelLV = JsonConvert.DeserializeObject<CommentModel>(model1.level_info.ToString());
-                    CommentModel resultsModel = new CommentModel()
-                    {
-                        avatar = model1.avatar,
-                        message = model2.message,
-                        plat = model2.plat,
-                        floor = item.floor,
-                        uname = model1.uname,
-                        mid = model1.mid,
-                        ctime = item.ctime,
-                        like = item.like,
-                        rcount = item.rcount,
-                        rpid = item.rpid,
-                        current_level = modelLV.current_level,
-
-                    };
-                    ListView_Flyout.Items.Add(resultsModel);
-                    if (ban.Count == 0)
-                    {
-                        btn_Load_More.Content = "加载完了...";
-                        btn_Load_More.IsEnabled = false;
-                    }
-                    else
-                    {
-                        btn_Load_More.Content = "加载更多";
-                        btn_Load_More.IsEnabled = true;
-                    }
-                }
-            }
-            catch (Exception)
-            {
-                messShow.Show("读取评论失败", 3000);
-            }
-            finally
-            {
-                Comment_loading.Visibility = Visibility.Collapsed;
-            }
-        }
-
-        private async Task GetComments(string aid, string rootid, int num)
-        {
-            try
-            {
-                Comment_loading.Visibility = Visibility.Visible;
-                btn_Load_More.Content = "加载中....";
-                btn_Load_More.IsEnabled = false;
-                WebClientClass wc = new WebClientClass();
-                Random r = new Random();
-                string results = await wc.GetResults(new Uri("http://api.bilibili.com/x/reply/reply?oid=" + aid + "&pn=" + num + "&ps=20&root=" + rootid + "&type=1&r=" + r.Next(1000, 99999)));
-                CommentModel model = JsonConvert.DeserializeObject<CommentModel>(results);
-                CommentModel model3 = JsonConvert.DeserializeObject<CommentModel>(model.data.ToString());
-                //Video_Grid_Info.DataContext = model;
-
-                List<CommentModel> ban = JsonConvert.DeserializeObject<List<CommentModel>>(model3.replies.ToString());
-
-                foreach (CommentModel item in ban)
-                {
-                    CommentModel model1 = new CommentModel();
-                    model1 = JsonConvert.DeserializeObject<CommentModel>(item.member.ToString());
-                    CommentModel model2 = new CommentModel();
-                    model2 = JsonConvert.DeserializeObject<CommentModel>(item.content.ToString());
-                    CommentModel modelLV = JsonConvert.DeserializeObject<CommentModel>(model1.level_info.ToString());
-                    CommentModel resultsModel = new CommentModel()
-                    {
-                        avatar = model1.avatar,
-                        message = model2.message,
-                        plat = model2.plat,
-                        floor = item.floor,
-                        uname = model1.uname,
-                        mid = model1.mid,
-                        ctime = item.ctime,
-                        like = item.like,
-                        rcount = item.rcount,
-                        rpid = item.rpid,
-                        current_level = modelLV.current_level
-                    };
-                    ListView_Flyout.Items.Add(resultsModel);
-                }
-                if (ban.Count == 0)
-                {
-                    btn_Load_More.Content = "加载完了...";
-                    btn_Load_More.IsEnabled = false;
-                }
-                else
-                {
-                    btn_Load_More.Content = "加载更多";
-                    btn_Load_More.IsEnabled = true;
-                }
-
-            }
-            catch (Exception)
-            {
-                messShow.Show("读取评论失败", 3000);
-            }
-            finally
-            {
-                Comment_loading.Visibility = Visibility.Collapsed;
-            }
-        }
 
 
         private void btn_Favbox_Click(object sender, RoutedEventArgs e)
@@ -1170,11 +854,7 @@ namespace bilibili2
 
         }
 
-        private void ListView_Flyout_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            root = (e.ClickedItem as CommentModel).rpid;
-            txt_Com_1.Text = "回复 @" + (e.ClickedItem as CommentModel).uname + ":";
-        }
+    
         //头像点击
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1241,122 +921,8 @@ namespace bilibili2
             }
         }
 
-        private async void btn_Load_More_Click(object sender, RoutedEventArgs e)
-        {
-            if (canLoad)
-            {
-                canLoad = false;
-                ps++;
-                await GetComments(aid, rootsid, ps);
-                canLoad = true;
-            }
-        }
-        bool canLoad = true;
-        private async void sv1_ViewChanged(object sender, ScrollViewerViewChangedEventArgs e)
-        {
-            if (sv1.VerticalOffset == sv1.ScrollableHeight)
-            {
-                if (canLoad)
-                {
-                    canLoad = false;
-                    ps++;
-                    await GetComments(aid, rootsid, ps);
-                    canLoad = true;
-                }
-            }
-        }
-
-        private async void btn_SendComment_Click(object sender, RoutedEventArgs e)
-        {
-            UserClass getUser = new UserClass();
-            if (getUser.IsLogin())
-            {
-                try
-                {
-                    Uri ReUri = new Uri("http://api.bilibili.com/x/reply/add");
-                    HttpClient hc = new HttpClient();
-                    hc.DefaultRequestHeaders.Referer = new Uri("http://www.bilibili.com/");
-                    string QuStr = "plat=6&jsonp=jsonp&message=" + Uri.EscapeDataString(txt_Com.Text) + "&type=1&oid=" + aid;
-                    var response = await hc.PostAsync(ReUri, new HttpStringContent(QuStr, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/x-www-form-urlencoded"));
-                    response.EnsureSuccessStatusCode();
-                    string result = await response.Content.ReadAsStringAsync();
-                    JObject json = JObject.Parse(result);
-                    if ((int)json["code"] == 0)
-                    {
-                        menu_Comment.IsChecked = false;
-                        menu_Good.IsChecked = false;
-                        menu_Time.IsEnabled = false;
-                        menu_Comment.IsEnabled = true;
-                        menu_Good.IsEnabled = true;
-                        pageNum = 1;
-                        ListView_Comment_New.Items.Clear();
-                        GetVideoComment_New(aid, 0);
-                        messShow.Show("已发送评论!", 3000);
-                    }
-                    else
-                    {
-                        messShow.Show("评论失败\r\n" + result, 3000);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    messShow.Show("评论时发生错误\r\n" + ex.Message, 3000);
-                }
-            }
-            else
-            {
-                messShow.Show("请先登录", 3000);
-
-            }
-        }
-
-        private async void brn_SendComment_1_Click(object sender, RoutedEventArgs e)
-        {
-            if (txt_Com_1.Text.Length == 0)
-            {
-                messShow.Show("内容不能为空", 3000);
-                return;
-            }
-            UserClass getUser = new UserClass();
-            if (getUser.IsLogin())
-            {
-                try
-                {
-                    Uri ReUri = new Uri("http://api.bilibili.com/x/reply/add");
-                    HttpClient hc = new HttpClient();
-                    hc.DefaultRequestHeaders.Referer = new Uri("http://www.bilibili.com/");
-                    if (root == "")
-                    {
-                        root = rootsid;
-                    }
-                    //jsonp=jsonp&message=(%E2%8C%92%E2%96%BD%E2%8C%92)&parent=95828061&root=95828061&type=1&plat=1&oid=4376012
-                    string QuStr = "plat=6&jsonp=jsonp&message=" + Uri.EscapeDataString(txt_Com_1.Text) + "&parent=" + rootsid + "&root=" + root + "&type=1&plat=6&oid=" + aid;
-                    var response = await hc.PostAsync(ReUri, new HttpStringContent(QuStr, Windows.Storage.Streams.UnicodeEncoding.Utf8, "application/x-www-form-urlencoded"));
-                    response.EnsureSuccessStatusCode();
-                    string result = await response.Content.ReadAsStringAsync();
-                    JObject json = JObject.Parse(result);
-                    if ((int)json["code"] == 0)
-                    {
-                        await GetComments(aid, rootsid);
-                        messShow.Show("评论成功！", 3000);
-                    }
-                    else
-                    {
-                        messShow.Show("评论失败！\r\n" + result, 3000);
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    messShow.Show("评论时发生错误\r\n" + ex.Message, 3000);
-                }
-            }
-            else
-            {
-                messShow.Show("请先登录!", 3000);
-            }
-        }
+     
+       
 
         private void btn_UP_Click(object sender, RoutedEventArgs e)
         {
@@ -1706,5 +1272,12 @@ namespace bilibili2
             }
 
         }
+
+        private void comment_OpenUser(string id)
+        {
+            this.Frame.Navigate(typeof(UserInfoPage), id);
+        }
+
+
     }
 }

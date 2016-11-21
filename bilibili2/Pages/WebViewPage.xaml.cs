@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
 using System.Text.RegularExpressions;
+using Windows.ApplicationModel.DataTransfer;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Core;
@@ -29,16 +30,16 @@ namespace bilibili2.Pages
         public WebViewPage()
         {
             this.InitializeComponent();
-            NavigationCacheMode = NavigationCacheMode.Enabled;
+            NavigationCacheMode = NavigationCacheMode.Required;
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
-            
-            // if (e.NavigationMode == NavigationMode.New)
-            // {
-            bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
+
+            if (e.NavigationMode == NavigationMode.New)
+            {
+                bg.Color = ((SolidColorBrush)this.Frame.Tag).Color;
                 webview_WebView.Navigate(new Uri((string)e.Parameter));
-            //}
+            }
         }
 
         private void webview_btn_Refresh_Click(object sender, RoutedEventArgs e)
@@ -162,5 +163,17 @@ namespace bilibili2.Pages
 
         }
 
+        private void menu_copy_Click(object sender, RoutedEventArgs e)
+        {
+            DataPackage pack = new Windows.ApplicationModel.DataTransfer.DataPackage();
+            pack.SetText(webview_WebView.Source.AbsoluteUri);
+            Clipboard.SetContent(pack); // 保存 DataPackage 对象到剪切板
+            Clipboard.Flush();
+        }
+
+        private async void menu_open_Click(object sender, RoutedEventArgs e)
+        {
+            await Windows.System.Launcher.LaunchUriAsync(webview_WebView.Source);
+        }
     }
 }

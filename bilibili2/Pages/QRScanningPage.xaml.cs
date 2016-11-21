@@ -22,9 +22,16 @@ namespace bilibili2.Pages
     /// </summary>
     public sealed partial class QRScanningPage : Page
     {
+        /// <summary>
+        /// 缺少扫码登录API，暂时不做
+        /// </summary>
         public QRScanningPage()
         {
             this.InitializeComponent();
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            
         }
     }
 }

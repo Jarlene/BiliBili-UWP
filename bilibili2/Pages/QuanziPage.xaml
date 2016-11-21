@@ -130,7 +130,7 @@
                 </StackPanel>
             </ScrollViewer>
         </SplitView>
-        <!--AppBarButton Icon="Back" VerticalAlignment="Top" Click="btn_Back_Click" Width="48" Height="48" Foreground="Black"/-->
+        <AppBarButton Icon="Back" VerticalAlignment="Top" Click="btn_Back_Click" Width="48" Height="48" Foreground="Black"></AppBarButton>
         <AppBarButton Visibility="Collapsed" VerticalAlignment="Top" HorizontalAlignment="Right" Width="48" Height="48" Foreground="Black"></AppBarButton>
         <CommandBar Grid.Row="1"  Background="{StaticResource BG}" Foreground="White">
             <CommandBar.SecondaryCommands>

@@ -26,8 +26,8 @@ xmlns:c="using:bilibili2"
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <!--AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/-->
-            <TextBlock  Text="话题" Margin="16 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
+            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
+            <TextBlock  Text="话题" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
         <ScrollViewer x:Name="sc" ViewChanged="sc_ViewChanged" Style="{StaticResource ScrollViewerStyle1}" Grid.Row="1">
             <StackPanel>

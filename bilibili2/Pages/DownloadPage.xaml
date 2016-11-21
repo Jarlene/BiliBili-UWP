@@ -28,8 +28,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <!--AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/-->
-            <TextBlock  Text="离线管理" Margin="16 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="0" Grid.ColumnSpan="2" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
+            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
+            <TextBlock  Text="离线管理" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
         </Grid>
         <Pivot x:Name="pivot" Grid.Row="1" Style="{StaticResource PivotStyle2}" BorderBrush="{StaticResource BG}" SelectionChanged="Pivot_SelectionChanged">
             <PivotItem Margin="0">
@@ -68,46 +68,50 @@
                         </DataTemplate>
                     </ListView.ItemTemplate>
                 </ListView>-->
-                <ListView x:Name="list_Downing" SelectionMode="None">
-                    <ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
-                            <Setter Property="BorderBrush" Value="#FFCBCBCB"/>
-                            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
-                            <Setter Property="Height" Value="48"/>
-                        </Style>
-                    </ListView.ItemContainerStyle>
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition/>
-                                    <RowDefinition Height="auto"/>
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition/>
-                                    <ColumnDefinition Width="auto"/>
-                                </Grid.ColumnDefinitions>
-                                <ProgressBar Height="48" Grid.RowSpan="2" Grid.ColumnSpan="2"  Maximum="100" Value="{Binding Progress}" Margin="-12" Background="{x:Null}" Foreground="{StaticResource BG}"></ProgressBar>
-                                <TextBlock FontSize="16" TextTrimming="CharacterEllipsis"><Run Text="{Binding Path=downModel.title}"/>
+                <Grid>
+                    <ListView x:Name="list_Downing" SelectionMode="None">
+                        <ListView.ItemContainerStyle>
+                            <Style TargetType="ListViewItem">
+                                <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                                <Setter Property="BorderBrush" Value="#FFCBCBCB"/>
+                                <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                                <Setter Property="Height" Value="48"/>
+                            </Style>
+                        </ListView.ItemContainerStyle>
+                        <ListView.ItemTemplate>
+                            <DataTemplate>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                        <RowDefinition Height="auto"/>
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition Width="auto"/>
+                                    </Grid.ColumnDefinitions>
+                                    <ProgressBar Height="48" Grid.RowSpan="2" Grid.ColumnSpan="2"  Maximum="100" Value="{Binding Progress}" Margin="-12" Background="{x:Null}" Foreground="{StaticResource BG}"></ProgressBar>
+                                    <TextBlock FontSize="16" TextTrimming="CharacterEllipsis"><Run Text="{Binding Path=downModel.title}"/>
 									<Run Text="P"/>
 									<Run Text="{Binding  Path=downModel.part}" /></TextBlock>
-                                <TextBlock FontSize="12" Grid.Row="1" Margin="0 2">
+                                    <TextBlock FontSize="12" Grid.Row="1" Margin="0 2">
                                             <Run Text="{Binding Status}" ></Run>
                                             <Run Text="|"/>
                                             <Run Text="{Binding Size}"/>
-                                </TextBlock>
-                                <StackPanel Grid.RowSpan="2" Grid.Column="1" Orientation="Horizontal">
-                                    <AppBarButton x:Name="btn_Pause" Visibility="{Binding Path=PauseVis}" Icon="Pause"  Height="48" Width="48" Click="btn_Pause_Click_1"></AppBarButton>
-                                    <AppBarButton x:Name="btn_Download" Visibility="{Binding Path=DownVis}" Icon="Download"  Height="48" Width="48" Click="btn_Download_Click"></AppBarButton>
-                                    <AppBarButton x:Name="btn_Canacel" Icon="Cancel"  Height="48" Width="48" Click="btn_Canacel_Click"></AppBarButton>
-                                </StackPanel>
+                                    </TextBlock>
+                                    <StackPanel Grid.RowSpan="2" Grid.Column="1" Orientation="Horizontal">
+                                        <AppBarButton x:Name="btn_Pause" Visibility="{Binding Path=PauseVis}" Icon="Pause"  Height="48" Width="48" Click="btn_Pause_Click_1"></AppBarButton>
+                                        <AppBarButton x:Name="btn_Download" Visibility="{Binding Path=DownVis}" Icon="Download"  Height="48" Width="48" Click="btn_Download_Click"></AppBarButton>
+                                        <AppBarButton x:Name="btn_Canacel" Icon="Cancel"  Height="48" Width="48" Click="btn_Canacel_Click"></AppBarButton>
+                                    </StackPanel>
 
-                            </Grid>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
+                                </Grid>
+                            </DataTemplate>
+                        </ListView.ItemTemplate>
 
-                </ListView>
+                    </ListView>
+                    <TextBlock x:Name="txt_NoDown" Visibility="Collapsed" Text="当前没有下载任何视频╮(╯▽╰)╭"  HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                </Grid>
+              
             </PivotItem>
             <PivotItem Margin="0">
                 <PivotItem.Header>

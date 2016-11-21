@@ -18,162 +18,6 @@
         </TransitionCollection>
     </Page.Transitions>
     <Page.Resources>
-        <Style TargetType="Button" x:Name="TitleBarBackButtonTheme">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
-                                                                   Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
-                                                                   Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource Bili-ForeColor-Dark}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
-                                                                   Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
-                                                                   Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="WhiteSmoke" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled"/>
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="FocusStates">
-                                    <VisualState x:Name="Focused"/>
-                                    <VisualState x:Name="Unfocused" />
-                                    <VisualState x:Name="PointerFocused" />
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Rectangle Name="back" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}"/>
-                            <SymbolIcon Name="Icon" Symbol="Back" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
-                                <SymbolIcon.RenderTransform>
-                                    <CompositeTransform ScaleX="0.666" ScaleY="0.666"/>
-                                </SymbolIcon.RenderTransform>
-                            </SymbolIcon>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
-        <Style TargetType="Button" x:Name="TitleBarRefreshButtonTheme">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
-                                                                   Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
-                                                                   Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource Bili-ForeColor-Dark}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
-                                                                   Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
-                                                                   Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="WhiteSmoke" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled"/>
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="FocusStates">
-                                    <VisualState x:Name="Focused"/>
-                                    <VisualState x:Name="Unfocused" />
-                                    <VisualState x:Name="PointerFocused" />
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Rectangle Name="back" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}"/>
-                            <SymbolIcon Name="Icon" Symbol="Refresh" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
-                                <SymbolIcon.RenderTransform>
-                                    <CompositeTransform ScaleX="0.666" ScaleY="0.666"/>
-                                </SymbolIcon.RenderTransform>
-                            </SymbolIcon>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        
-        <Style TargetType="Button" x:Name="TitleBarSearchButtonTheme">
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="Button">
-                        <Grid>
-                            <VisualStateManager.VisualStateGroups>
-                                <VisualStateGroup x:Name="CommonStates">
-                                    <VisualState x:Name="Normal" />
-                                    <VisualState x:Name="PointerOver">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
-                                                                   Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
-                                                                   Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource Bili-ForeColor-Dark}" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Pressed">
-                                        <Storyboard>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Icon"
-                                                                   Storyboard.TargetProperty="Foreground">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Black" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="back"
-                                                                   Storyboard.TargetProperty="Fill">
-                                                <DiscreteObjectKeyFrame KeyTime="0" Value="WhiteSmoke" />
-                                            </ObjectAnimationUsingKeyFrames>
-                                        </Storyboard>
-                                    </VisualState>
-                                    <VisualState x:Name="Disabled"/>
-                                </VisualStateGroup>
-                                <VisualStateGroup x:Name="FocusStates">
-                                    <VisualState x:Name="Focused"/>
-                                    <VisualState x:Name="Unfocused" />
-                                    <VisualState x:Name="PointerFocused" />
-                                </VisualStateGroup>
-                            </VisualStateManager.VisualStateGroups>
-                            <Rectangle Name="back" Width="{TemplateBinding Width}" Height="{TemplateBinding Height}" Fill="{TemplateBinding Background}"/>
-                            <SymbolIcon Name="Icon" Symbol="Find" Foreground="{TemplateBinding Foreground}" RenderTransformOrigin="0.5,0.5">
-                                <SymbolIcon.RenderTransform>
-                                    <CompositeTransform ScaleX="0.666" ScaleY="0.666"/>
-                                </SymbolIcon.RenderTransform>
-                            </SymbolIcon>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-
         <local:FeedItemDataTemplateSelector x:Key="FeedItemDataTemplateSelector"></local:FeedItemDataTemplateSelector>
         <Style x:Key="AutoSuggestBoxStyle1" TargetType="AutoSuggestBox">
             <Setter Property="VerticalAlignment" Value="Top"/>
@@ -189,7 +33,7 @@
                                     <VisualState x:Name="Portrait"/>
                                 </VisualStateGroup>
                             </VisualStateManager.VisualStateGroups>
-                            <TextBox x:Name="TextBox"  ScrollViewer.BringIntoViewOnFocusChange="False" DesiredCandidateWindowAlignment="BottomEdge" Header="{TemplateBinding Header}" Margin="0" PlaceholderText="{TemplateBinding PlaceholderText}" Style="{TemplateBinding TextBoxStyle}" Width="{TemplateBinding Width}" Canvas.ZIndex="0" BorderBrush="{x:Null}" VerticalAlignment="Center" Padding="10,3,6,5"/>
+                            <TextBox x:Name="TextBox"  ScrollViewer.BringIntoViewOnFocusChange="False" DesiredCandidateWindowAlignment="BottomEdge" Header="{TemplateBinding Header}" Margin="0" PlaceholderText="{TemplateBinding PlaceholderText}" Style="{TemplateBinding TextBoxStyle}" Width="{TemplateBinding Width}" Canvas.ZIndex="0" BorderBrush="{x:Null}"/>
                             <Popup x:Name="SuggestionsPopup">
                                 <Border x:Name="SuggestionsContainer">
                                     <Border.RenderTransform>
@@ -386,10 +230,10 @@
     </Page.Resources>
     <Grid  Background="{ThemeResource Bili-Background}">
         <Grid.RowDefinitions>
-            <RowDefinition Height="32"/>
             <RowDefinition Height="auto"/>
             <RowDefinition/>
         </Grid.RowDefinitions>
+       
         <VisualStateManager.VisualStateGroups>
             <VisualStateGroup x:Name="big">
                 <VisualState x:Name="wide1000">
@@ -402,6 +246,8 @@
                         <Setter Target="top_txt_Header.Margin" Value="5 0"/>
                         <Setter Target="btn_OpenMenu.Visibility" Value="Visible"/>
                         <Setter Target="top_User.Margin" Value="5 32 5 0"/>
+                        <Setter Target="btn_GoFind.Visibility" Value="Collapsed"/>
+                        <Setter Target="top_txt_find.Visibility" Value="Visible"/>
                     </VisualState.Setters>
                 </VisualState>
                 <VisualState x:Name="narrow">
@@ -414,28 +260,14 @@
                         <Setter Target="top_txt_Header.Margin" Value="48 0"/>
                         <Setter Target="btn_OpenMenu.Visibility" Value="Visible"/>
                         <Setter Target="top_User.Margin" Value="5 32 5 0"/>
+                        <Setter Target="btn_GoFind.Visibility" Value="Visible"/>
+                        <Setter Target="top_txt_find.Visibility" Value="Collapsed"/>
                     </VisualState.Setters>
                 </VisualState>
             </VisualStateGroup>
         </VisualStateManager.VisualStateGroups>
         <Image x:Name="bg_img" Visibility="Collapsed" Source="ms-appx:///Assets/艾米莉亞_婚紗.png" VerticalAlignment="Bottom" HorizontalAlignment="Right" Grid.RowSpan="3" Width="250"></Image>
-        <Grid x:Name="TitleBar" Grid.Row="0" Height="32" Background="{ThemeResource Bili-ForeColor}">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition Width="48"/>
-                <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="130"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.Column="3" x:Name="TrueTitleBar" Background="{ThemeResource Bili-ForeColor}">
-                <Image Grid.Column="0" Stretch="Uniform" VerticalAlignment="Center" HorizontalAlignment="Center" Source="ms-appx:///Assets/LOGOTITLE.png" Height="24"/>
-            </Grid>
-            <AutoSuggestBox Grid.Column="2" Grid.ColumnSpan="2" x:Name="top_txt_find"   PlaceholderText="输入关键字或AV号" Visibility="Collapsed" Height="32"  Width="180" QueryIcon="Find" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Left" Margin="0"  Style="{StaticResource AutoSuggestBoxStyle1}" BorderThickness="1" BorderBrush="#00808080" TextChanged="top_txt_find_TextChanged" QuerySubmitted="top_txt_find_QuerySubmitted" SuggestionChosen="top_txt_find_SuggestionChosen"/>
-            <Button Grid.Column="0" x:Name="btn_back" Style="{ThemeResource TitleBarBackButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}" Foreground="White" Click="btn_back_Click"/>
-            <Button Grid.Column="1" x:Name="btn_refresh" Style="{ThemeResource TitleBarRefreshButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}" Foreground="White" Click="btn_refresh_Click"/>
-            <Button Grid.Column="2" x:Name="btn_search" Style="{ThemeResource TitleBarSearchButtonTheme}" Width="48" Height="32" Background="{ThemeResource Bili-ForeColor}" Foreground="White" Click="btn_search_Click"/>
-        </Grid>
-        <SplitView x:Name="sp_View" Grid.Row="2" OpenPaneLength="200"   PaneBackground="{ThemeResource Bili-MenuBack}"  DisplayMode="Overlay" PaneClosed="sp_View_PaneClosed" >
+        <SplitView x:Name="sp_View" Grid.Row="1" OpenPaneLength="200"   PaneBackground="{ThemeResource Bili-MenuBack}"  DisplayMode="Overlay" PaneClosed="sp_View_PaneClosed" >
             <SplitView.Pane>
                 <Grid >
                     <Grid.RowDefinitions>
@@ -550,7 +382,8 @@
                     <TextBlock Text="首页" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
 
                     <StackPanel Orientation="Horizontal" Grid.ColumnSpan="2" HorizontalAlignment="Right" >
-                        <AppBarButton x:Name="btn_User" Icon="Contact" Width="48" Height="48" Foreground="White" Click="btn_User_Click"/>
+                        <AppBarButton x:Name="btn_GoFind" Icon="Find" Width="48" Height="48" Foreground="White" Click="btn_GoFind_Click"/>
+                        <AutoSuggestBox x:Name="top_txt_find"   PlaceholderText="输入关键字或AV号" Visibility="Collapsed" Height="32"  Width="180" QueryIcon="Find" Grid.Column="2" VerticalAlignment="Center" VerticalContentAlignment="Center" HorizontalAlignment="Right" Margin="5,0"  Style="{StaticResource AutoSuggestBoxStyle1}"  TextChanged="top_txt_find_TextChanged" QuerySubmitted="top_txt_find_QuerySubmitted" SuggestionChosen="top_txt_find_SuggestionChosen"/>
                         <AppBarButton Icon="Download" Visibility="Collapsed" Width="48" Height="48" Foreground="White"></AppBarButton>
 
                     </StackPanel>
@@ -1164,22 +997,22 @@
 					Width="20" Opacity="0" Background="White" HorizontalAlignment="Left"/>
             </Grid>
         </SplitView>
-        <Border Grid.Row="1" x:Name="grid_GG" Visibility="Collapsed" Height="auto" Grid.RowSpan="2" VerticalAlignment="Bottom" CornerRadius="10" HorizontalAlignment="Center" Background="#7F000000" Margin="0,30">
+        <Border x:Name="grid_GG" Visibility="Collapsed" Height="auto" Grid.RowSpan="2" VerticalAlignment="Bottom" CornerRadius="10" HorizontalAlignment="Center" Background="#7F000000" Margin="0,30">
             <TextBlock x:Name="txt_GG" Foreground="White" VerticalAlignment="Center" Margin="10,5">
 				<Run Text="信息不能为空"/>
             </TextBlock>
         </Border>
-        <Grid Grid.Row="2" Width="48" Height="48"  VerticalAlignment="Top" HorizontalAlignment="Left">
+        <Grid Grid.Row="1" Width="48" Height="48"  VerticalAlignment="Top" HorizontalAlignment="Left">
             <Ellipse x:Name="menu_bor_HasMessage" Visibility="Collapsed"  HorizontalAlignment="Right" Margin="5 15"  Fill="Red" Width="5" Height="5" VerticalAlignment="Top"/>
         </Grid>
-        <AppBarButton Grid.Row="2" x:Name="btn_OpenMenu" Width="48" Height="48" Foreground="White" Click="btn_OpenMenu_Click">
+        <AppBarButton x:Name="btn_OpenMenu" Grid.Row="1" Width="48" Height="48" Foreground="White" Click="btn_OpenMenu_Click">
             <AppBarButton.Icon>
                 <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE700;" />
             </AppBarButton.Icon>
         </AppBarButton>
         
      
-        <Frame Grid.Row="1" x:Name="infoFrame" Grid.RowSpan="2" Visibility="Visible" Navigating="infoFrame_Navigating"  Navigated="infoFrame_Navigated" >
+        <Frame x:Name="infoFrame" Grid.RowSpan="2" Visibility="Visible" Navigating="infoFrame_Navigating"  Navigated="infoFrame_Navigated" >
             <Frame.Resources>
                 <Storyboard x:Name="storyboardPopOut" >
                     <DoubleAnimation x:Name="tuic" From="0"  Duration="00:00:0.1"  Completed="StoryboardPopOut_Completed"
@@ -1200,7 +1033,7 @@
 
         <local:MessageShow x:Name="messShow" Grid.RowSpan="4" Margin="10" HorizontalAlignment="Center" VerticalAlignment="Bottom"/>
         <Grid x:Name="Feedback_Grid"></Grid>
-        <Controls:MyMessageDialog x:Name="mess_Info" Grid.Row="1" Grid.RowSpan="2"  RightClick="mess_Info_RightClick"/>
-        <Controls:MyMessageDialog x:Name="mess_Update" Grid.Row="1" Grid.RowSpan="2"/>
+        <Controls:MyMessageDialog x:Name="mess_Info" Grid.RowSpan="2"  RightClick="mess_Info_RightClick"/>
+        <Controls:MyMessageDialog x:Name="mess_Update" Grid.RowSpan="2"/>
     </Grid>
 </Page>

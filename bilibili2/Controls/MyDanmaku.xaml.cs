@@ -506,7 +506,7 @@ namespace bilibili2.Controls
             public string DanRowID { get; set; }
             public string DanText { get; set; }//信息
         }
-        bool wCnMdBUG = false;
+        public bool wCnMdBUG = false;
         public void SetJJ()
         {
             try
@@ -516,7 +516,7 @@ namespace bilibili2.Controls
                 {
                     D_height = 40;
                 }
-                maxRow = Convert.ToInt32(this.ActualHeight / D_height);
+                maxRow = Convert.ToInt32(this.ActualHeight / D_height)-1;
                 if (grid_Danmu.RowDefinitions.Count + 1 < maxRow)
                 {
                     for (int i = 0; i < maxRow - grid_Danmu.RowDefinitions.Count + 1; i++)

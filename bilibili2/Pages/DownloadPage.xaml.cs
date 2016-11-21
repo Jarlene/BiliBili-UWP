@@ -121,7 +121,17 @@ namespace bilibili2.Pages
             catch (Exception)
             {
             }
-
+            finally
+            {
+                if (list_Downing.Items.Count!=0)
+                {
+                    txt_NoDown.Visibility = Visibility.Collapsed;
+                }
+                else
+                {
+                    txt_NoDown.Visibility = Visibility.Visible;
+                }
+            }
         }
 
         //读取文件

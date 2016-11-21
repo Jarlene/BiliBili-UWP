@@ -59,8 +59,8 @@
                 <ColumnDefinition/>
                 <ColumnDefinition Width="auto"/>
             </Grid.ColumnDefinitions>
-            <!--AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/-->
-            <AutoSuggestBox Style="{StaticResource AutoSuggestBoxStyle1}" BorderThickness="1"  x:Name="txt_Find"  PlaceholderText="搜索主播、房间" Grid.Column="0" Grid.ColumnSpan="2" Margin="5"  QueryIcon="Find" VerticalAlignment="Center" QuerySubmitted="txt_Find_QuerySubmitted" ></AutoSuggestBox>
+            <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
+            <AutoSuggestBox Style="{StaticResource AutoSuggestBoxStyle1}" BorderThickness="1"  x:Name="txt_Find"  PlaceholderText="搜索主播、房间" Grid.Column="1" Margin="5" QueryIcon="Find" VerticalAlignment="Center" QuerySubmitted="txt_Find_QuerySubmitted" ></AutoSuggestBox>
         </Grid>
         <Grid Background="{StaticResource BG}"   Grid.Row="1" >
             <Grid.ColumnDefinitions>

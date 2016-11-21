@@ -78,16 +78,16 @@ namespace bilibili2
                     _jyUserFeedbackSdkManager.UploadPicture(ApiHelper.JyAppkey, ApiHelper.JySecret, file);
                 }
             };
-            if (DeriveHelper.GetDeriveType() == DeriveTypes.PC)
-            {
-                var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
-                coreTitleBar.ExtendViewIntoTitleBar = true;
-                Window.Current.SetTitleBar(TrueTitleBar);
-            }
-            else
-            {
-                TitleBar.Visibility = Visibility.Collapsed;
-            }
+            //if (DeriveHelper.GetDeriveType()== DeriveTypes.PC)
+            //{
+            //    var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
+            //    coreTitleBar.ExtendViewIntoTitleBar = true;
+            //    Window.Current.SetTitleBar(_title_bar);
+            //}
+            //else
+            //{
+            //    _title_bar.Visibility = Visibility.Collapsed;
+            //}
             ChangeTitbarColor();
         }
 
@@ -265,20 +265,21 @@ namespace bilibili2
                 timer.Interval = new TimeSpan(0, 0, 5);
                 timer.Start();
                 timer.Tick += Timer_Tick;
-                //string Info = @"";
+                string Info = @"";
 
-                ////string Info = @"新版更新";
-                //if (!settings.SettingContains(settings.GetVersion()))
-                //{
+                //string Info = @"新版更新";
+                if (!settings.SettingContains(settings.GetVersion()))
+                {
 
-                //    mess_Info.Show(string.Format("{0}更新内容", settings.GetVersion()), Info, false);
-                //}
+                    mess_Info.Show(string.Format("{0}更新内容", settings.GetVersion()), Info, false);
+                }
             }
             GetSetting();
             ChangeTheme();
             ChangeDrak();
             navInfo = infoFrame.GetNavigationState();
             infoFrame.Tag = (SolidColorBrush)top_grid.Background;
+            ApiHelper.SetEmojis();
             CheckUpdate();
             if (e.Parameter != null && e.Parameter.ToString().Length != 0)
             {
@@ -288,7 +289,10 @@ namespace bilibili2
                 switch (type)
                 {
                     case LoadType.OpenAvNum:
-                        infoFrame.Navigate(typeof(VideoInfoPage), (string)par[1]);
+                        if (((string)par[1])!= "CSCT")
+                        {
+                            infoFrame.Navigate(typeof(VideoInfoPage), (string)par[1]);
+                        }
                         break;
                     case LoadType.OpenVideo:
                         infoFrame.Navigate(typeof(PlayerPage), (KeyValuePair<List<VideoModel>, int>)par[1]);
@@ -303,7 +307,7 @@ namespace bilibili2
                         break;
                 }
             }
-
+          
 
         }
         private async void CheckUpdate()
@@ -778,7 +782,21 @@ namespace bilibili2
 
 
         }
+        //打开搜索框
+        private void btn_GoFind_Click(object sender, RoutedEventArgs e)
+        {
+            if (top_txt_find.Visibility == Visibility.Collapsed)
+            {
+                btn_GoFind.Visibility = Visibility.Collapsed;
+                top_txt_find.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                btn_GoFind.Visibility = Visibility.Visible;
+                top_txt_find.Visibility = Visibility.Collapsed;
+            }
 
+        }
         //打开分区
         private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
@@ -1128,7 +1146,7 @@ namespace bilibili2
 
         }
         //汉堡菜单的点击
-        private void list_Menu_ItemClick(object sender, ItemClickEventArgs e)
+        private  void list_Menu_ItemClick(object sender, ItemClickEventArgs e)
         {
             if ((e.ClickedItem as StackPanel).Tag == null)
             {
@@ -1358,11 +1376,10 @@ namespace bilibili2
             //电脑标题栏颜色
             var titleBar = Windows.UI.ViewManagement.ApplicationView.GetForCurrentView().TitleBar;
             titleBar.BackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            titleBar.ButtonForegroundColor = Colors.White;
-            titleBar.ButtonInactiveForegroundColor = Colors.White;
+            titleBar.ForegroundColor = Color.FromArgb(255, 254, 254, 254);//Colors.White纯白用不了。。。
             titleBar.ButtonHoverBackgroundColor = ((SolidColorBrush)menu_DarkBack.Background).Color;
             titleBar.ButtonBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
-            titleBar.ButtonPressedBackgroundColor = Colors.WhiteSmoke;
+            titleBar.ButtonForegroundColor = Color.FromArgb(255, 254, 254, 254);
             titleBar.InactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             titleBar.ButtonInactiveBackgroundColor = ((SolidColorBrush)top_grid.Background).Color;
             infoFrame.Tag = (SolidColorBrush)top_grid.Background;
@@ -1499,8 +1516,13 @@ namespace bilibili2
         //infoFrame跳转
         private void infoFrame_Navigated(object sender, NavigationEventArgs e)
         {
+            if ((e.Content as Page).Tag==null)
+            {
+                return;
+            }
             switch ((e.Content as Page).Tag.ToString())
             {
+               
                 case "视频信息":
                     (infoFrame.Content as VideoInfoPage).BackEvent += MainPage_BackEvent;
                     break;
@@ -1535,9 +1557,6 @@ namespace bilibili2
                 case "用户中心":
                     (infoFrame.Content as UserInfoPage).BackEvent += MainPage_BackEvent;
                     (infoFrame.Content as UserInfoPage).ExitEvent += MainPage_ExitEvent;
-                    break;
-                case "查看评论":
-                    (infoFrame.Content as CommentPage).BackEvent += MainPage_BackEvent;
                     break;
                 case "搜索结果":
                     (infoFrame.Content as SearchPage).BackEvent += MainPage_BackEvent;
@@ -1742,8 +1761,6 @@ namespace bilibili2
             {
                 infoFrame.Navigate(typeof(SearchPage), top_txt_find.Text);
             }
-            top_txt_find.Visibility = Visibility.Collapsed;
-            btn_search.Visibility = Visibility.Visible;
         }
 
         private void top_txt_find_SuggestionChosen(AutoSuggestBox sender, AutoSuggestBoxSuggestionChosenEventArgs args)
@@ -2074,35 +2091,6 @@ namespace bilibili2
 
                 Moreing = true;
             }
-        }
-
-        private void btn_User_Click(object sender, RoutedEventArgs e)
-            => btn_UserInfo_Click(sender, e);
-
-        private void btn_search_Click(object sender, RoutedEventArgs e)
-        {
-            btn_search.Visibility = Visibility.Collapsed;
-            top_txt_find.Visibility = Visibility.Visible;
-            top_txt_find.Focus(FocusState.Programmatic);
-        }
-
-        /// <summary>
-        /// 响应后退按钮
-        /// </summary>
-        /// <param name="sender">按钮本身</param>
-        /// <param name="e">方法参数</param>
-        private void btn_back_Click(object sender, RoutedEventArgs e)
-        {
-            if (infoFrame.Content != null)
-                if (infoFrame.CanGoBack)
-                    infoFrame.GoBack();
-                else
-                    MainPage_BackEvent();
-        }
-
-        private void btn_refresh_Click(object sender, RoutedEventArgs e)
-        {
-            infoFrame.Navigate(infoFrame.Content.GetType());
         }
     }
 
