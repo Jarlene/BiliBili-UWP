@@ -279,6 +279,7 @@ namespace bilibili2
             ChangeDrak();
             navInfo = infoFrame.GetNavigationState();
             infoFrame.Tag = (SolidColorBrush)top_grid.Background;
+            ApiHelper.SetEmojis();
             CheckUpdate();
             if (e.Parameter != null && e.Parameter.ToString().Length != 0)
             {
@@ -288,7 +289,10 @@ namespace bilibili2
                 switch (type)
                 {
                     case LoadType.OpenAvNum:
-                        infoFrame.Navigate(typeof(VideoInfoPage), (string)par[1]);
+                        if (((string)par[1])!= "CSCT")
+                        {
+                            infoFrame.Navigate(typeof(VideoInfoPage), (string)par[1]);
+                        }
                         break;
                     case LoadType.OpenVideo:
                         infoFrame.Navigate(typeof(PlayerPage), (KeyValuePair<List<VideoModel>, int>)par[1]);
@@ -303,7 +307,7 @@ namespace bilibili2
                         break;
                 }
             }
-
+          
 
         }
         private async void CheckUpdate()
@@ -1142,7 +1146,7 @@ namespace bilibili2
 
         }
         //汉堡菜单的点击
-        private void list_Menu_ItemClick(object sender, ItemClickEventArgs e)
+        private  void list_Menu_ItemClick(object sender, ItemClickEventArgs e)
         {
             if ((e.ClickedItem as StackPanel).Tag == null)
             {
@@ -1512,8 +1516,13 @@ namespace bilibili2
         //infoFrame跳转
         private void infoFrame_Navigated(object sender, NavigationEventArgs e)
         {
+            if ((e.Content as Page).Tag==null)
+            {
+                return;
+            }
             switch ((e.Content as Page).Tag.ToString())
             {
+               
                 case "视频信息":
                     (infoFrame.Content as VideoInfoPage).BackEvent += MainPage_BackEvent;
                     break;
@@ -1548,9 +1557,6 @@ namespace bilibili2
                 case "用户中心":
                     (infoFrame.Content as UserInfoPage).BackEvent += MainPage_BackEvent;
                     (infoFrame.Content as UserInfoPage).ExitEvent += MainPage_ExitEvent;
-                    break;
-                case "查看评论":
-                    (infoFrame.Content as CommentPage).BackEvent += MainPage_BackEvent;
                     break;
                 case "搜索结果":
                     (infoFrame.Content as SearchPage).BackEvent += MainPage_BackEvent;

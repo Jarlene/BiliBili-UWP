@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices.WindowsRuntime;
+using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.Foundation.Collections;
 using Windows.UI.Popups;
@@ -101,22 +102,18 @@ namespace bilibili2
                 }
             }
         }
-        public void SetListView(string results, GridView ls)
+        public async void SetListView(string results, GridView ls)
         {
             try
             {
                 InfoModel model = JsonConvert.DeserializeObject<InfoModel>(results);
                 List<InfoModel> ban = JsonConvert.DeserializeObject<List<InfoModel>>(model.list.ToString());
-                ls.ItemsSource = ban;
-                //for (int i = 0; i <12; i++)
-                //{
-                //    ls.Items.Add(ban[i]);
-                //}
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () => { ls.ItemsSource = ban; });
+            
               
             }
             catch (Exception)
             {
-                //ErrorEvent(ex.Message);
             }
         }
 
@@ -125,48 +122,50 @@ namespace bilibili2
             try
             {
                 List<InfoModel> ban = new List<InfoModel>();
-                HomeHotModel model = JsonConvert.DeserializeObject<HomeHotModel>(results);
-                foreach (var item in model.data[0].body)
-                {
-                    ban.Add(new InfoModel() {
-                         aid=item.param,
-                        pic = item.cover,
-                          play=item.play,
-                          video_review=item.danmaku,
-                          title=item.title,
-                    });
-                }
-                if (pagesize==16)
-                {
-                    try
+                    HomeHotModel model = JsonConvert.DeserializeObject<HomeHotModel>(results);
+                    foreach (var item in model.data[0].body)
                     {
-                        wc = new WebClientClass();
-                        // http://app.bilibili.com/x/v2/show/change?access_key=bb9e0f8a509a1d8eb53dc744432f1e8d&actionKey=appkey&appkey=5fd5a7d8bfd9b0e6&build=10180&channel=appstore&device=pad&mobi_app=ipad&plat=2&platform=ios&rand=0&sign=344b13c26840254d674cd4634be2d621&ts=1475599666
-                        string url = string.Format("http://app.bilibili.com/x/v2/show?access_key={0}&actionKey=appkey&appkey={1}&platform=wp&ts={2}&plat=2&device=pad&mobi_app=ipad&build=10180&warm=1", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
-                        url += "&sign=" + ApiHelper.GetSign(url);
-                        string re = await wc.GetResults(new Uri(url));
-                        HomeHotModel mo = JsonConvert.DeserializeObject<HomeHotModel>(re);
-                        foreach (var item in mo.data[0].body)
+                        ban.Add(new InfoModel()
                         {
-                            ban.Add(new InfoModel()
-                            {
-                                aid = item.param,
-                                pic = item.cover,
-                                play = item.play,
-                                video_review = item.danmaku,
-                                title = item.title,
-                            });
-                        }
+                            aid = item.param,
+                            pic = item.cover,
+                            play = item.play,
+                            video_review = item.danmaku,
+                            title = item.title,
+                        });
                     }
-                    catch (Exception)
+                    if (pagesize == 16)
                     {
+                        try
+                        {
+                            wc = new WebClientClass();
+                            // http://app.bilibili.com/x/v2/show/change?access_key=bb9e0f8a509a1d8eb53dc744432f1e8d&actionKey=appkey&appkey=5fd5a7d8bfd9b0e6&build=10180&channel=appstore&device=pad&mobi_app=ipad&plat=2&platform=ios&rand=0&sign=344b13c26840254d674cd4634be2d621&ts=1475599666
+                            string url = string.Format("http://app.bilibili.com/x/v2/show?access_key={0}&actionKey=appkey&appkey={1}&platform=wp&ts={2}&plat=2&device=pad&mobi_app=ipad&build=10180&warm=1", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
+                            url += "&sign=" + ApiHelper.GetSign(url);
+                            string re = await wc.GetResults(new Uri(url));
+                            HomeHotModel mo = JsonConvert.DeserializeObject<HomeHotModel>(re);
+                            foreach (var item in mo.data[0].body)
+                            {
+                                ban.Add(new InfoModel()
+                                {
+                                    aid = item.param,
+                                    pic = item.cover,
+                                    play = item.play,
+                                    video_review = item.danmaku,
+                                    title = item.title,
+                                });
+                            }
+                        }
+                        catch (Exception)
+                        {
+                        }
+
                     }
-                    
-                }
 
-
-
-                ls.ItemsSource = ban;
+                await this.Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                {
+                    ls.ItemsSource = ban;
+                });
                 //for (int i = 0; i <12; i++)
                 //{
                 //    ls.Items.Add(ban[i]);
@@ -198,37 +197,42 @@ namespace bilibili2
             try
             {
                 pr_Load.Visibility = Visibility.Visible;
-                string url = string.Format("http://app.bilibili.com/x/v2/show?access_key={0}&actionKey=appkey&appkey={1}&platform=wp&ts={2}&plat=2&device=pad&mobi_app=ipad&build=10180&warm=1", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
-                url += "&sign=" + ApiHelper.GetSign(url);
-                string HOT = await wc.GetResults(new Uri(url));
-                SetListView(HOT, home_GridView_Hot,true);
+                await Task.Run(async () =>
+                {
+                    string url = string.Format("http://app.bilibili.com/x/v2/show?access_key={0}&actionKey=appkey&appkey={1}&platform=wp&ts={2}&plat=2&device=pad&mobi_app=ipad&build=10180&warm=1", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen);
+                    url += "&sign=" + ApiHelper.GetSign(url);
+                    string HOT = await wc.GetResults(new Uri(url));
+                    SetListView(HOT, home_GridView_Hot, true);
 
-                string fj = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=13&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(fj, home_GridView_FJ);
-                // string banner = await wc.GetResults(new Uri("http://www.bilibili.com/index/slideshow.json"));
-                string dh = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=1&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd="+new Random().Next(1000,9999)));
-                SetListView(dh, home_GridView_DH);
-             
-                string yy = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=3&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(yy, home_GridView_YYWD);
-                string wd = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=20&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(wd, home_GridView_WD);
-                string yx = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=4&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(yx, home_GridView_YX);
-                string kj = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=36&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(kj, home_GridView_KJ);
-                string SH = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=5&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(SH, home_GridView_SH);
-                string YL = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=160&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(YL, home_GridView_YL);
-                string GC = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=119&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(GC, home_GridView_GC);
-                string DY = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=23&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(DY, home_GridView_DY);
-                string DSJ = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=11&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(DSJ, home_GridView_DSJ);
-                string SS = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=155&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
-                SetListView(SS, home_GridView_SS);
+                    string fj = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=13&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(fj, home_GridView_FJ);
+                    // string banner = await wc.GetResults(new Uri("http://www.bilibili.com/index/slideshow.json"));
+                    string dh = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=1&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(dh, home_GridView_DH);
+
+                    string yy = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=3&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(yy, home_GridView_YYWD);
+                    string wd = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=20&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(wd, home_GridView_WD);
+                    string yx = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=4&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(yx, home_GridView_YX);
+                    string kj = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=36&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(kj, home_GridView_KJ);
+                    string SH = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=5&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(SH, home_GridView_SH);
+                    string YL = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=160&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(YL, home_GridView_YL);
+                    string GC = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=119&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(GC, home_GridView_GC);
+                    string DY = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=23&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(DY, home_GridView_DY);
+                    string DSJ = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=11&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(DSJ, home_GridView_DSJ);
+                    string SS = await wc.GetResults(new Uri("http://api.bilibili.com/list?type=json&appkey=422fd9d7289a1dd9&tid=155&page=1&pagesize=" + pagesize + "&order=hot&ver=2&rnd=" + new Random().Next(1000, 9999)));
+                    SetListView(SS, home_GridView_SS);
+
+                });
+               
 
             }
             catch (Exception ex)

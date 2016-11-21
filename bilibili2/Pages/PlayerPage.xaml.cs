@@ -192,6 +192,7 @@ namespace bilibili2.Pages
         {
             cb_setting_defu.IsChecked = true;
             grid_end.Visibility = Visibility.Collapsed;
+            top_cb_Quality.Visibility = Visibility.Visible;
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
             await Task.Delay(200);
             sql.CreateTable();
@@ -272,7 +273,20 @@ namespace bilibili2.Pages
             lastPostVIs = false;
             DanMuPool = await GetDM(model.cid, false, false, string.Empty);
             pro_Num.Text = "读取视频信息...";
-            await GetPlayInfo(model.cid, top_cb_Quality.SelectedIndex + 1);
+            switch (model.from)
+            {
+                case "sohu":
+                    await GetSoHuPlayInfo(model.rich_vid, top_cb_Quality.SelectedIndex + 1);
+                    break;
+                case "qq":
+                    await new MessageDialog("腾讯源视频解析还有点小问题，暂不支持播放").ShowAsync();
+                    break;
+                default:
+                    await GetPlayInfo(model.cid, top_cb_Quality.SelectedIndex + 1);
+                    break;
+            }
+           
+            
 
         }
 
@@ -381,16 +395,16 @@ namespace bilibili2.Pages
             }
             ApplicationView.GetForCurrentView().ExitFullScreenMode();
             DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
-            
-            if (timer!=null)
+
+            if (timer != null)
             {
                 timer.Stop();
             }
-            if (datetimer!=null)
+            if (datetimer != null)
             {
                 datetimer.Stop();
             }
-            
+
         }
         //读取设置
         private void GetSetting()
@@ -648,7 +662,7 @@ namespace bilibili2.Pages
             //UseTW,UseHK,UseCN
             if (setting.SettingContains("UseTW"))
             {
-                userTwIp= (bool)setting.GetSettingValue("UseTW");
+                userTwIp = (bool)setting.GetSettingValue("UseTW");
             }
             else
             {
@@ -656,7 +670,7 @@ namespace bilibili2.Pages
             }
             if (setting.SettingContains("UseHK"))
             {
-                useHkIp= (bool)setting.GetSettingValue("UseHK");
+                useHkIp = (bool)setting.GetSettingValue("UseHK");
             }
             else
             {
@@ -701,9 +715,9 @@ namespace bilibili2.Pages
                 //http://bangumi.bilibili.com/player/web_api/playurl?cid=10506396&module=movie&player=1&quality=4&ts=1475587467&sign=12b256ad5510d558d07ddf5c4430cd56
                 // string url = string.Format("http://bangumi.bilibili.com/player/web_api/playurl?cid={0}&module=movie&player=1&quality=4&ts={1}&appkey={2}", mid,ApiHelper.GetTimeSpen,ApiHelper._appkey_DONTNOT);
 
-                string url = "http://interface.bilibili.com/playurl?platform=wp&cid=" + mid + "&otype=json&quality=" + quality + "&appkey=" + ApiHelper._appKey + "&access_key=" + ApiHelper.access_key + "&type=" + Format;
+                string url = "http://interface.bilibili.com/playurl?_device=uwp&cid=" + mid + "&otype=json&quality=" + quality + "&appkey=" + ApiHelper._appKey + "&access_key=" + ApiHelper.access_key + "&type=" + Format + "&mid=" + UserClass.Uid + "&_buvid=D9EFA749-6CCA-43B3-A3D2-20225D874E672072infoc&_hwid=03005a8603001c9a&platform=uwp_desktop" + "&ts=" + ApiHelper.GetTimeSpen;
                 url += "&sign=" + ApiHelper.GetSign(url);
-                
+
                 string results = "";
                 VideoUriModel model = null;
                 string area = "";
@@ -719,19 +733,19 @@ namespace bilibili2.Pages
                 {
                     area = "cn";
                 }
-                if (!userDlIp&&!userTwIp&&!useHkIp)
+                if (!userDlIp && !userTwIp && !useHkIp)
                 {
-                    results = await wc.GetResults(new Uri(url));
-                   
+                    results = await wc.GetResults_Phone(new Uri(url));
+
                     model = JsonConvert.DeserializeObject<VideoUriModel>(results);
-                    
-                    
+
+
                 }
                 else
                 {
-                    results = await wc.GetResults(new Uri("http://52uwp.com/api/BiliBili?area="+area+"&url=" + Uri.EscapeDataString(url)));
+                    results = await wc.GetResults(new Uri("http://52uwp.com/api/BiliBili?area=" + area + "&url=" + Uri.EscapeDataString(url)));
                     MessageModel ms = JsonConvert.DeserializeObject<MessageModel>(results);
-                    
+
 
                     if (ms.code == 0)
                     {
@@ -789,10 +803,58 @@ namespace bilibili2.Pages
                     MessageDialog md = new MessageDialog("视频地址获取失败！", "错误");
                     await md.ShowAsync();
                 }
-              
+
             }
         }
+        private async Task GetSoHuPlayInfo(string mid, int quality)
+        {
+            try
+            {
+                pro_Num.Text = "读取视频地址...";
+                WebClientClass wc = new WebClientClass();
+                string[] str = mid.Split('|');
+                //http://bangumi.bilibili.com/player/web_api/playurl?cid=10506396&module=movie&player=1&quality=4&ts=1475587467&sign=12b256ad5510d558d07ddf5c4430cd56
+                // string url = string.Format("http://bangumi.bilibili.com/player/web_api/playurl?cid={0}&module=movie&player=1&quality=4&ts={1}&appkey={2}", mid,ApiHelper.GetTimeSpen,ApiHelper._appkey_DONTNOT);
 
+                string url = string.Format("http://api.tv.sohu.com/v4/video/info/{0}.json?api_key=1820c56b9d16bbe3381766192e134811&uid=ad99774cfadfe5ecf12457ec5085359a&poid=1&plat=12&sver=3.7.0&partner=419&sysver=10.0.10586.318&ts={1}&verify=43026f88247fcbe0c56411624bd1531e&passport=&aid={2}&program_id=", str[1], ApiHelper.GetTimeSpen_2, str[0]);
+
+                string results = await wc.GetResults(new Uri(url));
+                SohuModel model = JsonConvert.DeserializeObject<SohuModel>(results);
+               
+                if (model.status==200)
+                {
+                    mediaElement.Stop();
+                    switch (quality)
+                    {
+                        case 1:
+                            mediaElement.Source = new Uri(model.data.url_nor+ "&uid=1608111818273358&SOHUSVP=aaxZQgiYTy4uioObZPfLJCVK3BxYwluKsrZ-cpoyfEk&pt=1&prod=h5&pg=1&eye=0&cv=1.0.0&qd=68000&src=11050001&ca=4&cateCode=101&_c=1&appid=tv&oth=&cd=");
+                            break;
+                        case 2:
+                            mediaElement.Source = new Uri(model.data.url_original+ "&uid=1608111818273358&SOHUSVP=aaxZQgiYTy4uioObZPfLJCVK3BxYwluKsrZ-cpoyfEk&pt=1&prod=h5&pg=1&eye=0&cv=1.0.0&qd=68000&src=11050001&ca=4&cateCode=101&_c=1&appid=tv&oth=&cd=");
+                            break;
+                        case 3:
+                            mediaElement.Source = new Uri(model.data.url_super+ "&uid=1608111818273358&SOHUSVP=aaxZQgiYTy4uioObZPfLJCVK3BxYwluKsrZ-cpoyfEk&pt=1&prod=h5&pg=1&eye=0&cv=1.0.0&qd=68000&src=11050001&ca=4&cateCode=101&_c=1&appid=tv&oth=&cd=");
+                            break;
+                    }
+                    pro_Num.Text = "开始缓冲视频...";
+                }
+               
+            }
+            catch (Exception ex)
+            {
+                if (ex.HResult == -2147012867)
+                {
+                    MessageDialog md = new MessageDialog("视频地址获取失败,检查你的网络连接！", "错误");
+                    await md.ShowAsync();
+                }
+                else
+                {
+                    MessageDialog md = new MessageDialog("视频地址获取失败！", "错误");
+                    await md.ShowAsync();
+                }
+
+            }
+        }
         public async Task<List<MyDanmaku.DanMuModel>> GetDM(string cid, bool IsLocal, bool IsOld, string path)
         {
             List<MyDanmaku.DanMuModel> ls = new List<MyDanmaku.DanMuModel>();
@@ -1141,7 +1203,7 @@ namespace bilibili2.Pages
                     break;
                 case MediaElementState.Paused:
                     try
-                        {
+                    {
                         ValueSet vs = new ValueSet();
                         vs.Add("Play", "Paused");
                         BackgroundMediaPlayer.SendMessageToBackground(vs);
@@ -1155,7 +1217,8 @@ namespace bilibili2.Pages
 
                     break;
                 case MediaElementState.Stopped:
-                    try{
+                    try
+                    {
                         ValueSet vs = new ValueSet();
                         vs.Add("Play", "Paused");
                         BackgroundMediaPlayer.SendMessageToBackground(vs);
@@ -1825,6 +1888,8 @@ namespace bilibili2.Pages
 
         private void Page_SizeChanged(object sender, SizeChangedEventArgs e)
         {
+           
+           danmu.SetJJ();
             if (cb_setting_169.IsChecked.Value)
             {
                 mediaElement.Height = grid.ActualHeight;

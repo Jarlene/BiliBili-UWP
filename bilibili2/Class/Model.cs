@@ -9,7 +9,9 @@ using System.Threading.Tasks;
 using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Xaml;
+using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
+using Windows.UI.Xaml.Markup;
 using Windows.UI.Xaml.Media;
 
 namespace bilibili2
@@ -162,6 +164,8 @@ namespace bilibili2
         public string page { get; set; }
         public string from { get; set; }
         public string part { get; set; }
+        public string rich_vid { get; set; }
+        public string vid { get; set; }
         //番剧信息
         public object season { get; set; }
         public string season_id { get; set; }
@@ -566,6 +570,38 @@ namespace bilibili2
                 }
             }
         }
+        public RichTextBlock text
+        {
+            get
+            {
+                if (message != null)
+                {
+                    string input = message;
+                    input = input.Replace("\r\n", "<LineBreak/>");
+                    input = input.Replace("\n", "<LineBreak/>");
+                    MatchCollection mc = Regex.Matches(input, @"\[(.*?)\]");
+                    foreach (Match item in mc)
+                    {
+
+                        input = input.Replace(item.Groups[0].Value, string.Format(@"<InlineUIContainer><Border><Image Source=""{0}"" Width=""36"" Height=""36""/></Border></InlineUIContainer>", ApiHelper.emojis.First(x => x.name == item.Groups[0].Value).url));
+                    }
+
+                    //生成xaml
+                    var xaml = string.Format(@"<RichTextBlock HorizontalAlignment=""Stretch"" TextWrapping=""Wrap"" Margin=""5"" xmlns=""http://schemas.microsoft.com/winfx/2006/xaml/presentation""
+                                            xmlns:x=""http://schemas.microsoft.com/winfx/2006/xaml"" xmlns:d=""http://schemas.microsoft.com/expression/blend/2008""
+    xmlns:mc = ""http://schemas.openxmlformats.org/markup-compatibility/2006"" >
+                                          <Paragraph>{0}</Paragraph>
+                                      </RichTextBlock>", input);
+                    var p = (RichTextBlock)XamlReader.Load(xaml);
+                    return p;
+                }
+                else
+                {
+                    return null;
+                }
+            }
+
+        }
     }
     //视频相关
     public class RecommendModel
@@ -600,6 +636,10 @@ namespace bilibili2
     //用户信息
     public class GetLoginInfoModel
     {
+        public GetLoginInfoModel data { get; set; }
+        public GetLoginInfoModel card { get; set; }
+
+
         public string mid { get; set; }//ID
         public string name { get; set; }//昵称
         public string sex { get; set; }//性别
@@ -1478,6 +1518,29 @@ namespace bilibili2
         public string url { get; set; }//视频地址
 
         public object backup_url { get; set; }//视频备份地址
+    }
+
+    public class SohuModel
+    {
+        public int status { get; set; }
+        public string statusText { get; set; }
+        public SohuModel data { get; set; }
+        public string url_blue { get; set; }
+
+        public string download_url { get; set; }
+        public string url_high { get; set; }
+        public string url_nor { get; set; }
+        public string url_original { get; set; }
+        public string url_super { get; set; }
+        
+      public string url_high_mp4 { get; set; }
+        public string url_nor_mp4 { get; set; }
+        public string url_original_mp4 { get; set; }
+        public string url_super_mp4 { get; set; }
+    }
+    public class QQModel
+    {
+
     }
 
     public class HomeLiveModel

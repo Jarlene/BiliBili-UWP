@@ -1,4 +1,5 @@
 ﻿using BILIBILI_UWP.Class;
+using bilibili2.Controls;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using System;
@@ -27,7 +28,7 @@ namespace bilibili2
         public const string _appSecret_Wp = "ba3a4e554e9a6e15dc4d1d70c2b154e3";//Wp
         public const string _appSecret_IOS = "8cb98205e9b2ad3669aad0fce12a4c13";//Ios
         public const string _appSecret_Android = "ea85624dfcf12d7cc7b2b3a94fac1f2c";//Android
-        public const string _appSecret_DONTNOT = "2ad42749773c441109bdc0191257a664";//Android
+        public const string _appSecret_DONTNOT = "2ad42749773c441109bdc0191257a664";
 
         public const string _appKey = "422fd9d7289a1dd9";//Wp
         public const string _appKey_IOS = "4ebafd7c4951b366";
@@ -102,8 +103,32 @@ namespace bilibili2
         }
         public static long GetTimeSpen
         {
-            get { return Convert.ToInt64((DateTime.Now - new DateTime(1970, 1, 1, 0, 0, 0, 0)).TotalSeconds); }
+            get { return Convert.ToInt64((DateTime.Now - new DateTime(1970, 1, 1, 8, 0, 0, 0)).TotalSeconds); }
         }
+        public static long GetTimeSpen_2
+        {
+            get { return Convert.ToInt64((DateTime.Now - new DateTime(1970, 1, 1, 8, 0, 0, 0)).TotalMilliseconds); }
+        }
+        public static List<EmojiModel> emojis;
+        public static List<FaceModel> emoji;
+        public static async void SetEmojis()
+        {
+            try
+            {
+                WebClientClass wc = new WebClientClass();
+                string url = "http://api.bilibili.com/x/v2/reply/emojis";
+                string results = await wc.GetResults(new Uri(url));
+                FaceModel model = JsonConvert.DeserializeObject<FaceModel>(results);
+                emoji = model.data;
+                emojis = new List<EmojiModel>();
+                model.data.ForEach(x => x.emojis.ForEach(y => emojis.Add(y)));
+            }
+            catch (Exception)
+            {
+            }
+
+        }
+
 
         public static async Task<string> GetEncryptedPassword(string passWord)
         {
@@ -117,7 +142,7 @@ namespace bilibili2
                 httpBaseProtocolFilter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Untrusted);
                 Windows.Web.Http.HttpClient httpClient = new Windows.Web.Http.HttpClient(httpBaseProtocolFilter);
                 //WebClientClass wc = new WebClientClass();
-                string stringAsync = await httpClient.GetStringAsync((new Uri("https://secure.bilibili.com/login?act=getkey&rnd=" + new Random().Next(1000, 9999), UriKind.Absolute)));
+                string stringAsync = await httpClient.GetStringAsync((new Uri("https://passport.bilibili.com/login?act=getkey&rnd=" + new Random().Next(1000, 9999), UriKind.Absolute)));
                 JObject jObjects = JObject.Parse(stringAsync);
                 string str = jObjects["hash"].ToString();
                 string str1 = jObjects["key"].ToString();
@@ -141,10 +166,11 @@ namespace bilibili2
         {
             try
             {
+                //https://api.bilibili.com/login?appkey=422fd9d7289a1dd9&platform=wp&pwd=JPJclVQpH4jwouRcSnngNnuPEq1S1rizxVJjLTg%2FtdqkKOizeIjS4CeRZsQg4%2F500Oye7IP4gWXhCRfHT6pDrboBNNkYywcrAhbOPtdx35ETcPfbjXNGSxteVDXw9Xq1ng0pcP1burNnAYtNRSayEKC1jiugi1LKyWbXpYE6VaM%3D&type=json&userid=xiaoyaocz&sign=74e4c872ec7b9d83d3a8a714e7e3b4b3
                 //发送第一次请求，得到access_key
                 WebClientClass wc = new WebClientClass();
-                string url = "https://api.bilibili.com/login?appkey=422fd9d7289a1dd9&platform=wp&pwd=" + WebUtility.UrlEncode(Password) + "&type=json&userid=" + WebUtility.UrlEncode(UserName);
-
+                string url = "https://api.bilibili.com/login?appkey=422fd9d7289a1dd9&platform=wp&pwd=" + WebUtility.UrlEncode(await GetEncryptedPassword(Password)) + "&type=json&userid=" + WebUtility.UrlEncode(UserName);
+                url += "&sign="+GetSign(url);
 
                 string results = await wc.GetResults(new Uri(url));
                 //Json解析及数据判断

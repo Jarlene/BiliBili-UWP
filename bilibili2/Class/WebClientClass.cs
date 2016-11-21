@@ -25,7 +25,36 @@ namespace bilibili2
             using (HttpClient hc = new HttpClient(fiter))
             {
 
-                hc.DefaultRequestHeaders.Add("user-agent", "BiliBili Win10 Client/2.0 (771102271@qq.com)");
+                //hc.DefaultRequestHeaders.Add("user-agent", "BiliBili Win10 Client/2.0 (771102271@qq.com)");
+                HttpResponseMessage hr = await hc.GetAsync(url);
+                hr.EnsureSuccessStatusCode();
+                string results = await hr.Content.ReadAsStringAsync();
+
+                //HttpResponseMessage hr = await hc.GetAsync(url);
+                //hr.EnsureSuccessStatusCode();
+                //var encodeResults = await hr.Content.ReadAsBufferAsync();
+                //string results = Encoding.UTF8.GetString(encodeResults.ToArray(), 0, encodeResults.ToArray().Length);
+
+                return results;
+            }
+
+
+        }
+        public async Task<string> GetResults_Phone(Uri url)
+        {
+
+            HttpBaseProtocolFilter fiter = new HttpBaseProtocolFilter();
+            fiter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.Expired);
+            //  fiter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.InvalidName);
+            // fiter.IgnorableServerCertificateErrors.Add(Windows.Security.Cryptography.Certificates.ChainValidationResult.UnknownCriticalExtension);
+            // myClientHandler.ClientCertificateOptions = System.Net.Http.ClientCertificateOption.Automatic;
+            //   myClientHandler.AllowAutoRedirect = true;
+            //fiter.ServerCredential.
+            using (HttpClient hc = new HttpClient(fiter))
+            {
+
+                hc.DefaultRequestHeaders.Add("user-agent", "Bilibili Windows.Desktop Client/1.1.8.0 (atelier39@outlook.com)");
+                hc.DefaultRequestHeaders.Add("Referer", "http://interface.bilibili.com/");
                 HttpResponseMessage hr = await hc.GetAsync(url);
                 hr.EnsureSuccessStatusCode();
                 string results = await hr.Content.ReadAsStringAsync();

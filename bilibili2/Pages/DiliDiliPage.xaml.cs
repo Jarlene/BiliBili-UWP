@@ -65,6 +65,7 @@ namespace bilibili2.Pages
                 wc = null;
             }
         }
+
         WebClientClass wc;
         private async void GetListInfo(string date)
         {

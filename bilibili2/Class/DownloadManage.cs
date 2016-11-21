@@ -122,9 +122,10 @@ namespace bilibili2.Class
             try
             {
                 wc = new WebClientClass();
-                string url = "http://interface.bilibili.com/playurl?platform=android&cid=" + cid + "&quality=" + quality + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4";
-                url+="&sign="+ ApiHelper.GetSign(url);
-               // url += "&sign=" + ApiHelper.GetSign(url);
+                //string url = "http://interface.bilibili.com/playurl?platform=android&cid=" + cid + "&quality=" + quality + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4";
+                string url = "http://interface.bilibili.com/playurl?_device=uwp&cid=" + cid + "&otype=json&quality=" + quality + "&appkey=" + ApiHelper._appKey + "&access_key=" + ApiHelper.access_key + "&type=mp4&mid=" + UserClass.Uid + "&_buvid=D9EFA749-6CCA-43B3-A3D2-20225D874E672072infoc&_hwid=03005a8603001c9a&platform=uwp_desktop" + "&ts=" + ApiHelper.GetTimeSpen;
+                url += "&sign=" + ApiHelper.GetSign(url);
+                // url += "&sign=" + ApiHelper.GetSign(url);
 
                 string results = "";
                 VideoUriModel model = null;
@@ -143,7 +144,7 @@ namespace bilibili2.Class
                 }
                 if (!userDlIp && !userTwIp && !useHkIp)
                 {
-                    results = await wc.GetResults(new Uri(url));
+                    results = await wc.GetResults_Phone(new Uri(url));
 
                     model = JsonConvert.DeserializeObject<VideoUriModel>(results);
 
@@ -202,7 +203,7 @@ namespace bilibili2.Class
                 {
                     if ((bool)setting.GetSettingValue("UseWifi"))
                     {
-                        downloader.CostPolicy = BackgroundTransferCostPolicy.Always;
+                        downloader.CostPolicy = BackgroundTransferCostPolicy.Default;
                     }
                     else
                     {

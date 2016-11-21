@@ -229,6 +229,7 @@ namespace bilibili2.Pages
                         grid_Cb.DataContext = rank;
                         grid_Cb.Visibility = Visibility.Visible;
                         txt_NotCb.Visibility = Visibility.Collapsed;
+                        GetRankInfo();
                     }
                     else
                     {
@@ -317,7 +318,7 @@ namespace bilibili2.Pages
                     if (list_E.Items.Count != 0)
                     {
                         GetVideoComment_Hot(list2[0].av_id);
-                        cb_H.SelectedIndex = list2.Count - 1;
+                        cb_H.SelectedIndex = 0;
                     }
                 }
                 if ((int)JObject.Parse(result)["code"] == -3)
@@ -844,81 +845,16 @@ namespace bilibili2.Pages
                 pr_load.Visibility = Visibility.Collapsed;
             }
         }
-        private async void GetVideoComment()
-        {
-            try
-            {
-                pr_load.Visibility = Visibility.Visible;
-                ListView_Comment.Items.Clear();
-                WebClientClass wc = new WebClientClass();
-                Random r = new Random();
-                string results = await wc.GetResults(new Uri("http://api.bilibili.com/x/reply?jsonp=jsonp&type=1&sort=" + 2 + "&oid=" + ((BangumiInfoModel)cb_H.Items[cb_H.SelectedIndex]).av_id + "&pn=" + 1 + "&nohot=1&ps=20&r=" + r.Next(1000, 99999)));
-                CommentModel model = JsonConvert.DeserializeObject<CommentModel>(results);
-                CommentModel model3 = JsonConvert.DeserializeObject<CommentModel>(model.data.ToString());
-                //Video_Grid_Info.DataContext = model;
-                List<CommentModel> ban = JsonConvert.DeserializeObject<List<CommentModel>>(model3.replies.ToString());
-                foreach (CommentModel item in ban)
-                {
-                    CommentModel model1 = JsonConvert.DeserializeObject<CommentModel>(item.member.ToString());
-                    CommentModel model2 = JsonConvert.DeserializeObject<CommentModel>(item.content.ToString());
-                    CommentModel modelLV = JsonConvert.DeserializeObject<CommentModel>(model1.level_info.ToString());
-                    CommentModel resultsModel = new CommentModel()
-                    {
-                        avatar = model1.avatar,
-                        message = model2.message,
-                        plat = model2.plat,
-                        floor = item.floor,
-                        uname = model1.uname,
-                        mid = model1.mid,
-                        ctime = item.ctime,
-                        like = item.like,
-                        rcount = item.rcount,
-                        rpid = item.rpid,
-                        current_level = modelLV.current_level
-                    };
-                    ListView_Comment.Items.Add(resultsModel);
-                }
-            }
-            catch (Exception ex)
-            {
-                //throw;
-                messShow.Show("读取热门评论失败!\r\n" + ex.Message, 3000);
-            }
-            finally
-            {
-                pr_load.Visibility = Visibility.Collapsed;
-            }
-        }
+    
         private void cb_Rank_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (list_Rank != null)
+            if (cb_Rank.Items.Count!=0&&banID.Length!=0)
             {
-                list_Rank.ItemsSource = null;
-                GetVideoComment();
+                GetRankInfo();
             }
+           
         }
 
-        private void ListView_Comment_Hot_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            object[] o = new object[] { (CommentModel)e.ClickedItem, ((BangumiInfoModel)list_E.Items[0]).av_id };
-            this.Frame.Navigate(typeof(CommentPage), o);
-        }
-
-        private void ListView_Comment_ItemClick(object sender, ItemClickEventArgs e)
-        {
-            object[] o = new object[] { (CommentModel)e.ClickedItem, ((BangumiInfoModel)cb_H.Items[cb_H.SelectedIndex]).av_id };
-            this.Frame.Navigate(typeof(CommentPage), o);
-        }
-
-        private void cb_H_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (cb_H.ItemsSource != null)
-            {
-                GetVideoComment();
-            }
-
-
-        }
 
         private void btn_CB_Click(object sender, RoutedEventArgs e)
         {
@@ -1010,7 +946,24 @@ namespace bilibili2.Pages
 
         }
 
+        private void comment_OpenUser(string id)
+        {
+            this.Frame.Navigate(typeof(UserInfoPage), id);
+        }
 
+        private void cb_H_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (cb_H.SelectedItem!=null)
+            {
+                comment.InitializeComment(1, 1, ((BangumiInfoModel)cb_H.Items[cb_H.SelectedIndex]).av_id);
+            }
+        }
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            CommentModel model = (sender as HyperlinkButton).DataContext as CommentModel;
+            this.Frame.Navigate(typeof(UserInfoPage), model.mid);
+        }
     }
 
     public class TokenModel

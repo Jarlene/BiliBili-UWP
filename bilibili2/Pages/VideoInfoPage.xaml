@@ -10,6 +10,7 @@
         Tag="视频信息"
     SizeChanged="Page_SizeChanged"
     xmlns:ds="using:bilibili2.Pages"
+    xmlns:c="using:bilibili2.Controls"
     
     >
 
@@ -111,15 +112,7 @@
             </Grid.ColumnDefinitions>
             <AppBarButton x:Name="btn_back" Click="btn_back_Click" Icon="Back" Width="48" Height="48" Foreground="White"/>
             <TextBlock  Text="AV" Margin="5 0" FontSize="16" x:Name="top_txt_Header" Grid.Column="1" VerticalAlignment="Center" HorizontalAlignment="Left" Foreground="White" />
-            <AppBarButton x:Name="btn_Sort" Grid.Column="2" Width="48" Height="48" Icon="Sort" Foreground="White">
-                <AppBarButton.Flyout>
-                    <MenuFlyout>
-                        <ToggleMenuFlyoutItem x:Name="menu_Time"  Click="menu_Time_Click">按时间</ToggleMenuFlyoutItem>
-                        <ToggleMenuFlyoutItem x:Name="menu_Good" IsChecked="True" IsEnabled="False" Click="menu_Good_Click">按点赞数</ToggleMenuFlyoutItem>
-                        <ToggleMenuFlyoutItem x:Name="menu_Comment" Click="menu_Comment_Click">按回复数</ToggleMenuFlyoutItem>
-                    </MenuFlyout>
-                </AppBarButton.Flyout>
-            </AppBarButton>
+           
         </Grid>
 
         <Grid Background="{StaticResource BG}"   Grid.Row="1" >
@@ -136,156 +129,6 @@
 
         </Grid>
         <SplitView x:Name="sp_Comment"  Grid.Row="2" OpenPaneLength="350" PanePlacement="Right" >
-            <SplitView.Pane>
-                <Grid>
-                    <Grid.RowDefinitions>
-                        <RowDefinition Height="auto"/>
-                        <RowDefinition/>
-                        <RowDefinition Height="auto"/>
-                    </Grid.RowDefinitions>
-                    <ProgressBar x:Name="Comment_loading" Visibility="Collapsed" IsIndeterminate="True" VerticalAlignment="Top" Background="{x:Null}"></ProgressBar>
-                    <TextBlock Margin="10 5">查看回复</TextBlock>
-                    <Border Background="#7F808080" Height="1" VerticalAlignment="Bottom"></Border>
-                    <ScrollViewer x:Name="sv1" Style="{StaticResource ScrollViewerStyle1}" ScrollViewer.VerticalScrollBarVisibility="Auto" Grid.Row="1" ViewChanged="sv1_ViewChanged">
-                        <StackPanel HorizontalAlignment="Stretch">
-                            <ListView x:Name="ListView_Flyout" ScrollViewer.VerticalScrollBarVisibility="Disabled" ScrollViewer.VerticalScrollMode="Disabled"  SelectionMode="None" VerticalAlignment="Top" ItemClick="ListView_Flyout_ItemClick" IsItemClickEnabled="True">
-                                <ListView.ItemContainerStyle>
-                                    <Style TargetType="ListViewItem">
-                                        <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                        <Setter Property="BorderBrush" Value="#7F808080"></Setter>
-                                    </Style>
-                                </ListView.ItemContainerStyle>
-                                <ListView.ItemTemplate>
-                                    <DataTemplate>
-                                        <Grid  BorderBrush="#33000000" Margin="0,5">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition></RowDefinition>
-                                                <RowDefinition></RowDefinition>
-                                                <RowDefinition></RowDefinition>
-                                                <RowDefinition></RowDefinition>
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                <ColumnDefinition ></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <HyperlinkButton Grid.RowSpan="2" HorizontalAlignment="Left" Click="HyperlinkButton_Click">
-                                                <StackPanel>
-                                                    <Ellipse Width="32" Height="32" Stroke="#7FC1C1C1" HorizontalAlignment="Left">
-                                                        <Ellipse.Fill>
-                                                            <ImageBrush ImageSource="{Binding avatar}"/>
-                                                        </Ellipse.Fill>
-                                                    </Ellipse>
-                                                    <Image Source="{Binding LV}" Width="24" Margin="0 2"></Image>
-                                                </StackPanel>
-                                            </HyperlinkButton>
-                                            <TextBlock Margin="5,0" Text="{Binding uname}" Grid.Column="1" VerticalAlignment="Bottom"></TextBlock>
-                                            <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
-                                                <StackPanel Orientation="Horizontal"  Margin="5,0">
-                                                    <TextBlock Text="#" Foreground="#FFB6B6B6" ></TextBlock>
-                                                    <TextBlock Text="{Binding floor}"  Foreground="#FFB6B6B6" ></TextBlock>
-                                                    <TextBlock Text="{Binding Plat}"  Foreground="#FFB6B6B6" Margin="5,0"></TextBlock>
-                                                </StackPanel>
-                                                <TextBlock Text="{Binding time}" Foreground="#FFB6B6B6"></TextBlock>
-                                            </StackPanel>
-                                            <TextBlock Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2" Margin="0,5" Text="{Binding message}" TextWrapping="Wrap"></TextBlock>
-                                            <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="3">
-                                                <!--<SymbolIcon Symbol="Message" Foreground="#FF666666" />-->
-                                                <!--<SymbolIcon Symbol="Like" Foreground="#FF666666" />-->
-                                                <HyperlinkButton  x:Name="btn_Zan" HorizontalAlignment="Left" Click="btn_Zan_Click">
-                                                    <TextBlock Text="{Binding Action}" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
-                                                </HyperlinkButton>
-                                                <TextBlock Text="{Binding like}" VerticalAlignment="Center" FontSize="12" Margin="5,0"></TextBlock>
-                                            </StackPanel>
-                                        </Grid>
-                                    </DataTemplate>
-                                </ListView.ItemTemplate>
-                            </ListView>
-                            <HyperlinkButton Grid.Row="1" x:Name="btn_Load_More" HorizontalAlignment="Center" Click="btn_Load_More_Click">加载更多</HyperlinkButton>
-                        </StackPanel>
-                    </ScrollViewer>
-                    <Border Grid.Row="2" BorderThickness="0 1 0 0" BorderBrush="#7F808080">
-                        <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="48"/>
-                                <ColumnDefinition/>
-                                <ColumnDefinition Width="48"/>
-                            </Grid.ColumnDefinitions>
-                            <AppBarButton Icon="Emoji" Height="48" Width="48">
-                                <AppBarButton.Flyout>
-                                    <Flyout>
-                                        <Flyout.FlyoutPresenterStyle>
-                                            <Style TargetType="FlyoutPresenter">
-                                                <Setter Property="ScrollViewer.ZoomMode" Value="Enabled"/>
-                                                <Setter Property="Background" Value="#FFF9F9F9"/>
-                                                <Setter Property="MinHeight" Value="300"/>
-                                                <Setter Property="MinWidth" Value="300"/>
-                                            </Style>
-                                        </Flyout.FlyoutPresenterStyle>
-                                        <Grid>
-                                            <Grid.Resources>
-                                                <Style x:Name="btn_Style1" TargetType="Button">
-                                                    <Setter Property="Width" Value="100"></Setter>
-                                                    <Setter Property="Background" Value="#FFF9F9F9"></Setter>
-                                                    <Setter Property="Foreground" Value="Black"></Setter>
-                                                </Style>
-                                            </Grid.Resources>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition></ColumnDefinition>
-                                                <ColumnDefinition></ColumnDefinition>
-                                                <ColumnDefinition></ColumnDefinition>
-                                            </Grid.ColumnDefinitions>
-                                            <StackPanel>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(⌒▽⌒)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">（￣▽￣）</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(=・ω・=)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(｀・ω・´)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(〜￣△￣)〜</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(･∀･)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(°∀°)ﾉ</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(｡･ω･｡)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(●￣(ｴ)￣●)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">ε=ε=(ノ≧∇≦)ノ</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">（#-_-)┯━┯</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">_(:3」∠)_</Button>
-                                            </StackPanel>
-                                            <StackPanel Grid.Column="1">
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(￣3￣)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">╮(￣▽￣)╭</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">( ´_ゝ｀)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">←_←</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">→_→</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(&lt; _&lt; )</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(&gt; _&lt; )</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(´･_･`)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(-_-#)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">（￣へ￣）</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(笑)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(汗)</Button>
-                                            </StackPanel>
-                                            <StackPanel Grid.Column="2">
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">("▔□▔)/</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(ﾟДﾟ≡ﾟдﾟ)!?</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">Σ(ﾟдﾟ;)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">Σ( ￣□￣||)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(´；ω；`)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">（/TДT)/</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(^・ω・^ )</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(￣ε(#￣) Σ</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">ヽ(`Д´)ﾉ</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(╯°口°)╯(┴—┴</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(泣)</Button>
-                                                <Button Click="Button_Click_1" Style="{StaticResource btn_Style1}">(苦笑)</Button>
-                                            </StackPanel>
-                                        </Grid>
-                                    </Flyout>
-                                </AppBarButton.Flyout>
-                            </AppBarButton>
-                            <TextBox x:Name="txt_Com_1" PlaceholderText="说点什么吧..."  Grid.Column="1" BorderThickness="0" Margin="0 5" AcceptsReturn="True"></TextBox>
-                            <AppBarButton x:Name="brn_SendComment_1" Grid.Column="2" Icon="Send" Height="48" Width="48" Click="brn_SendComment_1_Click"></AppBarButton>
-                        </Grid>
-                    </Border>
-                </Grid>
-            </SplitView.Pane>
             <Pivot x:Name="pivot" Style="{StaticResource PivotStyle1}" Margin="0" SelectionChanged="pivot_SelectionChanged">
                 <PivotItem Margin="0">
                     <ScrollViewer x:Name="sv2" Style="{StaticResource ScrollViewerStyle1}" HorizontalScrollMode="Disabled" VerticalScrollBarVisibility="Auto">
@@ -470,63 +313,7 @@
                                     <Border Background="{StaticResource BG}"   Width="10"  Height="24"  Margin="0 0 5 0"/>
                                     <TextBlock Text="热门评论" FontSize="18" VerticalAlignment="Center" />
                                 </StackPanel>
-                                <ListView x:Name="ListView_Comment_Hot" Grid.Row="1" ScrollViewer.VerticalScrollMode="Disabled" IsItemClickEnabled="True"   VerticalAlignment="Top" SelectionMode="None" ItemClick="ListView_Comment_New_ItemClick">
-                                    <ListView.ItemContainerStyle>
-                                        <Style TargetType="ListViewItem">
-                                            <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                            <Setter Property="BorderThickness" Value="0 0 0.5 0"></Setter>
-                                            <Setter Property="BorderBrush" Value="#7F808080"></Setter>
-                                        </Style>
-                                    </ListView.ItemContainerStyle>
-                                    <ListView.ItemTemplate>
-                                        <DataTemplate>
-                                            <Grid  BorderBrush="#33000000" Margin="0,5">
-                                                <Grid.RowDefinitions>
-                                                    <RowDefinition></RowDefinition>
-                                                    <RowDefinition></RowDefinition>
-                                                    <RowDefinition></RowDefinition>
-                                                    <RowDefinition></RowDefinition>
-                                                </Grid.RowDefinitions>
-                                                <Grid.ColumnDefinitions>
-                                                    <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                    <ColumnDefinition ></ColumnDefinition>
-                                                </Grid.ColumnDefinitions>
-                                                <HyperlinkButton Grid.RowSpan="2" HorizontalAlignment="Left"  Click="HyperlinkButton_Click">
-                                                    <StackPanel>
-                                                        <Ellipse Width="32" Height="32" Stroke="#7FC1C1C1" HorizontalAlignment="Left">
-                                                            <Ellipse.Fill>
-                                                                <ImageBrush ImageSource="{Binding avatar}"/>
-                                                            </Ellipse.Fill>
-                                                        </Ellipse>
-                                                        <Image Source="{Binding LV}" Width="24" Margin="0 2"></Image>
-                                                    </StackPanel>
-                                                </HyperlinkButton>
-                                                <TextBlock Margin="5,0" Text="{Binding uname}" Grid.Column="1" VerticalAlignment="Bottom"></TextBlock>
-                                                <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
-                                                    <StackPanel Orientation="Horizontal"  Margin="5,0">
-                                                        <TextBlock Text="#" Foreground="#FFB6B6B6" ></TextBlock>
-                                                        <TextBlock Text="{Binding floor}"  Foreground="#FFB6B6B6" ></TextBlock>
-                                                        <TextBlock Text="{Binding Plat}"  Foreground="#FFB6B6B6" Margin="5,0"></TextBlock>
-                                                    </StackPanel>
-                                                    <TextBlock Text="{Binding time}" Foreground="#FFB6B6B6"></TextBlock>
-                                                </StackPanel>
-                                                <TextBlock Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2" Margin="0,5" Text="{Binding message}" TextWrapping="Wrap"></TextBlock>
-                                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="3">
-                                                    <!--<SymbolIcon Symbol="Message" Foreground="#FF666666" />-->
-                                                    <HyperlinkButton  HorizontalAlignment="Left" >
-                                                        <TextBlock Text="回复" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
-                                                    </HyperlinkButton>
-                                                    <TextBlock Text="{Binding rcount}" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
-                                                    <!--<SymbolIcon Symbol="Like" Foreground="#FF666666" />-->
-                                                    <HyperlinkButton x:Name="btn_Zan" Click="btn_Zan_Click">
-                                                        <TextBlock Text="赞同" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
-                                                    </HyperlinkButton>
-                                                    <TextBlock Text="{Binding like}" VerticalAlignment="Center" FontSize="12" Margin="5,0"></TextBlock>
-                                                </StackPanel>
-                                            </Grid>
-                                        </DataTemplate>
-                                    </ListView.ItemTemplate>
-                                </ListView>
+                                <c:CommentControl x:Name="comment_hot" Grid.Row="1"  OpenUser="comment_OpenUser"/>
                             </Grid>
 
                         </Grid>
@@ -534,157 +321,7 @@
                     </ScrollViewer>
                 </PivotItem>
                 <PivotItem Margin="0" >
-                    <SplitView OpenPaneLength="300">
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition/>
-                                <RowDefinition Height="auto"/>
-                            </Grid.RowDefinitions>
-                            <ScrollViewer x:Name="sc" Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto" ViewChanged="ScrollViewer_ViewChanged">
-                                <StackPanel>
-                                    <ListView x:Name="ListView_Comment_New" ScrollViewer.VerticalScrollMode="Disabled" IsItemClickEnabled="True"   VerticalAlignment="Top" SelectionMode="None" ItemClick="ListView_Comment_New_ItemClick">
-                                        <ListView.ItemContainerStyle>
-                                            <Style TargetType="ListViewItem">
-                                                <Setter Property="HorizontalContentAlignment" Value="Stretch"></Setter>
-                                                <Setter Property="BorderThickness" Value="0 0 0.5 0"></Setter>
-                                                <Setter Property="BorderBrush" Value="#7F808080"></Setter>
-                                            </Style>
-                                        </ListView.ItemContainerStyle>
-                                        <ListView.ItemTemplate>
-                                            <DataTemplate>
-                                                <Grid  BorderBrush="#33000000" Margin="0,5">
-                                                    <Grid.RowDefinitions>
-                                                        <RowDefinition></RowDefinition>
-                                                        <RowDefinition></RowDefinition>
-                                                        <RowDefinition></RowDefinition>
-                                                        <RowDefinition></RowDefinition>
-                                                    </Grid.RowDefinitions>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition Width="auto"></ColumnDefinition>
-                                                        <ColumnDefinition ></ColumnDefinition>
-                                                    </Grid.ColumnDefinitions>
-                                                    <HyperlinkButton Grid.RowSpan="2" HorizontalAlignment="Left" Click="HyperlinkButton_Click">
-                                                        <StackPanel>
-                                                            <Ellipse Width="32" Height="32" Stroke="#7FC1C1C1" HorizontalAlignment="Left">
-                                                                <Ellipse.Fill>
-                                                                    <ImageBrush ImageSource="{Binding avatar}"/>
-                                                                </Ellipse.Fill>
-                                                            </Ellipse>
-                                                            <Image Source="{Binding LV}" Width="24" Margin="0 2"></Image>
-                                                        </StackPanel>
-                                                    </HyperlinkButton>
-                                                    <TextBlock Margin="5,0" Text="{Binding uname}" Grid.Column="1" VerticalAlignment="Bottom"></TextBlock>
-                                                    <StackPanel Orientation="Horizontal" Grid.Column="1" Grid.Row="1" Grid.ColumnSpan="2" VerticalAlignment="Top">
-                                                        <StackPanel Orientation="Horizontal"  Margin="5,0">
-                                                            <TextBlock Text="#" Foreground="#FFB6B6B6" ></TextBlock>
-                                                            <TextBlock Text="{Binding floor}"  Foreground="#FFB6B6B6" ></TextBlock>
-                                                            <TextBlock Text="{Binding Plat}"  Foreground="#FFB6B6B6" Margin="5,0"></TextBlock>
-                                                        </StackPanel>
-                                                        <TextBlock Text="{Binding time}" Foreground="#FFB6B6B6"></TextBlock>
-                                                    </StackPanel>
-                                                    <TextBlock Grid.ColumnSpan="3" Grid.Column="0" Grid.Row="2" Margin="0,5" Text="{Binding message}" TextWrapping="Wrap"></TextBlock>
-                                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" Grid.ColumnSpan="2" Grid.Row="3">
-                                                        <!--<SymbolIcon Symbol="Message" Foreground="#FF666666" />-->
-                                                        <HyperlinkButton  HorizontalAlignment="Left" >
-                                                            <TextBlock Text="回复" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
-                                                        </HyperlinkButton>
-                                                        <TextBlock Text="{Binding rcount}" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
-                                                        <!--<SymbolIcon Symbol="Like" Foreground="#FF666666" />-->
-                                                        <HyperlinkButton x:Name="btn_Zan" Click="btn_Zan_Click">
-                                                            <TextBlock Text="{Binding Action}" VerticalAlignment="Center"  FontSize="12" Margin="5,0"></TextBlock>
-                                                        </HyperlinkButton>
-                                                        <TextBlock Text="{Binding like}" VerticalAlignment="Center" FontSize="12" Margin="5,0"></TextBlock>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </DataTemplate>
-                                        </ListView.ItemTemplate>
-                                    </ListView>
-                                    <TextBlock x:Name="txt_More" HorizontalAlignment="Center">加载更多</TextBlock>
-                                </StackPanel>
-                            </ScrollViewer>
-                            <Border Grid.Row="1" BorderThickness="0 1 0 0" BorderBrush="Gray">
-                                <Grid>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="48"/>
-                                        <ColumnDefinition/>
-                                        <ColumnDefinition Width="48"/>
-                                    </Grid.ColumnDefinitions>
-                                    <AppBarButton Icon="Emoji" Height="48" Width="48">
-                                        <AppBarButton.Flyout>
-                                            <Flyout>
-                                                <Flyout.FlyoutPresenterStyle>
-                                                    <Style TargetType="FlyoutPresenter">
-                                                        <Setter Property="ScrollViewer.ZoomMode" Value="Enabled"/>
-                                                        <Setter Property="Background" Value="#FFF9F9F9"/>
-                                                        <Setter Property="MinHeight" Value="300"/>
-                                                        <Setter Property="MinWidth" Value="300"/>
-                                                    </Style>
-                                                </Flyout.FlyoutPresenterStyle>
-                                                <Grid>
-                                                    <Grid.Resources>
-                                                        <Style x:Name="btn_Style2" TargetType="Button">
-                                                            <Setter Property="Width" Value="100"></Setter>
-                                                            <Setter Property="Background" Value="#FFF9F9F9"></Setter>
-                                                            <Setter Property="Foreground" Value="Black"></Setter>
-                                                        </Style>
-                                                    </Grid.Resources>
-                                                    <Grid.ColumnDefinitions>
-                                                        <ColumnDefinition></ColumnDefinition>
-                                                        <ColumnDefinition></ColumnDefinition>
-                                                        <ColumnDefinition></ColumnDefinition>
-                                                    </Grid.ColumnDefinitions>
-                                                    <StackPanel>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(⌒▽⌒)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">（￣▽￣）</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(=・ω・=)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(｀・ω・´)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(〜￣△￣)〜</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(･∀･)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(°∀°)ﾉ</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(｡･ω･｡)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(●￣(ｴ)￣●)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">ε=ε=(ノ≧∇≦)ノ</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">（#-_-)┯━┯</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">_(:3」∠)_</Button>
-                                                    </StackPanel>
-                                                    <StackPanel Grid.Column="1">
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(￣3￣)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">╮(￣▽￣)╭</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">( ´_ゝ｀)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">←_←</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">→_→</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(&lt; _&lt; )</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(&gt; _&lt; )</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(´･_･`)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(-_-#)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">（￣へ￣）</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(笑)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(汗)</Button>
-                                                    </StackPanel>
-                                                    <StackPanel Grid.Column="2">
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">("▔□▔)/</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(ﾟДﾟ≡ﾟдﾟ)!?</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">Σ(ﾟдﾟ;)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">Σ( ￣□￣||)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(´；ω；`)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">（/TДT)/</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(^・ω・^ )</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(￣ε(#￣) Σ</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">ヽ(`Д´)ﾉ</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(╯°口°)╯(┴—┴</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(泣)</Button>
-                                                        <Button Click="Button_Click_2" Style="{StaticResource btn_Style2}">(苦笑)</Button>
-                                                    </StackPanel>
-                                                </Grid>
-                                            </Flyout>
-                                        </AppBarButton.Flyout>
-                                    </AppBarButton>
-                                    <TextBox x:Name="txt_Com" PlaceholderText="说点什么吧..."  Grid.Column="1" BorderThickness="0" Margin="0 5" AcceptsReturn="True"></TextBox>
-                                    <AppBarButton x:Name="btn_SendComment" Grid.Column="2" Icon="Send" Height="48" Width="48" Click="btn_SendComment_Click"></AppBarButton>
-                                </Grid>
-                            </Border>
-                        </Grid>
-                    </SplitView>
+                    <c:CommentControl x:Name="comment" OpenUser="comment_OpenUser"/>
                 </PivotItem>
                 <PivotItem Margin="0">
                     <Grid>
@@ -851,7 +488,7 @@
             <AppBarButton x:Name="btn_Ok" Icon="Accept"  Label="开始下载"  Foreground="White" Click="btn_Ok_Click"/>
             <AppBarButton Icon="Cancel"  x:Name="btn_Cancel" Label="取消" Foreground="White" Click="btn_Cancel_Click"/>
         </CommandBar>
-        <ProgressBar x:Name="pr_Load" VerticalAlignment="Top" Background="{x:Null}" IsIndeterminate="True" Foreground="White" ></ProgressBar>
+        <ProgressRing x:Name="pr_Load" VerticalAlignment="Center" Grid.RowSpan="3" Width="56" Height="56" Background="{x:Null}" IsActive="True"  ></ProgressRing>
         <StackPanel Visibility="Collapsed" HorizontalAlignment="Center" x:Name="movie_pay" Padding="10" VerticalAlignment="Center" Grid.RowSpan="4" Background="#7FFFFFFF">
             <Image Source="ms-appx:///Assets/ic_video_pay_movie_22.png" Width="56"></Image>
             <TextBlock>此电影需要付费(<Run x:Name="txt_PayMonery"></Run>B币)才可观看正片</TextBlock>

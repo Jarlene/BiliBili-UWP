@@ -38,12 +38,12 @@ namespace bilibili2.Pages
         public TestPlayerPage()
         {
             this.InitializeComponent();
-        
+
         }
 
         private DisplayRequest dispRequest = null;
         //private FFmpegInteropMSS FFmpegMSS;
-        string url ;
+        string url;
         protected async override void OnNavigatedTo(NavigationEventArgs e)
         {
             SystemNavigationManager.GetForCurrentView().AppViewBackButtonVisibility = AppViewBackButtonVisibility.Visible;
@@ -55,14 +55,27 @@ namespace bilibili2.Pages
                 dispRequest.RequestActive(); // 激活显示请求
             }
             DisplayInformation.AutoRotationPreferences = (DisplayOrientations)5;
-            string urls=await GetDiliVideoUri(url);
-            if (urls!=string.Empty)
+            string urls = await GetDiliVideoUri(url);
+            PropertySet options = new PropertySet();
+            if (urls != string.Empty)
             {
-                mediaElment.Source = new Uri(urls);
-               // PropertySet options = new PropertySet();
-               // mediaElment.Stop();
+                await Task.Run(async () =>
+                {
+                    FFmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromUri(urls, true, true, options);
+                    MediaStreamSource mss = FFmpegMSS.GetMediaStreamSource();
+                    //Pass MediaStreamSource to Media Element
+                    await this.Dispatcher.RunAsync(CoreDispatcherPriority.Normal, () =>
+                    {
+                        mediaElment.SetMediaStreamSource(mss);
+                        mediaElment.RealTimePlayback = true;
+                    });
+                });
+
+               // mediaElment.Source = new Uri(urls);
+                // PropertySet options = new PropertySet();
+                // mediaElment.Stop();
                 //FFmpegMSS = FFmpegInteropMSS.CreateFFmpegInteropMSSFromUri(urls, false, true, options);
-               // MediaStreamSource mss = FFmpegMSS.GetMediaStreamSource();
+                // MediaStreamSource mss = FFmpegMSS.GetMediaStreamSource();
                 //Pass MediaStreamSource to Media Element
                 //mediaElment.SetMediaStreamSource(mss);
             }
@@ -73,11 +86,11 @@ namespace bilibili2.Pages
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-            if (dispRequest!=null)
+            if (dispRequest != null)
             {
                 dispRequest = null;
             }
-            DisplayInformation.AutoRotationPreferences =  DisplayOrientations.None;
+            DisplayInformation.AutoRotationPreferences = DisplayOrientations.None;
         }
         private void btn_GoBack_Click(object sender, RoutedEventArgs e)
         {
@@ -86,17 +99,17 @@ namespace bilibili2.Pages
                 this.Frame.GoBack();
             }
         }
-
+        private FFmpegInteropMSS FFmpegMSS;
         public async void GetPlayInfo(string mid, int quality)
         {
             //http://interface.bilibili.com/playurl?platform=android&cid=5883400&quality=2&otype=json&appkey=422fd9d7289a1dd9&type=mp4
             try
             {
                 WebClientClass wc = new WebClientClass();
-                    string results = await wc.GetResults(new Uri("http://interface.bilibili.com/playurl?platform=android&cid=" + mid + "&quality=" + 2 + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4"));
+                string results = await wc.GetResults(new Uri("http://interface.bilibili.com/playurl?platform=android&cid=" + mid + "&quality=" + 2 + "&otype=json&appkey=422fd9d7289a1dd9&type=mp4"));
                 VideoUriModel model = JsonConvert.DeserializeObject<VideoUriModel>(results);
-                    List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
-                    mediaElment.Source = new Uri(model1[0].url);
+                List<VideoUriModel> model1 = JsonConvert.DeserializeObject<List<VideoUriModel>>(model.durl.ToString());
+                mediaElment.Source = new Uri(model1[0].url);
             }
             catch (Exception)
             {
@@ -110,36 +123,35 @@ namespace bilibili2.Pages
             try
             {
                 HttpClient hc = new HttpClient();
-            hc.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Linux; Android 5.0; SM-N9100 Build/LRX21V) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile Safari/537.36 MicroMessenger/6.0.2.56_r958800.520 NetType/WIFI");
-            hc.DefaultRequestHeaders.Add("Referer", URL);
-            HttpResponseMessage hr = await hc.GetAsync(new Uri(URL));
-            hr.EnsureSuccessStatusCode();
-            //   string content =await hr.Content.ReadAsStringAsync();
-            var encodeResults = await hr.Content.ReadAsBufferAsync();
-            string results = Encoding.UTF8.GetString(encodeResults.ToArray(), 0, encodeResults.ToArray().Length);
-            Match mc = Regex.Match(results, @"<iframe src=""(.*?)""", RegexOptions.Multiline);
-            HttpResponseMessage hr1 = await hc.GetAsync(new Uri(mc.Groups[1].Value));
-            hr1.EnsureSuccessStatusCode();
-            var encodeResults2 = await hr1.Content.ReadAsBufferAsync();
-            string a = Encoding.UTF8.GetString(encodeResults2.ToArray(), 0, encodeResults2.ToArray().Length);
+                hc.DefaultRequestHeaders.Add("user-agent", "Mozilla/5.0 (Linux; Android 5.0; SM-N9100 Build/LRX21V) AppleWebKit/537.36 (KHTML, like Gecko) Version/4.0 Chrome/37.0.0.0 Mobile Safari/537.36 MicroMessenger/6.0.2.56_r958800.520 NetType/WIFI");
+                hc.DefaultRequestHeaders.Add("Referer", URL);
+                HttpResponseMessage hr = await hc.GetAsync(new Uri(URL));
+                hr.EnsureSuccessStatusCode();
+                //   string content =await hr.Content.ReadAsStringAsync();
+                var encodeResults = await hr.Content.ReadAsBufferAsync();
+                string results = Encoding.UTF8.GetString(encodeResults.ToArray(), 0, encodeResults.ToArray().Length);
+                Match mc = Regex.Match(results, @"<iframe src=""(.*?)""", RegexOptions.Multiline);
+                HttpResponseMessage hr1 = await hc.GetAsync(new Uri(mc.Groups[1].Value));
+                hr1.EnsureSuccessStatusCode();
+                var encodeResults2 = await hr1.Content.ReadAsBufferAsync();
+                string a = Encoding.UTF8.GetString(encodeResults2.ToArray(), 0, encodeResults2.ToArray().Length);
                 Match mc2 = Regex.Match(a, @"var vid=""(.*?)"";.*?var hd2=""(.*?)"";.*?var typ=""(.*?)"";.*?var sign=""(.*?)"";.*?var ulk=""(.*?)"";", RegexOptions.Singleline);
-                /**var vid=""(.*?)"";
-var hd2=""(.*?)"";
-var typ=""(.*?)"";
-var sign=""(.*?)"";
-var ulk=""(.*?)"";**/
+
                 Match mc3 = Regex.Match(a, @"&tmsign=(.*?)&ajax");
-            string vid, hd2, typ, sign, ulk;
-            vid = mc2.Groups[1].Value;
-            hd2 = mc2.Groups[2].Value;
-            typ = mc2.Groups[3].Value;
-            sign = mc2.Groups[4].Value;
-            ulk = mc2.Groups[5].Value;
-            string url = "https://player.005.tv:60000/parse.php?h5url=null&type=" + typ + "&vid=" + vid + "&hd=" + 3 + "&sign=" + sign + "&tmsign=" + mc3.Groups[1].Value + "&ajax=1&userlink=" + ulk;
-            HttpResponseMessage hr3 = await hc.GetAsync(new Uri(url));
-            hr3.EnsureSuccessStatusCode();
-            string c = await hr3.Content.ReadAsStringAsync();
-            return c;
+                string vid, hd2, typ, sign, ulk;
+                vid = mc2.Groups[1].Value;
+                hd2 = mc2.Groups[2].Value;
+                typ = mc2.Groups[3].Value;
+                sign = mc2.Groups[4].Value;
+                ulk = mc2.Groups[5].Value;
+                string url = "https://player.dilidili.tv:60001/parse.php?xmlurl=null&type=" + typ + "&vid=" + vid + "&hd=" + 2 + "&sign=" + sign + "&tmsign=" + mc3.Groups[1].Value + "&userlink=" + ulk;
+                HttpResponseMessage hr3 = await hc.GetAsync(new Uri(url));
+                hr3.EnsureSuccessStatusCode();
+                string c = await hr3.Content.ReadAsStringAsync();
+                string hahahhahaha = Regex.Match(c, "<file>(.*?)</file>").Groups[1].Value;
+                hahahhahaha = hahahhahaha.Replace("<![CDATA[", "");
+                hahahhahaha = hahahhahaha.Replace("]]>", "");
+                return hahahhahaha;
             }
             catch (Exception)
             {

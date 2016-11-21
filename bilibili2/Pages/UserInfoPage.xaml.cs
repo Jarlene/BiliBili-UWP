@@ -163,7 +163,8 @@ namespace bilibili2.Pages
             try
             {
                 wc = new WebClientClass();
-                string url = string.Format("http://api.bilibili.com/userinfo?access_key={0}&appkey={1}&mid={2}", ApiHelper.access_key, ApiHelper._appKey, UserClass.Uid);
+                //http://account.bilibili.com/api/myinfo/v2?access_key={0}&appkey={1}&platform=ios&ts={2}&type=json
+                string url = string.Format("http://account.bilibili.com/api/myinfo/v2?access_key={0}&appkey={1}&platform=ios&ts={2}&type=json", ApiHelper.access_key, ApiHelper._appKey,ApiHelper.GetTimeSpen);
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
 
@@ -183,12 +184,15 @@ namespace bilibili2.Pages
             try
             {
                 wc = new WebClientClass();
-                string url = string.Format("http://api.bilibili.com/userinfo?access_key={0}&appkey={1}&mid={2}", ApiHelper.access_key, ApiHelper._appKey, uid);
+                //
+                string url = string.Format("http://app.bilibili.com/x/v2/space?access_key={0}&appkey={1}&platform=wp&ps=10&ts={2}000&vmid={3}&build=411005&mobi_app=android", ApiHelper.access_key, ApiHelper._appKey, ApiHelper.GetTimeSpen,uid);
+                //string url = string.Format("http://api.bilibili.com/userinfo?access_key={0}&appkey={1}&mid={2}", ApiHelper.access_key, ApiHelper._appKey, uid);
                 url += "&sign=" + ApiHelper.GetSign(url);
                 string results = await wc.GetResults(new Uri(url));
 
                 GetLoginInfoModel model = JsonConvert.DeserializeObject<GetLoginInfoModel>(results);
-                return model;
+               
+                return model.data.card;
             }
             catch (Exception)
             {

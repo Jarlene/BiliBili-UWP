@@ -20,7 +20,7 @@
         </StackPanel>
         <Grid x:Name="grid_Load" Tapped="grid_Load_Tapped">
             <Grid.Background>
-                <ImageBrush x:Name="img"  Stretch="Uniform" ImageSource="{Binding Path=image}"/>
+                <ImageBrush x:Name="img"  Stretch="UniformToFill" ImageSource="{Binding Path=image}"/>
             </Grid.Background>
           
         </Grid>

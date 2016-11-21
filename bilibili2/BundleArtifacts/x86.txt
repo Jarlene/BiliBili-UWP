@@ -1,2 +1,2 @@
-MainPackage=E:\Documents\Visual Studio 2015\Projects\BiliBili-UWP\bilibili2\bin\x86\Debug\bilibili2_2.7.1.0_x86_Debug.appx
-SymbolPackage=E:\Documents\Visual Studio 2015\Projects\BiliBili-UWP\bilibili2\AppPackages\bilibili2_2.7.1.0_Debug_Test\bilibili2_2.7.1.0_x86_Debug.appxsym
+MainPackage=E:\UWP\bilibili2\bilibili2\bin\x86\Release\bilibili2_2.7.8.0_x86.appx
+SymbolPackage=E:\UWP\bilibili2\bilibili2\AppPackages\bilibili2_2.7.8.0_Test\bilibili2_2.7.8.0_x86.appxsym
