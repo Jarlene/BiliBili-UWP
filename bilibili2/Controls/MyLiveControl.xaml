@@ -60,13 +60,6 @@
             </HyperlinkButton>
             <GridView x:Name="gridview_Hot" Visibility="Collapsed" ItemClick="gridview_Hot_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource GridItem}" ItemContainerStyle="{StaticResource itemStyle}" SelectionMode="None" IsItemClickEnabled="True">
             </GridView>
-            <HyperlinkButton Visibility="Collapsed" Foreground="{ThemeResource Bili-FontColor}" >
-                <StackPanel Orientation="Horizontal">
-                    <Border Background="{ThemeResource Bili-ForeColor}" Width="10"  Height="24"  Margin="5,0"/>
-                    <TextBlock Text="萌宅推荐" FontSize="16" VerticalAlignment="Center" />
-                </StackPanel>
-            </HyperlinkButton>
-            <GridView x:Name="gridview_MZ" Visibility="Collapsed" ItemClick="gridview_Hot_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource GridItem}" ItemContainerStyle="{StaticResource itemStyle}" SelectionMode="None" IsItemClickEnabled="True"></GridView>
             <HyperlinkButton  Foreground="{ThemeResource Bili-FontColor}" >
                 <StackPanel Orientation="Horizontal">
                     <Border Background="{ThemeResource Bili-ForeColor}" Width="10"  Height="24"  Margin="5,0"/>
@@ -74,6 +67,13 @@
                 </StackPanel>
             </HyperlinkButton>
             <GridView x:Name="gridview_SJ" ItemClick="gridview_Hot_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource GridItem}" ItemContainerStyle="{StaticResource itemStyle}" SelectionMode="None" IsItemClickEnabled="True"></GridView>
+            <HyperlinkButton Foreground="{ThemeResource Bili-FontColor}" >
+                <StackPanel Orientation="Horizontal">
+                    <Border Background="{ThemeResource Bili-ForeColor}" Width="10"  Height="24"  Margin="5,0"/>
+                    <TextBlock Text="手游直播" FontSize="16" VerticalAlignment="Center" />
+                </StackPanel>
+            </HyperlinkButton>
+            <GridView x:Name="gridview_SY" ItemClick="gridview_Hot_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource GridItem}" ItemContainerStyle="{StaticResource itemStyle}" SelectionMode="None" IsItemClickEnabled="True"></GridView>
             <HyperlinkButton  Foreground="{ThemeResource Bili-FontColor}" >
                 <StackPanel Orientation="Horizontal">
                     <Border Background="{ThemeResource Bili-ForeColor}" Width="10"  Height="24"  Margin="5,0"/>
@@ -99,7 +99,7 @@
             <HyperlinkButton  Foreground="{ThemeResource Bili-FontColor}" >
                 <StackPanel Orientation="Horizontal">
                     <Border Background="{ThemeResource Bili-ForeColor}" Width="10"  Height="24"  Margin="5,0"/>
-                    <TextBlock Text="单机联网" FontSize="16" VerticalAlignment="Center" />
+                    <TextBlock Text="单机联机" FontSize="16" VerticalAlignment="Center" />
                 </StackPanel>
             </HyperlinkButton>
             <GridView x:Name="gridview_DJ" ItemClick="gridview_Hot_ItemClick" HorizontalAlignment="Center" ScrollViewer.VerticalScrollMode="Disabled" ScrollViewer.VerticalScrollBarVisibility="Disabled" ItemTemplate="{StaticResource GridItem}"  ItemContainerStyle="{StaticResource itemStyle}" SelectionMode="None" IsItemClickEnabled="True"></GridView>
