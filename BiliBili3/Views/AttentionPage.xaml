@@ -1,0 +1,125 @@
+﻿<Page xmlns:my="using:BiliBili3" 
+    x:Class="BiliBili3.Views.AttentionPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:BiliBili3.Views"
+      xmlns:pr="using:PullToRefresh.UWP"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    Tag="动态"
+    >
+    <Page.Resources>
+        <local:FeedItemDataTemplateSelector x:Key="FeedItemDataTemplateSelector"></local:FeedItemDataTemplateSelector>
+        <Style x:Key="grid_TJ" TargetType="GridViewItem">
+            <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"/>
+            <Setter Property="BorderThickness" Value="1" />
+            <Setter Property="BorderBrush" Value="#7F808080"/>
+            <Setter Property="VerticalContentAlignment" Value="Stretch"/>
+            <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="MaxWidth" Value="640"/>
+        </Style>
+    </Page.Resources>
+    <Grid >
+        <pr:PullToRefreshBox RefreshInvoked="PullToRefreshBox_RefreshInvoked">
+            <ScrollViewer x:Name="sc"  Style="{StaticResource ScrollViewerStyle1}" VerticalScrollBarVisibility="Auto" ViewChanged="sc_ViewChanged" SizeChanged="sc_SizeChanged" >
+                <Grid>
+                    <StackPanel x:Name="DT_Info" Visibility="Visible">
+                        <!--<Grid>
+                        <HyperlinkButton Margin="10 5 10 0" HorizontalContentAlignment="Stretch" HorizontalAlignment="Stretch" Foreground="{ThemeResource Bili-FontColor}" Click="Ban_btn_MyBan_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Image Source="ms-appx:///Assets/PartIcon/BFJ.png" Width="24" Height="24" Margin="0 0 5 0"/>
+                                <TextBlock Text="追番" VerticalAlignment="Center" FontSize="18"/>
+                            </StackPanel>
+                        </HyperlinkButton>
+                        <HyperlinkButton  Margin="5 0" Foreground="{ThemeResource Bili-FontColor}" HorizontalAlignment="Right" Click="HyperlinkButton_Click_2">
+                            <Grid>
+                                <Ellipse Fill="{ThemeResource Bili-ForeColor}"></Ellipse>
+                                <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE00F;" Margin="5" FontSize="12" Foreground="White"/>
+                            </Grid>
+
+                        </HyperlinkButton>
+                    </Grid>
+                    <StackPanel x:Name="DT_0">
+                        <Image Source="ms-appx:///Assets/null.png" Width="72"></Image>
+                        <TextBlock Margin="10" HorizontalAlignment="Center" Foreground="Gray">
+										<Run Text="╮(╯_╰)╭ 没有追番"/>
+                        </TextBlock>
+                    </StackPanel>
+                  
+                    <ScrollViewer HorizontalScrollBarVisibility="Hidden"  HorizontalScrollMode="Enabled" VerticalScrollMode="Disabled" VerticalScrollBarVisibility="Disabled">
+                        <GridView ItemClick="gv1_ItemClick"x:Name="user_GridView_Bangumi" ItemClick="user_GridView_Bangumi_ItemClick" ScrollViewer.VerticalScrollBarVisibility="Disabled"  HorizontalAlignment="Left" SelectionMode="None" IsItemClickEnabled="True" >
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <Setter Property="Margin" Value="5 5 5 0"/>
+                                    <Setter Property="Width" Value="100"/>
+                                    <Setter Property="BorderThickness" Value="1"/>
+                                    <Setter Property="BorderBrush" Value="{ThemeResource Bili-Background}"/>
+                                    <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"/>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+                            <GridView.ItemTemplate>
+                                <DataTemplate>
+                                    <StackPanel >
+                                        <Image Source="{Binding cover}" Width="100" Height="135" VerticalAlignment="Top" Stretch="Fill"/>
+                                        <TextBlock Text="{Binding title}"  Height="48" TextWrapping="Wrap" MaxLines="2" FontSize="12"  Margin="5,0" />
+                                        <TextBlock Text="{Binding NewOver}" TextWrapping="Wrap" MaxLines="2" FontSize="12" Foreground="#FF898989" Margin="5"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GridView.ItemTemplate>
+                        </GridView>
+                    </ScrollViewer>-->
+                        <Grid>
+                            <HyperlinkButton Margin="10 0" Foreground="{ThemeResource Bili-FontColor}" >
+                                <StackPanel Orientation="Horizontal">
+                                    <Image Source="ms-appx:///Assets/PartIcon/ic_header_dynamic.png" Width="18" Height="18" Margin="0 0 10 0"/>
+                                    <TextBlock Text="动态" VerticalAlignment="Center" FontSize="18"/>
+                                </StackPanel>
+                            </HyperlinkButton>
+                            <HyperlinkButton x:Name="btn_refresh_Atton" Margin="5 0" Foreground="{ThemeResource Bili-FontColor}" HorizontalAlignment="Right" Click="btn_refresh_Atton_Click">
+                                <Grid>
+                                    <Ellipse Fill="{ThemeResource Bili-ForeColor}"></Ellipse>
+                                    <FontIcon FontFamily="Segoe MDL2 Assets" Glyph="&#xE117;" Margin="5" FontSize="12" Foreground="White"/>
+                                </Grid>
+                            </HyperlinkButton>
+                        </Grid>
+                        <StackPanel x:Name="DT_1">
+                            <Image Source="ms-appx:///Assets/null.png" Width="72"></Image>
+                            <TextBlock Margin="10" HorizontalAlignment="Center" Foreground="Gray">
+										<Run Text="╮(╯_╰)╭ 没有动态"/>
+                            </TextBlock>
+                        </StackPanel>
+
+                        <Border x:Name="bor_Width" Width="450" VerticalAlignment="Top"></Border>
+                        <GridView  x:Name="User_ListView_Attention" ItemClick="User_ListView_Attention_ItemClick" ScrollViewer.VerticalScrollMode="Disabled" ItemTemplateSelector="{StaticResource FeedItemDataTemplateSelector}" SelectionMode="None" IsItemClickEnabled="True" >
+                            <GridView.ItemContainerStyle>
+                                <Style TargetType="GridViewItem">
+                                    <!--<Setter Property="BorderThickness" Value="0,0,0,0.5"/>
+                                                    <Setter Property="BorderBrush" Value="#33808080"/>-->
+                                    <Setter Property="Background" Value="{ThemeResource Bili-List-Background}"></Setter>
+                                    <Setter Property="Margin" Value="5"></Setter>
+                                    <Setter Property="Padding" Value="5"></Setter>
+                                </Style>
+                            </GridView.ItemContainerStyle>
+
+
+                        </GridView>
+                        <Button x:Name="User_load_more" Visibility="Collapsed" Click="User_load_more_Click" Background="#00DF85A0" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="点我加载更多" Foreground="Gray" FontSize="14"/>
+                    </StackPanel>
+                    <StackPanel x:Name="DT_noLogin" Visibility="Collapsed" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <Image Width="100" Source="ms-appx:///Assets/Logo/NoLogin.png"></Image>
+                        <Button x:Name="User_Login" Click="User_Login_Click" Width="100" Margin="10" Background="{ThemeResource Bili-ForeColor}" HorizontalAlignment="Center" VerticalAlignment="Bottom" Content="登录" Foreground="White"/>
+                    </StackPanel>
+
+
+                    <ProgressBar  x:Name="pr_Load_DT" Visibility="Collapsed" IsIndeterminate="True" Background="{x:Null}" VerticalAlignment="Top"/>
+                </Grid>
+
+            </ScrollViewer>
+        </pr:PullToRefreshBox>
+
+        <AppBarButton  x:Name="b_btn_Refresh" Click="b_btn_Refresh_Click" Width="48" Height="48" Margin="20" VerticalAlignment="Bottom" HorizontalAlignment="Right" Icon="Refresh" Background="{ThemeResource Bili-ForeColor}" Opacity="0.6" Foreground="White"></AppBarButton>
+        <my:MessageShow x:Name="messShow" VerticalAlignment="Bottom" HorizontalAlignment="Center" Margin="20"/>
+    </Grid>
+</Page>

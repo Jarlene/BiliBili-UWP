@@ -1,6 +1,0 @@
-MainPackage=E:\UWP\bilibili2\bilibili2\bin\ARM\Release\bilibili2_2.7.8.0_ARM.appx
-SymbolPackage=E:\UWP\bilibili2\bilibili2\AppPackages\bilibili2_2.7.8.0_Test\bilibili2_2.7.8.0_ARM.appxsym
-ResourcePack=E:\UWP\bilibili2\bilibili2\bin\ARM\Release\bilibili2_2.7.8.0_scale-100.appx
-ResourcePack=E:\UWP\bilibili2\bilibili2\bin\ARM\Release\bilibili2_2.7.8.0_scale-125.appx
-ResourcePack=E:\UWP\bilibili2\bilibili2\bin\ARM\Release\bilibili2_2.7.8.0_scale-150.appx
-ResourcePack=E:\UWP\bilibili2\bilibili2\bin\ARM\Release\bilibili2_2.7.8.0_scale-400.appx

@@ -1,0 +1,76 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title>LOGIN</title>
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.8.0.js"></script>
+    <style>
+        #login {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin: -250px 0 0 -250px;
+            width: 500px;
+            height: 500px;
+        }
+         h1{
+             font-family:'Microsoft YaHei';
+             text-align:center;
+             color: #47b6ff;
+               margin-bottom: 20px;
+        }
+        input {
+            width: 478px;
+            height: 18px;
+            margin-bottom: 20px;
+            outline: none;
+            padding: 10px;
+            font-size: 13px;
+            border-top: 1px solid #808080;
+            border-left: 1px solid #808080;
+            border-right: 1px solid #808080;
+            border-bottom: 1px solid #808080;
+            border-radius: 4px;
+        }
+
+        input:focus  {
+           
+            border-top: 1px solid #12a1ff;
+            border-left: 1px solid #12a1ff;
+            border-right: 1px solid #12a1ff;
+            border-bottom: 1px solid #12a1ff;
+        }
+
+        .button {
+            width: 500px;
+            display: block;
+            background-color: #47b6ff;
+            border: 1px solid #47b6ff;
+            color: #fff;
+            padding: 9px 14px;
+            font-size: 15px;
+            line-height: normal;
+            border-radius: 5px;
+            margin: 0;
+        }
+
+
+
+    </style>
+    <script type="text/javascript">
+        function Login() {
+           alert( $("#username").val());
+        }
+    </script>
+
+</head>
+<body>
+    <div id="login">
+        <h1>登录/Login</h1>
+        <input type="text" required="required" placeholder="用户名" id="username"/>
+        <input type="password" required="required" placeholder="密码" id="paaword"/>
+        <button class="button" type="submit" onclick="Login();">登录</button>
+    </div>
+</body>
+</html>

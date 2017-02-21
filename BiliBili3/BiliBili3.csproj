@@ -1,0 +1,771 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
+    <ProjectGuid>{B6506127-B7E6-4C7E-9FFA-73B90F5E8623}</ProjectGuid>
+    <OutputType>AppContainerExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>BiliBili3</RootNamespace>
+    <AssemblyName>BiliBili3</AssemblyName>
+    <DefaultLanguage>zh-CN</DefaultLanguage>
+    <TargetPlatformIdentifier>UAP</TargetPlatformIdentifier>
+    <TargetPlatformVersion>10.0.14393.0</TargetPlatformVersion>
+    <TargetPlatformMinVersion>10.0.14393.0</TargetPlatformMinVersion>
+    <MinimumVisualStudioVersion>14</MinimumVisualStudioVersion>
+    <FileAlignment>512</FileAlignment>
+    <ProjectTypeGuids>{A5A43C5B-DE2A-4C0C-9213-0A381AF9435A};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <PackageCertificateKeyFile>BiliBili3_StoreKey.pfx</PackageCertificateKeyFile>
+    <AppxAutoIncrementPackageRevision>True</AppxAutoIncrementPackageRevision>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <PackageCertificateThumbprint>7450C18B647556F901645D6FD041B5ACC404C721</PackageCertificateThumbprint>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x86'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x86\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x86'">
+    <OutputPath>bin\x86\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x86</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|ARM'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\ARM\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|ARM'">
+    <OutputPath>bin\ARM\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>ARM</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'">
+    <DebugSymbols>true</DebugSymbols>
+    <OutputPath>bin\x64\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>full</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'">
+    <OutputPath>bin\x64\Release\</OutputPath>
+    <DefineConstants>TRACE;NETFX_CORE;WINDOWS_UWP</DefineConstants>
+    <Optimize>true</Optimize>
+    <NoWarn>;2008</NoWarn>
+    <DebugType>pdbonly</DebugType>
+    <PlatformTarget>x64</PlatformTarget>
+    <UseVSHostingProcess>false</UseVSHostingProcess>
+    <ErrorReport>prompt</ErrorReport>
+    <Prefer32Bit>true</Prefer32Bit>
+    <UseDotNetNativeToolchain>true</UseDotNetNativeToolchain>
+  </PropertyGroup>
+  <ItemGroup>
+    <!-- A reference to the entire .Net Framework and Windows SDK are automatically included -->
+    <Content Include="Assets\avatar\qrmodel.png" />
+    <Content Include="Assets\Img\233.png" />
+    <Content Include="Assets\Img\666.png" />
+    <Content Include="Assets\Img\fff.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_awards.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_gashapon.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_gold_recharge.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_medal.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_sea_patro.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_silver_recharge.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_title.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_vip.png" />
+    <Content Include="Assets\LiveIcon\ic_live_vip_month.png" />
+    <Content Include="Assets\LiveIcon\ic_live_vip_year.png" />
+    <Content Include="Assets\MiniIcon\img_tips_error_no_downloads.png" />
+    <Content Include="Assets\Splash.png" />
+    <Content Include="Assets\iconfont.ttf" />
+    <Content Include="Assets\Icon\ic_search_holder_default.png" />
+    <Content Include="Assets\Icon\img_tips_error_load_error.png" />
+    <Content Include="Assets\Icon\live_home_all_category.png" />
+    <Content Include="Assets\Icon\live_home_clip_video.png" />
+    <Content Include="Assets\Icon\live_home_follow_anchor.png" />
+    <Content Include="Assets\Icon\live_home_live_center.png" />
+    <Content Include="Assets\Icon\live_home_search_room.png" />
+    <Content Include="Assets\LiveIcon\1.png" />
+    <Content Include="Assets\LiveIcon\10.png" />
+    <Content Include="Assets\LiveIcon\11.png" />
+    <Content Include="Assets\LiveIcon\12.png" />
+    <Content Include="Assets\LiveIcon\2.png" />
+    <Content Include="Assets\LiveIcon\3.png" />
+    <Content Include="Assets\LiveIcon\4.png" />
+    <Content Include="Assets\LiveIcon\6.png" />
+    <Content Include="Assets\LiveIcon\7.png" />
+    <Content Include="Assets\LiveIcon\8.png" />
+    <Content Include="Assets\LiveIcon\99.png" />
+    <Content Include="Assets\LiveIcon\9.png" />
+    <Content Include="Assets\LiveIcon\ic_head_live.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_attention_anchor.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_history.png" />
+    <Content Include="Assets\LiveIcon\ic_live_center_my_room.png" />
+    <Content Include="Assets\logo.ttf" />
+    <None Include="BiliBili3_StoreKey.pfx" />
+    <None Include="project.json">
+      <SubType>Designer</SubType>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="App.xaml.cs">
+      <DependentUpon>App.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\CommentControl.xaml.cs" />
+    <Compile Include="Controls\DanmuPlayer.xaml.cs">
+      <DependentUpon>DanmuPlayer.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\MessageShow.xaml.cs" />
+    <Compile Include="Controls\MyDanmaku.xaml.cs" />
+    <Compile Include="Controls\OrientedSize.cs" />
+    <Compile Include="Controls\PlayerControl.xaml.cs">
+      <DependentUpon>PlayerControl.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\WrapPanel.cs" />
+    <Compile Include="Helper\ApiHelper.cs" />
+    <Compile Include="Helper\BiliLiveDanmu.cs" />
+    <Compile Include="Helper\CameraRotationHelper.cs" />
+    <Compile Include="Helper\DownloadHelper.cs" />
+    <Compile Include="Helper\MD5.cs" />
+    <Compile Include="Helper\MessageCenter.cs" />
+    <Compile Include="Helper\SettingHelper.cs" />
+    <Compile Include="Helper\SqlHelper.cs" />
+    <Compile Include="Helper\UserManage.cs" />
+    <Compile Include="Helper\WebClientClass.cs" />
+    <Compile Include="MainPage.xaml.cs">
+      <DependentUpon>MainPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Models\AttenionModels.cs" />
+    <Compile Include="Models\BangumiModel.cs" />
+    <Compile Include="Models\BanInfoModel.cs" />
+    <Compile Include="Models\FaceModels.cs" />
+    <Compile Include="Models\HomeModels.cs" />
+    <Compile Include="Models\LiveModels.cs" />
+    <Compile Include="Models\PlayModels.cs" />
+    <Compile Include="Models\UserModels.cs" />
+    <Compile Include="Models\VideoInfoModels.cs" />
+    <Compile Include="Pages\DMHideManagePage.xaml.cs">
+      <DependentUpon>DMHideManagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\DownloadPage.xaml.cs">
+      <DependentUpon>DownloadPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveMyMedalPage.xaml.cs">
+      <DependentUpon>LiveMyMedalPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveMyTitlePage.xaml.cs">
+      <DependentUpon>LiveMyTitlePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LivePartInfoPage.xaml.cs">
+      <DependentUpon>LivePartInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveVideoPage.xaml.cs">
+      <DependentUpon>LiveVideoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveAllPage.xaml.cs">
+      <DependentUpon>LiveAllPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveSearchPage.xaml.cs">
+      <DependentUpon>LiveSearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveCenterPage.xaml.cs">
+      <DependentUpon>LiveCenterPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveFeedPage.xaml.cs">
+      <DependentUpon>LiveFeedPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveHistoryPage.xaml.cs">
+      <DependentUpon>LiveHistoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LivePartPage.xaml.cs">
+      <DependentUpon>LivePartPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Live\LiveRoomPage.xaml.cs">
+      <DependentUpon>LiveRoomPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FindMore\LocalHistoryPage.xaml.cs">
+      <DependentUpon>LocalHistoryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PlayerPage.xaml.cs">
+      <DependentUpon>PlayerPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SubjectPage.xaml.cs">
+      <DependentUpon>SubjectPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\MyQrPage.xaml.cs">
+      <DependentUpon>MyQrPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\PartsPage.xaml.cs" />
+    <Compile Include="Pages\QRPage.xaml.cs">
+      <DependentUpon>QRPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\EditProfilePage.xaml.cs">
+      <DependentUpon>EditProfilePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\ChatPage.xaml.cs">
+      <DependentUpon>ChatPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FindMore\ActivityPage.xaml.cs">
+      <DependentUpon>ActivityPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BanInfoPage.xaml.cs">
+      <DependentUpon>BanInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Bangumi\BanTagPage.xaml.cs">
+      <DependentUpon>BanTagPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\BlankPage.xaml.cs">
+      <DependentUpon>BlankPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Bangumi\CnBangumiPage.xaml.cs">
+      <DependentUpon>CnBangumiPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FindMore\FastNavigatePage.xaml.cs">
+      <DependentUpon>FastNavigatePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Bangumi\JpBangumiPage.xaml.cs">
+      <DependentUpon>JpBangumiPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\LoginPage.xaml.cs">
+      <DependentUpon>LoginPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Bangumi\MyFollowsBangumiPage.xaml.cs">
+      <DependentUpon>MyFollowsBangumiPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\MyMessagePage.xaml.cs">
+      <DependentUpon>MyMessagePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\MyWalletPage.xaml.cs">
+      <DependentUpon>MyWalletPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FindMore\RankPage.xaml.cs">
+      <DependentUpon>RankPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\FindMore\TopicPage.xaml.cs">
+      <DependentUpon>TopicPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\UserInfoPage.xaml.cs">
+      <DependentUpon>UserInfoPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\MyHistroryPage.xaml.cs">
+      <DependentUpon>MyHistroryPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\User\MyCollectPage.xaml.cs">
+      <DependentUpon>MyCollectPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\SearchPage.xaml.cs">
+      <DependentUpon>SearchPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\Bangumi\TimelinePage.xaml.cs">
+      <DependentUpon>TimelinePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\VideoViewPage.xaml.cs">
+      <DependentUpon>VideoViewPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Pages\WebPage.xaml.cs">
+      <DependentUpon>WebPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="PlayerModePage.xaml.cs">
+      <DependentUpon>PlayerModePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SplashPage.xaml.cs">
+      <DependentUpon>SplashPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\AttentionPage.xaml.cs">
+      <DependentUpon>AttentionPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\BangumiPage.xaml.cs">
+      <DependentUpon>BangumiPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\FindPage.xaml.cs">
+      <DependentUpon>FindPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\HomePage.xaml.cs">
+      <DependentUpon>HomePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\LivePage.xaml.cs">
+      <DependentUpon>LivePage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\PartPage.xaml.cs">
+      <DependentUpon>PartPage.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingPage.xaml.cs">
+      <DependentUpon>SettingPage.xaml</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <AppxManifest Include="Package.appxmanifest">
+      <SubType>Designer</SubType>
+    </AppxManifest>
+    <None Include="BiliBili3_TemporaryKey.pfx" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Assets\avatar\ic_22.png" />
+    <Content Include="Assets\avatar\ic_22_hide.png" />
+    <Content Include="Assets\avatar\ic_33.png" />
+    <Content Include="Assets\avatar\ic_33_hide.png" />
+    <Content Include="Assets\avatar\ic_avatar1.jpg" />
+    <Content Include="Assets\avatar\ic_avatar10.jpg" />
+    <Content Include="Assets\avatar\ic_avatar11.jpg" />
+    <Content Include="Assets\avatar\ic_avatar2.jpg" />
+    <Content Include="Assets\avatar\ic_avatar3.jpg" />
+    <Content Include="Assets\avatar\ic_avatar4.jpg" />
+    <Content Include="Assets\avatar\ic_avatar5.jpg" />
+    <Content Include="Assets\avatar\ic_avatar6.jpg" />
+    <Content Include="Assets\avatar\ic_avatar7.jpg" />
+    <Content Include="Assets\avatar\ic_avatar8.jpg" />
+    <Content Include="Assets\avatar\ic_avatar9.jpg" />
+    <Content Include="Assets\avatar\NoAvatar.png" />
+    <Content Include="Assets\Icon\bangumi_common_editor_recommend.png" />
+    <Content Include="Assets\Icon\bangumi_common_ic_serializing.png" />
+    <Content Include="Assets\Icon\bangumi_domestic_ic_finish.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_domestic_recommend.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_index.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_mine.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_recommend.png" />
+    <Content Include="Assets\Icon\bangumi_follow_ic_timeline.png" />
+    <Content Include="Assets\Icon\bangumi_home_ic_season_.png" />
+    <Content Include="Assets\Icon\bangumi_home_index_cn_ic.png" />
+    <Content Include="Assets\Icon\bangumi_home_index_jp_ic.png" />
+    <Content Include="Assets\Icon\ic_info_danmakus2.png" />
+    <Content Include="Assets\Icon\ic_info_views2.png" />
+    <Content Include="Assets\Icon\ic_vip_v_22.png" />
+    <Content Include="Assets\Img\bg1.png" />
+    <Content Include="Assets\Logo\bp10.png" />
+    <Content Include="Assets\Logo\bp450.png" />
+    <Content Include="Assets\Logo\bp50.png" />
+    <Content Include="Assets\Logo\coins.png" />
+    <Content Include="Assets\Logo\HappyBirthDay.png" />
+    <Content Include="Assets\Logo\ic_bili_logo.png" />
+    <Content Include="Assets\Logo\ic_splash_default.png" />
+    <Content Include="Assets\Logo.png" />
+    <Content Include="Assets\Logo\NoLogin.png" />
+    <Content Include="Assets\Logo\PI520_300.png" />
+    <Content Include="Assets\Logo\PI640_480.png" />
+    <Content Include="Assets\Logo\PI900_300.png" />
+    <Content Include="Assets\Logo\PlaceholdeImage.png" />
+    <Content Include="Assets\Logo\EMT.png" />
+    <Content Include="Assets\MiniIcon\ic_lv0_large.png" />
+    <Content Include="Assets\MiniIcon\ic_lv1_large.png" />
+    <Content Include="Assets\MiniIcon\ic_lv2_large.png" />
+    <Content Include="Assets\MiniIcon\ic_lv3_large.png" />
+    <Content Include="Assets\MiniIcon\ic_lv4_large.png" />
+    <Content Include="Assets\MiniIcon\ic_lv5_large.png" />
+    <Content Include="Assets\MiniIcon\ic_lv6_large.png" />
+    <Content Include="Assets\MiniIcon\ic_user_female_border.png" />
+    <Content Include="Assets\MiniIcon\ic_user_gay_border.png" />
+    <Content Include="Assets\MiniIcon\ic_user_male_border.png" />
+    <Content Include="Assets\MiniIcon\Play.png" />
+    <Content Include="Assets\MiniIcon\scj.png" />
+    <Content Include="Assets\MiniIcon\Sex.png" />
+    <Content Include="Assets\MiniIcon\Time.png" />
+    <Content Include="Assets\MiniIcon\Type.png" />
+    <Content Include="Assets\MiniIcon\uid.png" />
+    <Content Include="Assets\MiniIcon\up.png" />
+    <Content Include="Assets\MiniIcon\地址.png" />
+    <Content Include="Assets\MiniIcon\注册时间.png" />
+    <Content Include="Assets\MiniIcon\生日.png" />
+    <Content Include="Assets\MiniIcon\硬币.png" />
+    <Content Include="Assets\NewStoreLogo.scale-100.png" />
+    <Content Include="Assets\NewStoreLogo.scale-125.png" />
+    <Content Include="Assets\NewStoreLogo.scale-150.png" />
+    <Content Include="Assets\NewStoreLogo.scale-200.png" />
+    <Content Include="Assets\NewStoreLogo.scale-400.png" />
+    <Content Include="Assets\null.png" />
+    <Content Include="Assets\PartIcon\BAD.png" />
+    <Content Include="Assets\PartIcon\BDH.png" />
+    <Content Include="Assets\PartIcon\BDSJ.png" />
+    <Content Include="Assets\PartIcon\BDY.png" />
+    <Content Include="Assets\PartIcon\BFJ.png" />
+    <Content Include="Assets\PartIcon\BGC.png" />
+    <Content Include="Assets\PartIcon\BHD.png" />
+    <Content Include="Assets\PartIcon\BHT.png" />
+    <Content Include="Assets\PartIcon\BKJ.png" />
+    <Content Include="Assets\PartIcon\BSS.png" />
+    <Content Include="Assets\PartIcon\BWD.png" />
+    <Content Include="Assets\PartIcon\BYL.png" />
+    <Content Include="Assets\PartIcon\BYX.png" />
+    <Content Include="Assets\PartIcon\BYY.png" />
+    <Content Include="Assets\PartIcon\BZB.png" />
+    <Content Include="Assets\PartIcon\BSH.png" />
+    <Content Include="Assets\PartIcon\ic_category_t5.png" />
+    <Content Include="Assets\PartIcon\ic_header_dynamic.png" />
+    <Content Include="Assets\PartIcon\ic_header_hot.png" />
+    <Content Include="Assets\Square150x150Logo.scale-100.png" />
+    <Content Include="Assets\Square150x150Logo.scale-125.png" />
+    <Content Include="Assets\Square150x150Logo.scale-150.png" />
+    <Content Include="Assets\Square150x150Logo.scale-400.png" />
+    <Content Include="Assets\Square310x310Logo.scale-100.png" />
+    <Content Include="Assets\Square310x310Logo.scale-125.png" />
+    <Content Include="Assets\Square310x310Logo.scale-150.png" />
+    <Content Include="Assets\Square310x310Logo.scale-200.png" />
+    <Content Include="Assets\Square310x310Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.scale-100.png" />
+    <Content Include="Assets\Square44x44Logo.scale-125.png" />
+    <Content Include="Assets\Square44x44Logo.scale-150.png" />
+    <Content Include="Assets\Square44x44Logo.scale-400.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-16_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-256_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-32_altform-unplated.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-48_altform-unplated.png" />
+    <Content Include="Assets\Square71x71Logo.scale-100.png" />
+    <Content Include="Assets\Square71x71Logo.scale-125.png" />
+    <Content Include="Assets\Square71x71Logo.scale-150.png" />
+    <Content Include="Assets\Square71x71Logo.scale-200.png" />
+    <Content Include="Assets\Square71x71Logo.scale-400.png" />
+    <Content Include="Assets\timg.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-100.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-125.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-150.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-400.png" />
+    <Content Include="Assets\zfb.jpg" />
+    <None Include="Package.StoreAssociation.xml" />
+    <Content Include="page.png" />
+    <Content Include="Properties\Default.rd.xml" />
+    <Content Include="Assets\LockScreenLogo.scale-200.png" />
+    <Content Include="Assets\SplashScreen.scale-200.png" />
+    <Content Include="Assets\Square150x150Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.scale-200.png" />
+    <Content Include="Assets\Square44x44Logo.targetsize-24_altform-unplated.png" />
+    <Content Include="Assets\StoreLogo.png" />
+    <Content Include="Assets\Wide310x150Logo.scale-200.png" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avcodec-57.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avdevice-57.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avfilter-6.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avformat-57.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\avutil-55.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\swresample-2.dll" />
+    <Content Include="$(SolutionDir)ffmpeg\Build\Windows10\$(PlatformTarget)\bin\swscale-4.dll" />
+  </ItemGroup>
+  <ItemGroup>
+    <ApplicationDefinition Include="App.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </ApplicationDefinition>
+    <Page Include="Controls\CommentControl.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\DanmuPlayer.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\MessageShow.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\MyDanmaku.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Controls\PlayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="MainPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\DMHideManagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\DownloadPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveMyMedalPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveMyTitlePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LivePartInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveVideoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveAllPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveSearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveCenterPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveFeedPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveHistoryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LivePartPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Live\LiveRoomPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FindMore\LocalHistoryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PlayerPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SubjectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\User\MyQrPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\PartsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Pages\QRPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\User\EditProfilePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\User\ChatPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FindMore\ActivityPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\BanInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Bangumi\BanTagPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\BlankPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Bangumi\CnBangumiPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FindMore\FastNavigatePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Bangumi\JpBangumiPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\LoginPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Bangumi\MyFollowsBangumiPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\User\MyMessagePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\User\MyWalletPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FindMore\RankPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\FindMore\TopicPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\UserInfoPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\User\MyHistroryPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\User\MyCollectPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\SearchPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\Bangumi\TimelinePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\VideoViewPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Pages\WebPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="PlayerModePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="SplashPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Theme\BlueTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\EMTTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\GreenTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\PinkTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\PurpleTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\RedTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Theme\YellowTheme.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Views\AttentionPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\BangumiPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\FindPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\HomePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\LivePage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\PartPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SettingPage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <SDKReference Include="Microsoft.VCLibs, Version=14.0">
+      <Name>Visual C++ 2015 Runtime for Universal Windows Platform Apps</Name>
+    </SDKReference>
+    <SDKReference Include="Microsoft.VCLibs.120, Version=14.0">
+      <Name>Microsoft Visual C++ 2013 Runtime Package for Windows Universal</Name>
+    </SDKReference>
+    <SDKReference Include="SQLite.UWP.2015, Version=3.15.1">
+      <Name>SQLite for Universal Windows Platform</Name>
+    </SDKReference>
+    <SDKReference Include="WindowsMobile, Version=10.0.14393.0">
+      <Name>Windows Mobile Extensions for the UWP</Name>
+    </SDKReference>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\BackTask\BackTask.csproj">
+      <Project>{e3691422-cbfd-4df9-827b-77d195731eec}</Project>
+      <Name>BackTask</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\FFmpegInterop\Win10\FFmpegInterop\FFmpegInterop.vcxproj">
+      <Project>{9cfa3b3e-b7af-4629-84e2-c962c5b046b1}</Project>
+      <Name>FFmpegInterop</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
+    <VisualStudioVersion>14.0</VisualStudioVersion>
+  </PropertyGroup>
+  <Import Project="$(MSBuildExtensionsPath)\Microsoft\WindowsXaml\v$(VisualStudioVersion)\Microsoft.Windows.UI.Xaml.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
