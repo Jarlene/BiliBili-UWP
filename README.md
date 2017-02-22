@@ -16,7 +16,7 @@
  ~~发行包一般包含主安装包和依赖包，请先安装位于Dependencies目录下、对应计算机配置的依赖包，依次安装完毕，再安装主安装包；对于RS1或更高版本的用户来说，安装通过双击就可完成；否则需要PowerShell，请自行搜索“PowerShell安装Appx”。~~
 
 ## 反馈
- 若master分支代码或Releases最新的发行包*（非master分支代码或非最新发行包的问题请不要反馈）*出现功能性问题或者崩溃现象，欢迎新建Issue或发送邮件至771102271@qq.com（逍遥橙子）或ThomasW.Fan@outlook.com（DotNet码农）进行反馈。
+ 若master分支代码或Releases最新的发行包*（非master分支代码或非最新发行包的问题请不要反馈）*出现功能性问题或者崩溃现象，欢迎新建Issue或发送邮件至xiaoyaocz@52uwp.com（逍遥橙子）或ThomasW.Fan@outlook.com（DotNet码农）进行反馈。
  
 ## 代码开放协议（MIT许可协议）
 Copyright (C) <year> <copyright holders>
